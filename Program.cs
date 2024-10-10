@@ -27,3 +27,5 @@ app.MapRazorComponents<App>()
 app.Run();
 
 // I was here
+
+// I was here as well!
