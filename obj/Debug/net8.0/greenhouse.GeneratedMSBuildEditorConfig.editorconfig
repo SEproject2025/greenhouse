@@ -9,47 +9,47 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = greenhouse
 build_property.RootNamespace = greenhouse
-build_property.ProjectDir = C:\Users\danie\Projects\git\greenhouse\
+build_property.ProjectDir = C:\Users\Jared White\Source\Repos\greenhouse\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\danie\Projects\git\greenhouse
+build_property.MSBuildProjectDirectory = C:\Users\Jared White\Source\Repos\greenhouse
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/danie/Projects/git/greenhouse/Components/App.razor]
+[C:/Users/Jared White/Source/Repos/greenhouse/Components/App.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBcHAucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/danie/Projects/git/greenhouse/Components/Pages/Counter.razor]
+[C:/Users/Jared White/Source/Repos/greenhouse/Components/Pages/Counter.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xDb3VudGVyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/danie/Projects/git/greenhouse/Components/Pages/Error.razor]
+[C:/Users/Jared White/Source/Repos/greenhouse/Components/Pages/Error.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFcnJvci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/danie/Projects/git/greenhouse/Components/Pages/Home.razor]
+[C:/Users/Jared White/Source/Repos/greenhouse/Components/Pages/Home.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb21lLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/danie/Projects/git/greenhouse/Components/Pages/Weather.razor]
+[C:/Users/Jared White/Source/Repos/greenhouse/Components/Pages/Weather.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xXZWF0aGVyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/danie/Projects/git/greenhouse/Components/Routes.razor]
+[C:/Users/Jared White/Source/Repos/greenhouse/Components/Routes.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSb3V0ZXMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/danie/Projects/git/greenhouse/Components/_Imports.razor]
+[C:/Users/Jared White/Source/Repos/greenhouse/Components/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xfSW1wb3J0cy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/danie/Projects/git/greenhouse/Components/Layout/MainLayout.razor]
+[C:/Users/Jared White/Source/Repos/greenhouse/Components/Layout/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTWFpbkxheW91dC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-xzgpra4voj
 
-[C:/Users/danie/Projects/git/greenhouse/Components/Layout/NavMenu.razor]
+[C:/Users/Jared White/Source/Repos/greenhouse/Components/Layout/NavMenu.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTmF2TWVudS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-byyfyg0pio
