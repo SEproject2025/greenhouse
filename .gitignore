@@ -4,3 +4,5 @@
 
 /.vs/greenhouse/FileContentIndex
 /.vs
+/obj/
+/Debug/
