@@ -25,3 +25,7 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
 app.Run();
+
+// I was here
+
+// I was here as well!
