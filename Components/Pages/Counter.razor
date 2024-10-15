@@ -15,7 +15,7 @@
 <style type="text/css">
     .main {
         margin: 50px auto;
-        width: 60%;
+        width: 70%;
         padding-top: 10px;
         padding-bottom: 10px;
         background-color: #90EE90;
@@ -54,33 +54,12 @@
 
 <div class="main">
     <div class="inner">
-        <div class="tile">
-            <h2>Name 1</h2>
-        </div>
-        <div class="tile">
-            <h2>Name 2</h2>
-        </div>
-        <div class="tile">
-            <h2>Name 3</h2>
-        </div>
-        <div class="tile">
-            <h2>Name 4</h2>
-        </div>
-        <div class="tile">
-            <h2>Name 5</h2>
-        </div>
-        <div class="tile">
-            <h2>Name 6</h2>
-        </div>
-        <div class="tile">
-            <h2>Name 6</h2>
-        </div>
-        <div class="tile">
-            <h2>Name 7</h2>
-        </div>
-        <div class="tile">
-            <h2>Name 8</h2>
-        </div>
+        @for (int i = 1; i < 10; i++)
+        {
+            <div class="tile">
+                <h2>Name @i</h2>
+            </div>
+        }
     </div>
 </div>
 
@@ -96,4 +75,5 @@
     {
         currentCount -= 500;
     }
+
 }
