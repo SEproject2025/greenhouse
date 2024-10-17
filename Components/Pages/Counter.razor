@@ -1,15 +1,67 @@
 ﻿@page "/counter"
 @rendermode InteractiveServer
 
-<PageTitle>Counter</PageTitle>
+<PageTitle>blah blah</PageTitle>
 
-<h1>Counter</h1>
+<h1>BLAH BLAH BLAH!!!!!!!!!!!!!!</h1>
 
 <p role="status">Current count: @currentCount</p>
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me to Add 1</button>
 
 <button class="btn btn-primary" @onclick="DecrementCount">Click me to Sub 500</button>
+
+    
+<style type="text/css">
+    .main {
+        margin: 50px auto;
+        width: 700px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        background-color: #008000;
+    }
+
+        .main .inner {
+            /*padding: 50px;*/
+            font-size: 0px;
+            display: table;
+            text-align: center;
+            margin: auto, auto;
+        }
+
+
+    .tile h2 {
+        font-size: 20px;
+        color: #90EE90;
+        font-family: "Helvetica Neue", sans-serif;
+        font-weight: 100;
+        line-height: 1.1;
+        text-align: center;
+    }
+
+    .tile {
+        margin: 0 auto;
+        top: 80%;
+        padding: 50px;
+        height: 190px;
+        width: 190px;
+        border: 20px solid #008000;
+        opacity: 1;
+        background-color: #654321;
+        display: inline-block;
+    }
+</style>
+
+<div class="main">
+    <div class="inner">
+        @for (int i = 1; i < 10; i++)
+        {
+            <div class="tile">
+                <h2>Name @i</h2>
+            </div>
+        }
+    </div>
+</div>
 
 @code {
     private int currentCount = 0;
@@ -21,6 +73,7 @@
 
     private void DecrementCount()
     {
-        currentCount-=500;
+        currentCount -= 500;
     }
+
 }
