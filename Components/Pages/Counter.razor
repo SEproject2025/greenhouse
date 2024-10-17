@@ -50,6 +50,10 @@
         background-color: #654321;
         display: inline-block;
     }
+
+    .picture {
+        
+    }
 </style>
 
 <div class="main">
@@ -57,7 +61,19 @@
         @for (int i = 1; i < 10; i++)
         {
             <div class="tile">
-                <h2>Name @i</h2>
+                <div class="picture">
+                <img src="images/Tomato.png" alt="Plant img" style="width:80px;height:65px;" align="left">
+                </div>
+
+    <!--            <form>
+                    <input type="checkbox" id="task1" name="task1" value="Complete1">
+                    <label for="task1"> I watered my plant</label><br>
+                    <input type="checkbox" id="task2" name="task2" value="Complete2">
+                    <label for="task2"> I placed my plant in sunlight</label><br>
+                    <input type="checkbox" id="task3" name="task3" value="Complete3">
+                    <label for="task3"> I have fertalized my plant</label><br><br>
+                </form>
+    -->
             </div>
         }
     </div>
