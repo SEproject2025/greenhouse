@@ -3,16 +3,17 @@
 
 <PageTitle>blah blah</PageTitle>
 
-<h1>BLAH BLAH BLAH!!!!!!!!!!!!!!</h1>
-
+<h1>Blossom MVP</h1>
+<!--
 <p role="status">Current count: @currentCount</p>
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me to Add 1</button>
-
 <button class="btn btn-primary" @onclick="DecrementCount">Click me to Sub 500</button>
+-->
 
-    
 <style type="text/css">
+    /* Styling for the green box                                             */
+    /*************************************************************************/
     .main {
         margin: 50px auto;
         width: 700px;
@@ -20,25 +21,16 @@
         padding-bottom: 10px;
         background-color: #008000;
     }
-
-        .main .inner {
-            /*padding: 50px;*/
-            font-size: 0px;
-            display: table;
-            text-align: center;
-            margin: auto, auto;
-        }
-
-
-    .tile h2 {
-        font-size: 20px;
-        color: #90EE90;
-        font-family: "Helvetica Neue", sans-serif;
-        font-weight: 100;
-        line-height: 1.1;
+     /* Inner Container for the grid                                          */
+     /*************************************************************************/
+    .main .inner {
+        font-size: 0px;
+        display: table;
         text-align: center;
+        margin: auto, auto;
     }
-
+    /*  styles the individual tiles                                          */
+    /*************************************************************************/
     .tile {
         margin: 0 auto;
         top: 80%;
@@ -47,35 +39,82 @@
         width: 190px;
         border: 20px solid #008000;
         opacity: 1;
-        background: url(images/Tomato.png) left -1px top -1px no-repeat, #654321;
-        background-size: 75px;
+        background-color: #654321;
         display: inline-block;
+        position: relative;
+    }
+    /* Styling for the first tile - Tomatoe                                  */
+    /*************************************************************************/
+    .tile-one {
+        background: url(images/Tomato.png) left -1px top -1px no-repeat, #654321; 
+        background-size: 75px;
+    }
+    /* Styling for the second tile - Carrot                                  */
+    /*************************************************************************/
+    .tile-two {
+        background: url(images/Carrot.png) left -1px top -1px no-repeat, #654321;
+        background-size: 75px;
     }
 
-    .
+    /* Styling for the plant name - targets spans inside the tiles           */
+    /*************************************************************************/
+    .tile span {
+        position: absolute;
+        top: 15%;
+        left: 85px;
+        color: white;
+        font-size: 18px;
+        font-family: Arial, sans-serif;
+    }
+
+    /* Styling for formatting checkbox - targets checkbox input              */
+    /*************************************************************************/
+    .tile input[type="checkbox"] {
+        position: absolute;
+        top: 60%;  
+        left: 25px; 
+    }
+
+    /* Styling for the checkbox label - targets labels                       */
+    /*************************************************************************/
+    .tile label {
+        position: absolute;
+        top: 58%;        
+        left: 40px;       
+        color: black;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+    }
+
 </style>
 
+<!-- Main content block for displaing the tile grid -->
 <div class="main">
     <div class="inner">
+        <!-- Generating 9 tiles                      -->
         @for (int i = 1; i < 10; i++)
         {
-            <div class="tile">
-                
-
-    <!--            <form>
-                    <input type="checkbox" id="task1" name="task1" value="Complete1">
-                    <label for="task1"> I watered my plant</label><br>
-                    <input type="checkbox" id="task2" name="task2" value="Complete2">
-                    <label for="task2"> I placed my plant in sunlight</label><br>
-                    <input type="checkbox" id="task3" name="task3" value="Complete3">
-                    <label for="task3"> I have fertalized my plant</label><br><br>
-                </form>
-    -->
+            <!-- Adds images to two of the tiles  -->
+            <!-- Assigns the class tile-one to the tile -->
+            <div class="tile @(i == 1 ? "tile-one" : i == 2 ? "tile-two" : "")"> 
+                @if (i == 1)
+                { 
+                   <span>Tomato</span>
+                   <input type="checkbox" id="watering-tomato" name="watering-tomato">
+                    <label for="watering-tomato">Watering</label>
+                }
+                else if(i == 2)
+                {
+                    <span>Carrot</span>
+                    <input type="checkbox" id="watering-tomato" name="watering-tomato">
+                    <label for="watering-tomato">Pull Weeds</label>
+                }
             </div>
         }
     </div>
-</div>
+</div> 
 
+<!--
 @code {
     private int currentCount = 0;
 
@@ -90,3 +129,4 @@
     }
 
 }
+-->
