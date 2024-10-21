@@ -3,13 +3,7 @@
 
 <PageTitle>blah blah</PageTitle>
 
-<h1>BLAH BLAH BLAH!!!!!!!!!!!!!!</h1>
-
-<p role="status">Current count: @currentCount</p>
-
-<button class="btn btn-primary" @onclick="IncrementCount">Click me to Add 1</button>
-
-<button class="btn btn-primary" @onclick="DecrementCount">Click me to Sub 500</button>
+<h1>Plant Box</h1>
 
     
 <style type="text/css">
@@ -18,7 +12,8 @@
         width: 700px;
         padding-top: 10px;
         padding-bottom: 10px;
-        background-color: #008000;
+        background-color: #725D4C;
+        border-radius: 20px;
     }
 
         .main .inner {
@@ -27,37 +22,40 @@
             display: table;
             text-align: center;
             margin: auto, auto;
+            border-radius: 20px;
         }
 
 
     .tile h2 {
         font-size: 20px;
-        color: #90EE90;
+        color: #654321;
         font-family: "Helvetica Neue", sans-serif;
         font-weight: 100;
         line-height: 1.1;
         text-align: center;
+        border-radius: 20px;
     }
 
-    .tile {
+    .tile {#5AAB61
         margin: 0 auto;
         top: 80%;
         padding: 50px;
         height: 190px;
         width: 190px;
-        border: 20px solid #008000;
+        border: 20px solid #725D4C;
         opacity: 1;
-        background-color: #654321;
+        background-color: #48BF53;
         display: inline-block;
+        border-radius: 20px;
     }
 </style>
 
 <div class="main">
-    <div class="inner">
+    <div class="inner" style="border-radius: 20px;">
         @for (int i = 1; i < 10; i++)
         {
             <div class="tile">
-                <h2>Name @i</h2>
+                <h2>Plant @i</h2>
             </div>
         }
     </div>
