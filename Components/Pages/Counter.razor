@@ -15,32 +15,29 @@
         width: 700px;
         padding-top: 10px;
         padding-bottom: 10px;
-        background-color: #725D4C;
-        border-radius: 20px;
-        box-shadow: 10px 10px 8px #888888;
+        background-color: #008000;
     }
      /* Inner Container for the grid                                          */
      /*************************************************************************/
     .main .inner {
-            font-size: 0px;
-            display: table;
-            text-align: center;
-            margin: auto, auto;
-            border-radius: 20px;
-        }
+        font-size: 0px;
+        display: table;
+        text-align: center;
+        margin: auto, auto;
+    }
     /*  styles the individual tiles                                          */
     /*************************************************************************/
-    .tile {#725D4C
+    .tile {
         margin: 0 auto;
         top: 80%;
         padding: 50px;
         height: 190px;
         width: 190px;
-        border: 20px solid #725D4C;
+        border: 20px solid #008000;
         opacity: 1;
-        background-color: #48BF53;
+        background-color: #654321;
         display: inline-block;
-        border-radius: 20px;
+        position: relative;
     }
     /* Styling for the first tile - Tomatoe                                  */
     /*************************************************************************/
@@ -89,7 +86,7 @@
 
 <!-- Main content block for displaing the tile grid -->
 <div class="main">
-    <div class="inner" style="border-radius: 20px;">
+    <div class="inner">
         <!-- Generating 9 tiles                      -->
         @for (int i = 1; i < 10; i++)
         {
