@@ -1,12 +1,15 @@
-﻿@page "/counter"
+﻿@page "/blossom_MVP"
 @rendermode InteractiveServer
 
-<PageTitle>blah blah</PageTitle>
 
-<h1>Plant Box</h1>
+<PageTitle>MVP</PageTitle>
 
-    
+
+<h1>Blossom MVP</h1>
+
 <style type="text/css">
+    /* Styling for the green box                                             */
+    /*************************************************************************/
     .main {
         margin: 50px auto;
         width: 700px;
@@ -16,27 +19,17 @@
         border-radius: 20px;
         box-shadow: 10px 10px 8px #888888;
     }
-
-        .main .inner {
-            /*padding: 50px;*/
+     /* Inner Container for the grid                                          */
+     /*************************************************************************/
+    .main .inner {
             font-size: 0px;
             display: table;
             text-align: center;
             margin: auto, auto;
             border-radius: 20px;
         }
-
-
-    .tile h2 {
-        font-size: 20px;
-        color: #654321;
-        font-family: "Helvetica Neue", sans-serif;
-        font-weight: 100;
-        line-height: 1.1;
-        text-align: center;
-        border-radius: 20px;
-    }
-
+    /*  styles the individual tiles                                          */
+    /*************************************************************************/
     .tile {#725D4C
         margin: 0 auto;
         top: 80%;
@@ -49,30 +42,73 @@
         display: inline-block;
         border-radius: 20px;
     }
+    /* Styling for the first tile - Tomatoe                                  */
+    /*************************************************************************/
+    .tile-one {
+        background: url(images/Tomato.png) left -1px top -1px no-repeat, #654321; 
+        background-size: 75px;
+    }
+    /* Styling for the second tile - Carrot                                  */
+    /*************************************************************************/
+    .tile-two {
+        background: url(images/Carrot.png) left -1px top -1px no-repeat, #654321;
+        background-size: 75px;
+    }
+
+    /* Styling for the plant name - targets spans inside the tiles           */
+    /*************************************************************************/
+    .tile span {
+        position: absolute;
+        top: 15%;
+        left: 85px;
+        color: white;
+        font-size: 18px;
+        font-family: Arial, sans-serif;
+    }
+
+    /* Styling for formatting checkbox - targets checkbox input              */
+    /*************************************************************************/
+    .tile input[type="checkbox"] {
+        position: absolute;
+        top: 60%;  
+        left: 25px; 
+    }
+
+    /* Styling for the checkbox label - targets labels                       */
+    /*************************************************************************/
+    .tile label {
+        position: absolute;
+        top: 58%;        
+        left: 40px;       
+        color: black;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+    }
+
 </style>
 
+<!-- Main content block for displaing the tile grid -->
 <div class="main">
     <div class="inner" style="border-radius: 20px;">
+        <!-- Generating 9 tiles                      -->
         @for (int i = 1; i < 10; i++)
         {
-            <div class="tile">
-                <h2>Plant @i</h2>
+            <!-- Adds images to two of the tiles  -->
+            <!-- Assigns the class tile-one to the tile -->
+            <div class="tile @(i == 1 ? "tile-one" : i == 2 ? "tile-two" : "")"> 
+                @if (i == 1)
+                { 
+                   <span>Tomato</span>
+                   <input type="checkbox" id="watering-tomato" name="watering-tomato">
+                    <label for="watering-tomato">Watering</label>
+                }
+                else if(i == 2)
+                {
+                    <span>Carrot</span>
+                    <input type="checkbox" id="watering-tomato" name="watering-tomato">
+                    <label for="watering-tomato">Pull Weeds</label>
+                }
             </div>
         }
     </div>
-</div>
-
-@code {
-    private int currentCount = 0;
-
-    private void IncrementCount()
-    {
-        currentCount++;
-    }
-
-    private void DecrementCount()
-    {
-        currentCount -= 500;
-    }
-
-}
+</div> 
