@@ -1,3 +1,33 @@
 ﻿@page "/blossom"
-@attribute [StreamRendering]
+@attribute [StreamRendering] 
+@inject IPlantService PlantService
 
+<h3>PlantList</h3>
+
+@if (plant == null)
+{
+	<span>Loading...</span>
+
+}
+else if(plant.Count == 0)
+{
+	<span>No plants found.</span>
+}
+else
+{
+	<ul>
+		@foreach (var plants in plant)
+		{
+			<li>@plants.PlantName</li>
+		}
+	</ul>
+}
+
+@code{
+	List<Plants>? plant = null;
+
+	protected override async Task OnInitializedAsync()
+	{
+		plant = await PlantService.GetAllPlants();
+	}
+}
