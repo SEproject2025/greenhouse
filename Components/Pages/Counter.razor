@@ -4,7 +4,6 @@
 
 <PageTitle>MVP</PageTitle>
 
-
 <h1>Blossom MVP</h1>
 
 <style type="text/css">
@@ -15,41 +14,47 @@
         width: 700px;
         padding-top: 10px;
         padding-bottom: 10px;
-        background-color: #008000;
+        background-color: #725D4C;
+        border-radius: 20px;
+        box-shadow: 10px 10px 8px #888888;
     }
      /* Inner Container for the grid                                          */
      /*************************************************************************/
-    .main .inner {
-        font-size: 0px;
-        display: table;
-        text-align: center;
-        margin: auto, auto;
-    }
+        .main .inner {
+            font-size: 0px;
+            display: table;
+            text-align: center;
+            margin: auto, auto;
+            border-radius: 20px;
+        }
     /*  styles the individual tiles                                          */
     /*************************************************************************/
-    .tile {
+    .tile {#5AAB61
         margin: 0 auto;
         top: 80%;
         padding: 50px;
         height: 190px;
         width: 190px;
-        border: 20px solid #008000;
+        border: 20px solid #725D4C;
         opacity: 1;
-        background-color: #654321;
+        background-color: #48BF53;
         display: inline-block;
         position: relative;
+        border-radius: 20px;
     }
     /* Styling for the first tile - Tomatoe                                  */
     /*************************************************************************/
     .tile-one {
-        background: url(images/Tomato.png) left -1px top -1px no-repeat, #654321; 
+        background: url(images/Tomato.png) left -1px top -1px no-repeat, #654321;
         background-size: 75px;
+        background-color: #48BF53;
     }
     /* Styling for the second tile - Carrot                                  */
     /*************************************************************************/
     .tile-two {
         background: url(images/Carrot.png) left -1px top -1px no-repeat, #654321;
         background-size: 75px;
+        background-color: #48BF53;
     }
 
     /* Styling for the plant name - targets spans inside the tiles           */
@@ -86,24 +91,24 @@
 
 <!-- Main content block for displaing the tile grid -->
 <div class="main">
-    <div class="inner">
+    <div class="inner" style="border-radius: 20px;">
         <!-- Generating 9 tiles                      -->
         @for (int i = 1; i < 10; i++)
         {
             <!-- Adds images to two of the tiles  -->
             <!-- Assigns the class tile-one to the tile -->
-            <div class="tile @(i == 1 ? "tile-one" : i == 2 ? "tile-two" : "")"> 
+            <div class="tile @(i == 1 ? "tile-one" : i == 2 ? "tile-two" : "")">
                 @if (i == 1)
-                { 
-                   <span>Tomato</span>
-                   <input type="checkbox" id="watering-tomato" name="watering-tomato">
+                {
+                    <span>Tomato</span>
+                    <input type="checkbox" id="watering-tomato" name="watering-tomato">
                     <label for="watering-tomato">Watering</label>
                 }
-                else if(i == 2)
+                else if (i == 2)
                 {
                     <span>Carrot</span>
                     <input type="checkbox" id="watering-tomato" name="watering-tomato">
-                    <label for="watering-tomato">Pull Weeds</label>
+                    <label for="watering-tomato">Watering</label>
                 }
             </div>
         }
