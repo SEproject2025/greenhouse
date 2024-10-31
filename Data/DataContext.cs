@@ -4,11 +4,12 @@
 //--------------------------------------------------------------------------------------
 
 using greenhouse.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace greenhouse.Data
 { 
-	public class DataContext : DbContext
+	public class DataContext : IdentityDbContext<ApplicationUser>
 	{
 		public DataContext(DbContextOptions<DataContext> options) 
 		   : base(options)

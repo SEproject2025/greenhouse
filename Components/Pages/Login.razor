@@ -1,0 +1,59 @@
+@page "/login"
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Identity
+@using System.Net.Http.Json
+@inject SignInManager<ApplicationUser> SignInManager
+@inject IHttpClientFactory HttpClientFactory
+@inject NavigationManager NavigationManager
+@inject SignInManager<ApplicationUser> SignInManager
+
+<h3>Login</h3>
+
+<EditForm Model="loginModel" OnValidSubmit="HandleLogin" FormName="loginForm">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label>Email:</label>
+        <InputText @bind-Value="loginModel.Email" />
+    </div>
+    <div>
+        <label>Password:</label>
+        <InputText type="password" @bind-Value="loginModel.Password" />
+    </div>
+    <button type="submit">Login</button>
+
+    @if (!string.IsNullOrEmpty(loginError))
+    {
+        <p style="color:red;">@loginError</p>
+    }
+</EditForm>
+
+@code {
+
+    private LoginModel loginModel = new LoginModel();
+    private string loginError;
+
+    private async Task HandleLogin()
+    {
+        try {
+            var client = HttpClientFactory.CreateClient("MyHttpClient");
+            var response = await client.PostAsJsonAsync("api/auth/login", loginModel);
+            if (response.IsSuccessStatusCode)
+            {
+                NavigationManager.NavigateTo("/");
+            }
+            else
+            {
+                loginError = "Invalid login attempt.";
+            }
+        }
+        catch (Exception ex)
+        {
+            loginError = "An error occurred during login: " + ex.Message;
+        }
+
+
+    }
+}
