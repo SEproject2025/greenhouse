@@ -9,8 +9,10 @@ namespace greenhouse.Entities
 	public class Plants
 	{
 		[Key]
-		public int PlantId { get; set; }
-		public required string PlantName { get; set; }
+		public int PLANT_ID { get; set; }
+		public required string PLANT_NAME { get; set; }
+		public required string IS_PRIVATE { get; set; }
+		public string? USER_ID { get; set; }
 
 	}
 }
