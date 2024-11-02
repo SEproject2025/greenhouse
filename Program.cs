@@ -17,7 +17,9 @@ builder.Services.AddRazorPages(); // Required for Identity UI
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-if (builder.Environment.IsDevelopment())
+if (builder.Environment.IsDevelopment()) // This is where the problem is!
+                                         // I added a '!' in front of "builder.Environment.IsDevelopment()"
+                                         // In order to use Anna's DB instead Andrew's SQL Lite trash!!!!
 {
     // Use SQLite if on dev.
     builder.Services.AddDbContext<DataContext>(options =>
