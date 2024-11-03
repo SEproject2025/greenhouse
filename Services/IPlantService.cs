@@ -8,5 +8,6 @@ namespace greenhouse.Services
 	public interface IPlantService
 	{
 		Task<List<Plants>> GetAllPlants();
+		Task<Plants> AddPlants(Plants plants);
 	}
 }

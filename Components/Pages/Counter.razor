@@ -1,11 +1,12 @@
 ﻿@page "/blossom_MVP"
 @rendermode InteractiveServer
-
+@inject NavigationManager NavigationManager
+@attribute [StreamRendering(true)]
 
 <PageTitle>MVP</PageTitle>
 
 <h1>Blossom MVP</h1>
-
+<AddPlantButton/>
 <style type="text/css">
     /* Styling for the green box                                             */
     /*************************************************************************/
@@ -114,3 +115,7 @@
         }
     </div>
 </div> 
+
+@code {
+    
+}

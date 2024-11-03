@@ -16,7 +16,15 @@ namespace greenhouse.Services
 			_context = context;
 		}
 
-		public async Task<List<Plants>> GetAllPlants()
+        public async Task<Plants> AddPlants(Plants plants)
+        {
+            _context.Plant.Add(plants);
+			await _context.SaveChangesAsync();
+
+			return plants;
+        }
+
+        public async Task<List<Plants>> GetAllPlants()
 		{
 			var plant = await _context.Plant.ToListAsync();
 			return plant;
