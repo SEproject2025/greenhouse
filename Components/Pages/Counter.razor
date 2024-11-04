@@ -2,6 +2,7 @@
 @rendermode InteractiveServer
 @inject NavigationManager NavigationManager
 @attribute [StreamRendering(true)]
+@inject IPlantService PlantService
 
 <PageTitle>MVP</PageTitle>
 
@@ -45,14 +46,14 @@
     }
     /* Styling for the first tile - Tomatoe                                  */
     /*************************************************************************/
-    .tile-one {
+    .tile-1 {
         background: url(images/Tomato.png) left -1px top -1px no-repeat, #654321;
         background-size: 75px;
         background-color: #48BF53;
     }
     /* Styling for the second tile - Carrot                                  */
     /*************************************************************************/
-    .tile-two {
+    .tile-2 {
         background: url(images/Carrot.png) left -1px top -1px no-repeat, #654321;
         background-size: 75px;
         background-color: #48BF53;
@@ -92,30 +93,37 @@
 
 <!-- Main content block for displaing the tile grid -->
 <div class="main">
+    @if (plant == null)
+    {
+     <p>null</p>
+    }
+    else
+    {
     <div class="inner" style="border-radius: 20px;">
         <!-- Generating 9 tiles                      -->
-        @for (int i = 1; i < 10; i++)
+        @for (int i = 1; i < num_plants; i++)
         {
             <!-- Adds images to two of the tiles  -->
             <!-- Assigns the class tile-one to the tile -->
-            <div class="tile @(i == 1 ? "tile-one" : i == 2 ? "tile-two" : "")">
-                @if (i == 1)
-                {
-                    <span>Tomato</span>
+            <div class="tile tile-@i">
+                    <span>@plant[i].PLANT_NAME</span>
                     <input type="checkbox" id="watering-tomato" name="watering-tomato">
                     <label for="watering-tomato">Watering</label>
-                }
-                else if (i == 2)
-                {
-                    <span>Carrot</span>
-                    <input type="checkbox" id="watering-tomato" name="watering-tomato">
-                    <label for="watering-tomato">Watering</label>
-                }
             </div>
         }
     </div>
+    }
 </div> 
 
 @code {
-    
+    List<Plants>? plant = null;
+
+    int num_plants;
+
+    protected override async Task OnInitializedAsync()
+    {
+        plant = await PlantService.GetAllPlants();
+        num_plants = plant.Count;
+    }
+
 }
