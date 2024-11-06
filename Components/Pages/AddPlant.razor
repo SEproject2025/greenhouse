@@ -1,8 +1,8 @@
-﻿@page "/edit-plant"
-@page "/edit-plant/{PLANT_ID:int}"
+﻿@page "/add-plants"
+@page "/add-plants/{PLANT_ID:int}"
 @inject IPlantService PlantService
 
-<h3>Create Plant</h3>
+	<h3>Create Plant</h3>
 
 <EditForm Model="plant" OnSubmit="HandleSubmit" FormName="editPlant">
 	<label>Plant Name</label>

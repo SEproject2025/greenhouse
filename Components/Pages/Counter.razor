@@ -107,6 +107,7 @@
             <!-- Assigns the class tile-one to the tile -->
             <div class="tile tile-@i">
                     <span>@plant[i].PLANT_NAME</span>
+                    <DeletePlantButton PlantId="@plant[i].PLANT_ID" />
                     <input type="checkbox" id="watering-tomato" name="watering-tomato">
                     <label for="watering-tomato">Watering</label>
             </div>

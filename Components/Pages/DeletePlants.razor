@@ -1,0 +1,36 @@
+﻿@page "/delete-plants"
+@page "/delete-plants/{PLANT_ID:int}"
+@inject IPlantService PlantService
+
+
+   <h3>Edit @plant.PLANT_NAME</h3>
+
+<EditForm Model="plant" OnSubmit="DeletePlant" FormName="editPlant">
+	<label>Plant Name</label>
+	<InputText @bind-Value="plant.PLANT_NAME">@plant.PLANT_NAME</InputText>
+	<button type="submit" class="btn btn-danger">Delete</button>
+</EditForm>
+
+@code {
+	[Parameter]
+	public int? PLANT_ID { get; set; }
+	[SupplyParameterFromForm]
+	Plants plant { get; set; } = new Plants { PLANT_NAME = string.Empty };
+
+	protected override async Task OnParametersSetAsync()
+	{
+		if (PLANT_ID.HasValue)
+		{
+			plant = await PlantService.GetPlantByID(PLANT_ID.Value);
+		}
+		else
+		{
+			plant = new Plants { PLANT_NAME = string.Empty, IS_PRIVATE = "false" }; // Properly initialize for creation
+		}
+	}
+
+	async Task DeletePlant()
+	{
+		await PlantService.DeletePlant((int)PLANT_ID);
+	}
+}
