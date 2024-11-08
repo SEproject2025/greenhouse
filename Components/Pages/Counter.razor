@@ -4,10 +4,6 @@
 @attribute [StreamRendering(true)]
 @inject IPlantService PlantService
 
-<PageTitle>MVP</PageTitle>
-
-<h1>Blossom MVP</h1>
-<AddPlantButton/>
 <style type="text/css">
     /* Styling for the green box                                             */
     /*************************************************************************/
@@ -22,27 +18,45 @@
     }
      /* Inner Container for the grid                                          */
      /*************************************************************************/
-        .main .inner {
-            font-size: 0px;
-            display: table;
-            text-align: center;
-            margin: auto, auto;
-            border-radius: 20px;
-        }
+    .main .inner {
+        font-size: 0px;
+        display: table;
+        text-align: center;
+        margin: auto, auto;
+        border-radius: 20px;
+     }
+    
+  /* Delete button as a shovel icon in the top-left corner of the tile */
+    .delete-button {
+        position: absolute;
+        top: 10px;
+        right: 10px; /* Changed from left to right */
+        width: 30px;
+        height: 30px;
+        background: url('/images/shovel-icon.png') no-repeat center center;
+        background-size: contain;
+        border: none;
+        cursor: pointer;
+        outline: none;
+    }
+
+    .delete-button:hover {
+        opacity: 0.8;
+    }
+
     /*  styles the individual tiles                                          */
     /*************************************************************************/
-    .tile {#5AAB61
+    .tile {
         margin: 0 auto;
-        top: 80%;
         padding: 50px;
         height: 190px;
         width: 190px;
         border: 20px solid #725D4C;
-        opacity: 1;
         background-color: #48BF53;
         display: inline-block;
         position: relative;
         border-radius: 20px;
+    }
     }
     /* Styling for the first tile - Tomatoe                                  */
     /*************************************************************************/
@@ -64,7 +78,7 @@
     .tile span {
         position: absolute;
         top: 15%;
-        left: 85px;
+        left: 25px;
         color: white;
         font-size: 18px;
         font-family: Arial, sans-serif;
@@ -88,43 +102,48 @@
         font-family: Arial, sans-serif;
         font-size: 14px;
     }
-
 </style>
+
+<PageTitle>MVP</PageTitle>
+
+<h1>Blossom MVP</h1>
+<AddPlantButton/>
+
 
 <!-- Main content block for displaing the tile grid -->
 <div class="main">
-    @if (plant == null)
+    @if (plant == null || !plant.Any())
     {
-     <p>null</p>
+            <p>No plants available</p>
     }
     else
     {
-    <div class="inner" style="border-radius: 20px;">
-        <!-- Generating 9 tiles                      -->
-        @for (int i = 1; i < num_plants; i++)
+        <div class="inner" style="border-radius: 20px;">
+        @foreach (var p in plant)
         {
-            <!-- Adds images to two of the tiles  -->
-            <!-- Assigns the class tile-one to the tile -->
-            <div class="tile tile-@i">
-                    <span>@plant[i].PLANT_NAME</span>
-                    <DeletePlantButton PlantId="@plant[i].PLANT_ID" />
-                    <input type="checkbox" id="watering-tomato" name="watering-tomato">
-                    <label for="watering-tomato">Watering</label>
+            <div class="tile">
+            <!-- Shovel delete button in the top-left corner -->
+            <button @onclick="() => func(p.PLANT_ID)" class="delete-button"></button>
+
+            <span>@p.PLANT_NAME</span>
+            <input type="checkbox" id="watering-@p.PLANT_ID" name="watering-@p.PLANT_ID">
+            <label for="watering-@p.PLANT_ID">Watering</label>
             </div>
         }
-    </div>
+         </div>
     }
 </div> 
 
 @code {
     List<Plants>? plant = null;
 
-    int num_plants;
-
     protected override async Task OnInitializedAsync()
     {
         plant = await PlantService.GetAllPlants();
-        num_plants = plant.Count;
     }
 
+    async Task func(int PLANT_ID)
+    {
+        await PlantService.DeletePlant(PLANT_ID);
+    }
 }
