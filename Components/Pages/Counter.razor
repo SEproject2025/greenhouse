@@ -145,6 +145,6 @@
     async Task func(int PLANT_ID)
     {
         await PlantService.DeletePlant(PLANT_ID);
-        NavigationManager.NavigateTo("/blossom_MVP", forceLoad: true);
+        plant = await PlantService.GetAllPlants();
     }
 }
