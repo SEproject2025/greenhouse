@@ -24,10 +24,27 @@ namespace greenhouse.Services
 			return plants;
         }
 
-        public async Task<List<Plants>> GetAllPlants()
+		public async Task<bool> DeletePlant(int PLANT_ID)
+		{
+			var dbPlant = await _context.Plant.FindAsync(PLANT_ID);
+			if (dbPlant != null)
+			{
+				_context.Remove(dbPlant);
+				await _context.SaveChangesAsync();
+				return true;
+			}
+			return false;
+		}
+
+		public async Task<List<Plants>> GetAllPlants()
 		{
 			var plant = await _context.Plant.ToListAsync();
 			return plant;
+		}
+
+		public async Task<Plants> GetPlantByID(int PLANT_ID)
+		{
+			return await _context.Plant.FindAsync(PLANT_ID);
 		}
 	}
 }

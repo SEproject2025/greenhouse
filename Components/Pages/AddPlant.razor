@@ -1,12 +1,16 @@
-﻿@page "/edit-plant"
-@page "/edit-plant/{PLANT_ID:int}"
+﻿@page "/add-plants"
+@page "/add-plants/{PLANT_ID:int}"
 @inject IPlantService PlantService
 
-<h3>Create Plant</h3>
+	<h3>Create Plant</h3>
 
 <EditForm Model="plant" OnSubmit="HandleSubmit" FormName="editPlant">
 	<label>Plant Name</label>
 	<InputText @bind-Value="plant.PLANT_NAME">@plant.PLANT_NAME</InputText>
+
+	<label>Upload Image</label>
+	<InputFile OnChange="HandleFileSelected" />
+
 	<button type="submit" class="btn btn-primary">Submit</button>
 </EditForm>
 
@@ -15,6 +19,22 @@
 	public int? PLANT_ID { get; set; }
 	[SupplyParameterFromForm]
 	Plants plant { get; set; } = new Plants { PLANT_NAME = string.Empty };
+
+	private IBrowserFile? selectedFile;
+
+	private const long MaxFileSize = 2 * 1024 * 1024; // 2 MB
+
+	private async Task HandleFileSelected(InputFileChangeEventArgs e)
+	{
+		selectedFile = e.File;
+
+		if (selectedFile != null)
+		{
+			using var memoryStream = new MemoryStream();
+			await selectedFile.OpenReadStream().CopyToAsync(memoryStream);
+			plant.IMAGE_DATA = memoryStream.ToArray();
+		}
+	}
 
 	async Task HandleSubmit()
 	{
