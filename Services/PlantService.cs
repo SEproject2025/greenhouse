@@ -41,6 +41,15 @@ namespace greenhouse.Services
 			var plant = await _context.Plant.ToListAsync();
 			return plant;
 		}
+		public async Task<List<Plants>> GetAllPublicPlants()
+		{
+
+			var PublicPlants = await _context.Plant
+				.Where(plant => plant.IS_PRIVATE == "N")
+				.ToListAsync();
+
+			return PublicPlants;
+		}
 
 		public async Task<Plants> GetPlantByID(int PLANT_ID)
 		{

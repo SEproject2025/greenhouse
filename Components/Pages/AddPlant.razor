@@ -2,28 +2,43 @@
 @page "/add-plants/{PLANT_ID:int}"
 @inject IPlantService PlantService
 
-	<h3>Create Plant</h3>
+<h3>Create Plant</h3>
 
+<!-- Form to create or edit a plant -->
 <EditForm Model="plant" OnSubmit="HandleSubmit" FormName="editPlant">
+	<!-- Input field for plant name-->
 	<label>Plant Name</label>
 	<InputText @bind-Value="plant.PLANT_NAME">@plant.PLANT_NAME</InputText>
 
+	<!-- File input for uploading an image of the plant -->
 	<label>Upload Image</label>
 	<InputFile OnChange="HandleFileSelected" />
 
+	<!-- Submit button to save the plant details -->
 	<button type="submit" class="btn btn-primary">Submit</button>
 </EditForm>
 
+
+<!--***********************************************************************
+*	                             CODE SECTION                             *
+************************************************************************-->
 @code {
+	// Parameter for plant ID, used when editing an exisiting plant
 	[Parameter]
 	public int? PLANT_ID { get; set; }
+
+	// The plant object that represents the data being entered in the form
 	[SupplyParameterFromForm]
 	Plants plant { get; set; } = new Plants { PLANT_NAME = string.Empty };
+	List<Plants>? publicPlants = null;
 
+	// Stores the file selected by the user
 	private IBrowserFile? selectedFile;
 
-	private const long MaxFileSize = 2 * 1024 * 1024; // 2 MB
+	// Max file size allow for image uploads (2MD)
+	private const long MaxFileSize = 2 * 1024 * 1024;
 
+	// Handles the image file selected by the user
 	private async Task HandleFileSelected(InputFileChangeEventArgs e)
 	{
 		selectedFile = e.File;
@@ -36,8 +51,10 @@
 		}
 	}
 
+	// Handles the form submission and save the plant to the database
 	async Task HandleSubmit()
 	{
 		await PlantService.AddPlants(plant);
 	}
+
 }
