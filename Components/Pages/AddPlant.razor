@@ -10,6 +10,19 @@
 	<label>Plant Name</label>
 	<InputText @bind-Value="plant.PLANT_NAME">@plant.PLANT_NAME</InputText>
 
+	<!-- Dropdown to select a public plant -->
+	<label>Select a Public Plant</label>
+	<InputSelect @bind-Value="selectedPublicPlantId">
+		<option value="">-- Select a public plant --</option>
+		@if (publicPlants != null)
+		{
+			@foreach (var publicPlant in publicPlants)
+			{
+				<option value="@publicPlant.PLANT_ID">@publicPlant.PLANT_NAME</option>
+			}
+		}
+	</InputSelect>
+
 	<!-- File input for uploading an image of the plant -->
 	<label>Upload Image</label>
 	<InputFile OnChange="HandleFileSelected" />
@@ -23,14 +36,14 @@
 *	                             CODE SECTION                             *
 ************************************************************************-->
 @code {
-	// Parameter for plant ID, used when editing an exisiting plant
 	[Parameter]
-	public int? PLANT_ID { get; set; }
+	public int? PLANT_ID { get; set; }    // 
+	private int? selectedPublicPlantId;   // 
+	List<Plants>? publicPlants = null;    // 
 
 	// The plant object that represents the data being entered in the form
 	[SupplyParameterFromForm]
 	Plants plant { get; set; } = new Plants { PLANT_NAME = string.Empty };
-	List<Plants>? publicPlants = null;
 
 	// Stores the file selected by the user
 	private IBrowserFile? selectedFile;
@@ -54,7 +67,24 @@
 	// Handles the form submission and save the plant to the database
 	async Task HandleSubmit()
 	{
+		// If a public plant is selected, use its information
+		if (selectedPublicPlantId.HasValue)
+		{
+			var selectedPlant = publicPlants?.FirstOrDefault(p => p.PLANT_ID == selectedPublicPlantId.Value);
+			if (selectedPlant != null)
+			{
+				plant.PLANT_NAME = selectedPlant.PLANT_NAME;
+			}
+		}
+
+		// Save the plant to the database
 		await PlantService.AddPlants(plant);
+	}
+
+	// Loads the list of public plants when the component is initialized
+	protected override async Task OnInitializedAsync()
+	{
+		publicPlants = await PlantService.GetAllPublicPlants();
 	}
 
 }
