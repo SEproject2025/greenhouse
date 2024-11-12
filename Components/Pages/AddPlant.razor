@@ -1,90 +1,106 @@
 ﻿@page "/add-plants"
 @page "/add-plants/{PLANT_ID:int}"
 @inject IPlantService PlantService
+@rendermode InteractiveServer
 
 <h3>Create Plant</h3>
-
-<!-- Form to create or edit a plant -->
-<EditForm Model="plant" OnSubmit="HandleSubmit" FormName="editPlant">
+<input type="checkbox" @onchange="CheckBoxChange">
+@if (is_checked)
+{
+    <!-- Form to create or edit a plant -->
+    <EditForm Model="plant" OnSubmit="HandleSubmit" FormName="editPlant">
 	<!-- Input field for plant name-->
 	<label>Plant Name</label>
 	<InputText @bind-Value="plant.PLANT_NAME">@plant.PLANT_NAME</InputText>
-
-	<!-- Dropdown to select a public plant -->
-	<label>Select a Public Plant</label>
-	<InputSelect @bind-Value="selectedPublicPlantId">
-		<option value="">-- Select a public plant --</option>
-		@if (publicPlants != null)
-		{
-			@foreach (var publicPlant in publicPlants)
-			{
-				<option value="@publicPlant.PLANT_ID">@publicPlant.PLANT_NAME</option>
-			}
-		}
-	</InputSelect>
+        <!-- Submit button to save the plant details -->
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </EditForm>
+}
+else
+{
+    <EditForm Model="plant" OnSubmit="HandleSubmit" FormName="editPlant">
+    <!-- Dropdown to select a public plant -->
+    <label>Select a Public Plant</label>
+    <InputSelect @bind-Value="selectedPublicPlantId">
+        <option value="">-- Select a public plant --</option>
+        @if (publicPlants != null)
+        {
+            @foreach (var publicPlant in publicPlants)
+            {
+                <option value="@publicPlant.PLANT_ID">@publicPlant.PLANT_NAME</option>
+            }
+        }
+    </InputSelect>
+        <!-- Submit button to save the plant details -->
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </EditForm>
+}
 
 	<!-- File input for uploading an image of the plant -->
 	<label>Upload Image</label>
 	<InputFile OnChange="HandleFileSelected" />
 
-	<!-- Submit button to save the plant details -->
-	<button type="submit" class="btn btn-primary">Submit</button>
-</EditForm>
+
 
 
 <!--***********************************************************************
 *	                             CODE SECTION                             *
 ************************************************************************-->
 @code {
-	[Parameter]
-	public int? PLANT_ID { get; set; }    // 
-	private int? selectedPublicPlantId;   // 
-	List<Plants>? publicPlants = null;    // 
+    [Parameter]
+    public int? PLANT_ID { get; set; }    // 
+    private int? selectedPublicPlantId;   // 
+    List<Plants>? publicPlants = null;    // 
+    public bool is_checked; 
 
-	// The plant object that represents the data being entered in the form
-	[SupplyParameterFromForm]
-	Plants plant { get; set; } = new Plants { PLANT_NAME = string.Empty };
+    // The plant object that represents the data being entered in the form
+    [SupplyParameterFromForm]
+    Plants plant { get; set; } = new Plants { PLANT_NAME = string.Empty };
 
-	// Stores the file selected by the user
-	private IBrowserFile? selectedFile;
+    // Stores the file selected by the user
+    private IBrowserFile? selectedFile;
 
-	// Max file size allow for image uploads (2MD)
-	private const long MaxFileSize = 2 * 1024 * 1024;
+    // Max file size allow for image uploads (2MD)
+    private const long MaxFileSize = 2 * 1024 * 1024;
 
-	// Handles the image file selected by the user
-	private async Task HandleFileSelected(InputFileChangeEventArgs e)
-	{
-		selectedFile = e.File;
+    // Handles the image file selected by the user
+    private async Task HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        selectedFile = e.File;
 
-		if (selectedFile != null)
-		{
-			using var memoryStream = new MemoryStream();
-			await selectedFile.OpenReadStream().CopyToAsync(memoryStream);
-			plant.IMAGE_DATA = memoryStream.ToArray();
-		}
-	}
+        if (selectedFile != null)
+        {
+            using var memoryStream = new MemoryStream();
+            await selectedFile.OpenReadStream().CopyToAsync(memoryStream);
+            plant.IMAGE_DATA = memoryStream.ToArray();
+        }
+    }
 
-	// Handles the form submission and save the plant to the database
-	async Task HandleSubmit()
-	{
-		// If a public plant is selected, use its information
-		if (selectedPublicPlantId.HasValue)
-		{
-			var selectedPlant = publicPlants?.FirstOrDefault(p => p.PLANT_ID == selectedPublicPlantId.Value);
-			if (selectedPlant != null)
-			{
-				plant.PLANT_NAME = selectedPlant.PLANT_NAME;
-			}
-		}
+    // Handles the form submission and save the plant to the database
+    async Task HandleSubmit()
+    {
+        Console.WriteLine("The ID:", selectedPublicPlantId);
+        // If a public plant is selected, use its information
+        if (selectedPublicPlantId.HasValue)
+        {
+            var selectedPlant = publicPlants?.FirstOrDefault(p => p.PLANT_ID == selectedPublicPlantId.Value);
+            if (selectedPlant != null)
+            {
+                plant.PLANT_NAME = selectedPlant.PLANT_NAME;
+            }
+        }
 
-		// Save the plant to the database
-		await PlantService.AddPlants(plant);
-	}
+        // Save the plant to the database
+        await PlantService.AddPlants(plant);
+    }
 
-	// Loads the list of public plants when the component is initialized
-	protected override async Task OnInitializedAsync()
-	{
-		publicPlants = await PlantService.GetAllPublicPlants();
-	}
-
+    // Loads the list of public plants when the component is initialized
+    protected override async Task OnInitializedAsync()
+    {
+        publicPlants = await PlantService.GetAllPublicPlants();
+    }
+    private void CheckBoxChange()
+    {
+       is_checked = !is_checked;
+    }
 }
