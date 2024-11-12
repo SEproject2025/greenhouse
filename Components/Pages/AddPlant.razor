@@ -4,19 +4,26 @@
 @rendermode InteractiveServer
 
 <h3>Create Plant</h3>
-<input type="checkbox" @onchange="CheckBoxChange">
-@if (is_checked)
+<button @onclick="ShowCustomForm" class="btn btn-secondary">Create Custom Plant</button>
+<button @onclick="ShowPrefilledForm" class="btn btn-secondary">Creat Prefilled Plant</button>
+
+@if (showCustomForm)
 {
     <!-- Form to create or edit a plant -->
     <EditForm Model="plant" OnSubmit="HandleSubmit" FormName="editPlant">
-	<!-- Input field for plant name-->
-	<label>Plant Name</label>
-	<InputText @bind-Value="plant.PLANT_NAME">@plant.PLANT_NAME</InputText>
-        <!-- Submit button to save the plant details -->
-        <button type="submit" class="btn btn-primary">Submit</button>
+	   <!-- Input field for plant name-->
+	   <label>Plant Name</label>
+	   <InputText @bind-Value="plant.PLANT_NAME">@plant.PLANT_NAME</InputText>
+
+       <!-- File input for uploading an image of the plant -->
+       <label>Upload Image</label>
+       <InputFile OnChange="HandleFileSelected" />
+
+       <!-- Submit button to save the plant details -->
+       <button type="submit" class="btn btn-primary">Submit</button>
     </EditForm>
 }
-else
+else if(showPrefilledForm)
 {
     <EditForm Model="plant" OnSubmit="HandleSubmit" FormName="editPlant">
     <!-- Dropdown to select a public plant -->
@@ -36,10 +43,6 @@ else
     </EditForm>
 }
 
-	<!-- File input for uploading an image of the plant -->
-	<label>Upload Image</label>
-	<InputFile OnChange="HandleFileSelected" />
-
 
 
 
@@ -51,7 +54,9 @@ else
     public int? PLANT_ID { get; set; }    // 
     private int? selectedPublicPlantId;   // 
     List<Plants>? publicPlants = null;    // 
-    public bool is_checked; 
+    public bool is_checked;               // 
+    private bool showCustomForm = false;    // Flag to control which form is displayed
+    private bool showPrefilledForm = false; // Flag
 
     // The plant object that represents the data being entered in the form
     [SupplyParameterFromForm]
@@ -99,8 +104,14 @@ else
     {
         publicPlants = await PlantService.GetAllPublicPlants();
     }
-    private void CheckBoxChange()
+    private void ShowCustomForm()
     {
-       is_checked = !is_checked;
+        showCustomForm = true;
+        showPrefilledForm = false;
+    }
+    private void ShowPrefilledForm()
+    {
+        showCustomForm = false;
+        showPrefilledForm = true;
     }
 }
