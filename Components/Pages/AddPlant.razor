@@ -1,6 +1,7 @@
 ﻿@page "/add-plants"
 @page "/add-plants/{PLANT_ID:int}"
 @inject IPlantService PlantService
+@inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
 <h3>Create Plant</h3>
@@ -94,9 +95,11 @@ else if(showPrefilledForm)
                 plant.PLANT_NAME = selectedPlant.PLANT_NAME;
             }
         }
-
         // Save the plant to the database
         await PlantService.AddPlants(plant);
+
+        NavigationManager.NavigateTo("/blossom_MVP");
+
     }
 
     // Loads the list of public plants when the component is initialized
