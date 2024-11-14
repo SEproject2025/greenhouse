@@ -1,43 +1,229 @@
 ﻿@page "/add-plants"
 @page "/add-plants/{PLANT_ID:int}"
 @inject IPlantService PlantService
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
 
-	<h3>Create Plant</h3>
 
-<EditForm Model="plant" OnSubmit="HandleSubmit" FormName="editPlant">
-	<label>Plant Name</label>
-	<InputText @bind-Value="plant.PLANT_NAME">@plant.PLANT_NAME</InputText>
+<!--***********************************************************************
+*	                             CSS/STYLING SECTION                      *
+************************************************************************-->
+<style>
+    
+    /* Body styling - sets font and text color */
+    body {
+        font-family: 'Arial', sans-serif;
+        color: #2F4F4F;
+        justify-content: center;
+    }
+    
+    /* Header styling - font size and color */
+    h3 {
+        font-size: 24px;
+        color: #2C6E49;
+        text-align: center;
+        margin-bottom: 20px;
+        font-family: 'Georgia', serif;
+    }
 
-	<label>Upload Image</label>
-	<InputFile OnChange="HandleFileSelected" />
+    /* Button styling - main style */
+    button.btn {
+        background-color: #6BBF59;
+        color: #FFFFFF;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 25px;
+        font-size: 16px;
+        margin: 10px 5px;
+        cursor: pointer;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease;
+    }
 
-	<button type="submit" class="btn btn-primary">Submit</button>
-</EditForm>
+    /* Button hover effect */
+    button.btn:hover {
+        background-color: #5AA74E;
+    }
 
-@code {
-	[Parameter]
-	public int? PLANT_ID { get; set; }
-	[SupplyParameterFromForm]
-	Plants plant { get; set; } = new Plants { PLANT_NAME = string.Empty };
+    /* Form container styling */
+    form {
+        display: flex;
+        flex-direction: column;
+        background-color: #FFFFFF;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+        margin: 20px auto;
+        border: 1px solid #C6E2C6;
+    }
 
-	private IBrowserFile? selectedFile;
+    /* Label styling - font size and color */
+    label {
+        font-size: 14px;
+        color: #4F7942;
+        margin-top: 10px;
+    }
 
-	private const long MaxFileSize = 2 * 1024 * 1024; // 2 MB
+    /* Text input and select styling */
+    input[type="text"],
+    select {
+        padding: 10px;
+        border: 1px solid #A0D3A1;
+        border-radius: 8px;
+        font-size: 14px;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        color: #4F7942;
+        background-color: #F8FFF8;
+    }
 
-	private async Task HandleFileSelected(InputFileChangeEventArgs e)
-	{
-		selectedFile = e.File;
+    /* Focus effect on text input and select */
+    input[type="text"]:focus, select:focus {
+        outline: none;
+        border-color: #6BBF59;
+        box-shadow: 0px 0px 5px rgba(107, 191, 89, 0.4);
+    }
 
-		if (selectedFile != null)
-		{
-			using var memoryStream = new MemoryStream();
-			await selectedFile.OpenReadStream().CopyToAsync(memoryStream);
-			plant.IMAGE_DATA = memoryStream.ToArray();
-		}
-	}
+    /* File input styling */
+    input[type="file"] {
+        margin-top: 10px;
+        padding: 8px;
+        background-color: #F0F5F0;
+        color: #4F7942;
+        border: 1px solid #A0D3A1;
+        border-radius: 8px;
+    }
 
-	async Task HandleSubmit()
-	{
-		await PlantService.AddPlants(plant);
-	}
+    /* Submit button styling */
+    button[type="submit"] {
+        background-color: #6BBF59;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 25px;
+        font-size: 16px;
+        margin-top: 10px;
+        cursor: pointer;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease;
+    }
+
+    /* Submit button hover effect */
+    button[type="submit"]:hover {
+        background-color: #5AA74E;
+    }
+</style>
+
+<!--***********************************************************************
+*	                             HTML SECTION                             *
+************************************************************************-->
+<h3>Create Plant</h3>
+<button @onclick="ShowCustomForm" class="btn btn-secondary">Create Custom Plant</button>
+<button @onclick="ShowPrefilledForm" class="btn btn-secondary">Create Prefilled Plant</button>
+
+@if (showCustomForm)
+{
+    <!-- Form to create a CUSTOM a plant -->
+    <EditForm Model="plant" OnSubmit="HandleSubmit" FormName="editPlant">
+        <!-- Input field for plant name-->
+        <label>Plant Name</label>
+        <InputText @bind-Value="plant.PLANT_NAME">@plant.PLANT_NAME</InputText>
+
+        <!-- File input for uploading an image of the plant -->
+        <label>Upload Image</label>
+        <InputFile OnChange="HandleFileSelected" />
+  
+        <!-- Submit button to save the plant details -->
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </EditForm>
 }
+else if (showPrefilledForm)
+{
+    <!-- Form to create a PRE-FILLED a plant -->
+    <EditForm Model="plant" OnSubmit="HandleSubmit" FormName="editPlant">
+        <!-- Dropdown to select a public plant -->
+        <label>Select a Public Plant</label>
+        <InputSelect @bind-Value="selectedPublicPlantId">
+            <option value="">-- Select a public plant --</option>
+            @if (publicPlants != null)
+            {
+                @foreach (var publicPlant in publicPlants)
+                {
+                    <option value="@publicPlant.PLANT_ID">@publicPlant.PLANT_NAME</option>
+                }
+            }
+        </InputSelect>
+        <!-- Submit button to save the plant details -->
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </EditForm>
+}
+
+<!--***********************************************************************
+*	                             CODE SECTION                             *
+************************************************************************-->
+@code {
+    [Parameter]
+    public int? PLANT_ID { get; set; }       // Plant ID from route parameter
+    private int? selectedPublicPlantId;      // ID of selected public plant
+    List<Plants>? publicPlants = null;       // List of public plants
+    private bool showCustomForm = false;     // Show custom plant form
+    private bool showPrefilledForm = false;  // Show prefilled plant form
+
+    [SupplyParameterFromForm]
+    Plants plant { get; set; } = new Plants { PLANT_NAME = string.Empty }; 
+    private IBrowserFile? selectedFile;
+    private const long MaxFileSize = 2 * 1024 * 1024;
+
+    // Handles file selection for image upload
+    private async Task HandleFileSelected(InputFileChangeEventArgs e)
+    {
+        selectedFile = e.File;
+
+        if (selectedFile != null)
+        {
+            using var memoryStream = new MemoryStream();
+            await selectedFile.OpenReadStream().CopyToAsync(memoryStream);
+            plant.IMAGE_DATA = memoryStream.ToArray();
+        }
+    }
+
+    // Handles form submission
+    async Task HandleSubmit()
+    {
+        Console.WriteLine("The ID:", selectedPublicPlantId);
+
+        if (selectedPublicPlantId.HasValue)
+        {
+            var selectedPlant = publicPlants?.FirstOrDefault(p => p.PLANT_ID == selectedPublicPlantId.Value);
+            if (selectedPlant != null)
+            {
+                plant.PLANT_NAME = selectedPlant.PLANT_NAME;
+            }
+        }
+
+        await PlantService.AddPlants(plant);
+        NavigationManager.NavigateTo("/blossom_MVP");
+    }
+
+    // Initializes and fetches public plants list
+    protected override async Task OnInitializedAsync()
+    {
+        publicPlants = await PlantService.GetAllPublicPlants();
+    }
+
+    // Displays the custom plant form
+    private void ShowCustomForm()
+    {
+        showCustomForm = true;
+        showPrefilledForm = false;
+    }
+
+    // Displays the prefilled plant form
+    private void ShowPrefilledForm()
+    {
+        showCustomForm = false;
+        showPrefilledForm = true;
+    }
+}
+

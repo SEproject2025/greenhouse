@@ -4,9 +4,12 @@
 @attribute [StreamRendering(true)]
 @inject IPlantService PlantService
 
+<!--***********************************************************************
+*	                             CSS/STYLING SECTION                      *
+************************************************************************-->
 <style type="text/css">
-    /* Styling for the green box                                             */
-    /*************************************************************************/
+    /* Styling for the green box                                         */
+    /*********************************************************************/
     .main {
         margin: 50px auto;
         width: 700px;
@@ -16,8 +19,8 @@
         border-radius: 20px;
         box-shadow: 10px 10px 8px #888888;
     }
-     /* Inner Container for the grid                                          */
-     /*************************************************************************/
+     /* Inner Container for the grid                                      */
+     /*********************************************************************/
     .main .inner {
         font-size: 0px;
         display: table;
@@ -44,8 +47,8 @@
         opacity: 0.8;
     }
 
-    /*  styles the individual tiles                                          */
-    /*************************************************************************/
+    /*  styles the individual tiles                                      */
+    /*********************************************************************/
     .tile {
         margin: 0 auto;
         padding: 50px;
@@ -58,23 +61,23 @@
         border-radius: 20px;
     }
     }
-    /* Styling for the first tile - Tomatoe                                  */
-    /*************************************************************************/
+    /* Styling for the first tile - Tomatoe                              */
+    /*********************************************************************/
     .tile-1 {
         background: url(images/Tomato.png) left -1px top -1px no-repeat, #654321;
         background-size: 75px;
         background-color: #48BF53;
     }
-    /* Styling for the second tile - Carrot                                  */
-    /*************************************************************************/
+    /* Styling for the second tile - Carrot                              */
+    /*********************************************************************/
     .tile-2 {
         background: url(images/Carrot.png) left -1px top -1px no-repeat, #654321;
         background-size: 75px;
         background-color: #48BF53;
     }
 
-    /* Styling for the plant name - targets spans inside the tiles           */
-    /*************************************************************************/
+    /* Styling for the plant name - targets spans inside the tiles       */
+    /*********************************************************************/
     .tile span {
         position: absolute;
         top: 15%;
@@ -84,16 +87,16 @@
         font-family: Arial, sans-serif;
     }
 
-    /* Styling for formatting checkbox - targets checkbox input              */
-    /*************************************************************************/
+    /* Styling for formatting checkbox - targets checkbox input          */
+    /*********************************************************************/
     .tile input[type="checkbox"] {
         position: absolute;
         top: 60%;  
         left: 25px; 
     }
 
-    /* Styling for the checkbox label - targets labels                       */
-    /*************************************************************************/
+    /* Styling for the checkbox label - targets labels                   */
+    /*********************************************************************/
     .tile label {
         position: absolute;
         top: 58%;        
@@ -104,6 +107,9 @@
     }
 </style>
 
+<!--***********************************************************************
+*	                             HTML SECTION                             *
+************************************************************************-->
 <PageTitle>MVP</PageTitle>
 
 <h1>Blossom MVP</h1>
@@ -133,6 +139,9 @@
     }
 </div> 
 
+<!--***********************************************************************
+*	                             CODE SECTION                             *
+************************************************************************-->
 @code {
     List<Plants>? plant = null;
 
@@ -146,4 +155,5 @@
         await PlantService.DeletePlant(PLANT_ID);
         plant = await PlantService.GetAllPlants();
     }
+
 }
