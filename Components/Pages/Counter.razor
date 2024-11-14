@@ -131,6 +131,12 @@
             <button @onclick="() => func(p.PLANT_ID)" class="delete-button"></button>
 
             <span>@p.PLANT_NAME</span>
+
+            @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
+            {
+                <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)" alt="@p.PLANT_NAME" style="width: 75px; height: auto; border-radius: 10px; margin-top: 10px;" />
+            }
+
             <input type="checkbox" id="watering-@p.PLANT_ID" name="watering-@p.PLANT_ID">
             <label for="watering-@p.PLANT_ID">Watering</label>
             </div>
