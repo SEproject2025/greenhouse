@@ -12,22 +12,22 @@
     /*********************************************************************/
     .main {
         margin: 50px auto;
-        width: 700px;
+        width: 700px; 
         padding-top: 10px;
         padding-bottom: 10px;
         background-color: #725D4C;
         border-radius: 20px;
         box-shadow: 10px 10px 8px #888888;
     }
-     /* Inner Container for the grid                                      */
-     /*********************************************************************/
+
+    /* Inner Container for the grid */
     .main .inner {
-        font-size: 0px;
-        display: table;
-        text-align: center;
-        margin: auto, auto;
-        border-radius: 20px;
-     }
+        display: flex;
+        flex-wrap: wrap; /* Allows items to wrap to the next line */
+        justify-content: center; /* Centers items horizontally */
+        gap: 20px; /* Space between tiles */
+        padding: 10px;
+    }
     
   /* Delete button as a shovel icon in the top-left corner of the tile */
     .delete-button {
@@ -47,33 +47,27 @@
         opacity: 0.8;
     }
 
-    /*  styles the individual tiles                                      */
     /*********************************************************************/
+    /* Container for all tiles */
+    .tiles-container {
+        display: flex;
+        flex-wrap: wrap; /* Allows tiles to wrap onto new rows */
+        justify-content: center; /* Centers tiles on the page */
+        gap: 50px; /* Space between tiles */
+        padding: 30px; /* Optional padding around the container */
+    }
+
+    /* Styling for individual tiles */
     .tile {
-        margin: 0 auto;
-        padding: 50px;
-        height: 190px;
-        width: 190px;
+        height: 225px;
+        width: 400px; /* Adjust width as needed */
         border: 20px solid #725D4C;
         background-color: #48BF53;
         display: inline-block;
         position: relative;
         border-radius: 20px;
-    }
-    }
-    /* Styling for the first tile - Tomatoe                              */
-    /*********************************************************************/
-    .tile-1 {
-        background: url(images/Tomato.png) left -1px top -1px no-repeat, #654321;
-        background-size: 75px;
-        background-color: #48BF53;
-    }
-    /* Styling for the second tile - Carrot                              */
-    /*********************************************************************/
-    .tile-2 {
-        background: url(images/Carrot.png) left -1px top -1px no-repeat, #654321;
-        background-size: 75px;
-        background-color: #48BF53;
+        box-shadow: 10px 10px 8px #888888;
+        padding: 10px;
     }
 
     /* Styling for the plant name - targets spans inside the tiles       */
@@ -81,7 +75,7 @@
     .tile span {
         position: absolute;
         top: 15%;
-        left: 25px;
+        left: 200px;
         color: white;
         font-size: 18px;
         font-family: Arial, sans-serif;
@@ -116,34 +110,34 @@
 <AddPlantButton/>
 
 <!-- Main content block for displaing the tile grid -->
-<div class="main">
+<div class="tiles-container">
     @if (plant == null || !plant.Any())
     {
-            <p>No plants available</p>
+        <p>No plants available</p>
     }
     else
     {
-        <div class="inner" style="border-radius: 20px;">
         @foreach (var p in plant)
         {
             <div class="tile">
-            <!-- Shovel delete button in the top-left corner -->
-            <button @onclick="() => func(p.PLANT_ID)" class="delete-button"></button>
+                <!-- Shovel delete button in the top-right corner -->
+                <button @onclick="() => func(p.PLANT_ID)" class="delete-button"></button>
 
-            <span>@p.PLANT_NAME</span>
+                <span>@p.PLANT_NAME</span>
 
-            @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
-            {
-                <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)" alt="@p.PLANT_NAME" style="width: 75px; height: auto; border-radius: 10px; margin-top: 10px;" />
-            }
+                @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
+                {
+                    <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)" 
+                         alt="@p.PLANT_NAME" 
+                         style="width: 75px; height: 80px; border-radius: 10px; margin-top: 0px;" />
+                }
 
-            <input type="checkbox" id="watering-@p.PLANT_ID" name="watering-@p.PLANT_ID">
-            <label for="watering-@p.PLANT_ID">Watering</label>
+                <input type="checkbox" id="watering-@p.PLANT_ID" name="watering-@p.PLANT_ID">
+                <label for="watering-@p.PLANT_ID">Watering</label>
             </div>
         }
-         </div>
     }
-</div> 
+</div>
 
 <!--***********************************************************************
 *	                             CODE SECTION                             *
