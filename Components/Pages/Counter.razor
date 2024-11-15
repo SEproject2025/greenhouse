@@ -119,6 +119,9 @@
     {
         @foreach (var p in plant)
         {
+            
+            @if (p.IS_PRIVATE == "Y")
+            {
             <div class="tile">
                 <!-- Shovel delete button in the top-right corner -->
                 <button @onclick="() => func(p.PLANT_ID)" class="delete-button"></button>
@@ -135,6 +138,7 @@
                 <input type="checkbox" id="watering-@p.PLANT_ID" name="watering-@p.PLANT_ID">
                 <label for="watering-@p.PLANT_ID">Watering</label>
             </div>
+            }
         }
     }
 </div>
