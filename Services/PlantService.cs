@@ -55,5 +55,19 @@ namespace greenhouse.Services
 		{
 			return await _context.Plant.FindAsync(PLANT_ID);
 		}
-	}
+
+		public async Task<List<String>> GetFrequencyFields(int plantID)
+		{
+			var plant = await _context.Plant.FindAsync(plantID); // Create a new plant object
+			var frequencyFields = new List<String>();			 // Create a list to populate
+
+			// Add water to the list if not null
+			if (plant.WATER_FREQ != 0)
+			{
+				frequencyFields.Add("Water");
+			}
+
+			return frequencyFields;
+		}
+    }
 }
