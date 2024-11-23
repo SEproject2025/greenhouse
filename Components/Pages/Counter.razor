@@ -135,8 +135,10 @@
                          style="width: 75px; height: 80px; border-radius: 10px; margin-top: 0px;" />
                 }
 
+                <!-- Pull the list instead of hardcoding a water check-box -->
                 <input type="checkbox" id="watering-@p.PLANT_ID" name="watering-@p.PLANT_ID">
                 <label for="watering-@p.PLANT_ID">Watering</label>
+                <p>@p.WATER_FREQ</p>
             </div>
             }
         }
