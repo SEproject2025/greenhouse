@@ -16,6 +16,7 @@ namespace greenhouse.Services
 			_context = context;
 		}
 
+		// Add a plant to the page and the database
         public async Task<Plants> AddPlants(Plants plants)
         {
             _context.Plant.Add(plants);
@@ -24,6 +25,7 @@ namespace greenhouse.Services
 			return plants;
         }
 
+		// Delete a plant from the page and the database
 		public async Task<bool> DeletePlant(int PLANT_ID)
 		{
 			var dbPlant = await _context.Plant.FindAsync(PLANT_ID);
@@ -36,11 +38,14 @@ namespace greenhouse.Services
 			return false;
 		}
 
+		// 
 		public async Task<List<Plants>> GetAllPlants()
 		{
 			var plant = await _context.Plant.ToListAsync();
 			return plant;
 		}
+
+		// Get all public plants not created by the user
 		public async Task<List<Plants>> GetAllPublicPlants()
 		{
 
@@ -51,11 +56,13 @@ namespace greenhouse.Services
 			return PublicPlants;
 		}
 
+		// Get a plant from the database by ID
 		public async Task<Plants> GetPlantByID(int PLANT_ID)
 		{
 			return await _context.Plant.FindAsync(PLANT_ID);
 		}
 
+		// Create a list of fields that need to be populated
 		public async Task<List<String>> GetFrequencyFields(int plantID)
 		{
 			var plant = await _context.Plant.FindAsync(plantID); // Create a new plant object
