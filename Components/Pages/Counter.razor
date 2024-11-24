@@ -136,9 +136,26 @@
                 }
 
                 <!-- Pull the list instead of hardcoding a water check-box -->
-                <input type="checkbox" id="watering-@p.PLANT_ID" name="watering-@p.PLANT_ID">
-                <label for="watering-@p.PLANT_ID">Watering</label>
-                <p>@p.WATER_FREQ</p>
+                <!-- <input type="checkbox" id="watering-@p.PLANT_ID" name="watering-@p.PLANT_ID"> -->
+                <!-- <label for="watering-@p.PLANT_ID">Watering</label> -->
+
+                @if (@p.WATER_FREQ != 0)
+                {
+                    <input type="checkbox" id="watering-@p.PLANT_ID" name="watering-@p.PLANT_ID">
+                    <label for="watering-@p.PLANT_ID">Watering</label>
+                    <div>
+                        @if (@p.WATER_FREQ == 1)
+                        {
+                            <div>Water @p.WATER_FREQ time a day.</div>    
+                        }
+                    </div>
+                    <div>
+                        @if (@p.WATER_FREQ > 1)
+                        {
+                            <div>Water @p.WATER_FREQ times a day.</div>    
+                        }
+                    </div>
+                }
             </div>
             }
         }
