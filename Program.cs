@@ -5,12 +5,15 @@ using greenhouse.Components;
 using greenhouse.Data;
 using greenhouse.Services;
 using Microsoft.EntityFrameworkCore;
+using DevExpress.Blazor;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+builder.Services.AddDevExpressBlazor(configure => configure.BootstrapVersion = BootstrapVersion.v5);
+builder.Services.AddMvc();
 
 builder.Services.AddDbContext<DataContext>(options =>
 	 options.UseMySql(

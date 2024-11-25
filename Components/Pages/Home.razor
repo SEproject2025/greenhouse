@@ -1,1 +1,16 @@
 ﻿@page "/"
+@rendermode InteractiveServer
+
+<div @onclick="@(() => PopupVisible = true)">
+    <button class="button">CLICK TO SHOW A POP-UP WINDOW</button>
+  
+</div>
+
+<DxPopup @bind-Visible="@PopupVisible" AllowDrag="true">
+
+</DxPopup>
+
+@code {
+    bool PopupVisible { get; set; } = false;
+}
+
