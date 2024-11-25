@@ -9,13 +9,23 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace greenhouse.Data
 { 
-	public class DataContext : IdentityDbContext
+	public class DataContext : IdentityDbContext<ApplicationUser>
 	{
 		public DataContext(DbContextOptions<DataContext> options) 
 		   : base(options)
 		{ }
 
-		public DbSet<Plants> Plant { get; set; }
-	}
+		public DbSet<Plant> Plants { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+			builder.Entity<Plant>(entity => {
+				entity.HasOne(d => d.Owner)
+					.WithMany(p => p.Plants);
+			});
+        }
+    }
 	
 }

@@ -7,10 +7,10 @@ namespace greenhouse.Services
 {
 	public interface IPlantService
 	{
-		Task<List<Plants>> GetAllPlants();
-		Task<List<Plants>> GetAllPublicPlants();
-		Task<Plants> GetPlantByID(int PLANT_ID);
-		Task<Plants> AddPlants(Plants plants);
+		Task<List<Plant>> GetAllPlants();
+		Task<List<Plant>> GetAllPublicPlants();
+		Task<Plant> GetPlantByID(int PLANT_ID);
+		Task<Plant> AddPlants(Plant plants);
 		Task<bool> DeletePlant(int PLANT_ID);
 
 	}
