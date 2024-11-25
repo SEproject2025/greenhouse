@@ -12,7 +12,7 @@ namespace greenhouse.Services
 		Task<Plants>       GetPlantByID(int PLANT_ID);
 		Task<Plants>       AddPlants(Plants plants);
 		Task<bool>         DeletePlant(int PLANT_ID);
-		Task<List<String>> GetFrequencyFields(int plantID);
+		Task<Dictionary<String, int>> GetFrequencyFields(int plantID);
 
     }
 }

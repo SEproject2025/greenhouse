@@ -62,19 +62,24 @@ namespace greenhouse.Services
 			return await _context.Plant.FindAsync(PLANT_ID);
 		}
 
-		// Create a list of fields that need to be populated
-		public async Task<List<String>> GetFrequencyFields(int plantID)
-		{
-			var plant = await _context.Plant.FindAsync(plantID); // Create a new plant object
-			var frequencyFields = new List<String>();			 // Create a list to populate
+        // Retrieves frequency-related fields for a specific plant by its ID
+        public async Task<Dictionary<string, int>> GetFrequencyFields(int plantId)
+        {
+            var plant = await _context.Plant.FindAsync(plantId);    // Find the plant by its ID
+            var frequencyFields = new Dictionary<string, int>();    // Dictionary to store field names & frequencies
 
-			// Add water to the list if not null
-			if (plant.WATER_FREQ != 0)
-			{
-				frequencyFields.Add("Water");
-			}
+            if (plant == null)
+            {
+                return new Dictionary<string, int>();
+            }
 
-			return frequencyFields;
-		}
+            if (plant.WATER_FREQ > 0)
+            {
+                frequencyFields.Add("Water", plant.WATER_FREQ);
+            }
+
+            return frequencyFields;
+        }
+
     }
 }
