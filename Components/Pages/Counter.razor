@@ -3,6 +3,7 @@
 @inject NavigationManager NavigationManager
 @attribute [StreamRendering(true)]
 @inject IPlantService PlantService
+@inject IJSRuntime JSRuntime
 
 <!--***********************************************************************
 *	                             CSS/STYLING SECTION                      *
@@ -124,7 +125,8 @@
             {
             <div class="tile">
                 <!-- Shovel delete button in the top-right corner -->
-                <button @onclick="() => func(p.PLANT_ID)" class="delete-button"></button>
+                <button @onclick="() => DeletePlant(p.PLANT_ID)" class="delete-button"></button>
+
 
                 <span>@p.PLANT_NAME</span>
 
@@ -173,10 +175,14 @@
         plant = await PlantService.GetAllPlants();
     }
 
-    async Task func(int PLANT_ID)
+    async Task DeletePlant(int PLANT_ID)
     {
-        await PlantService.DeletePlant(PLANT_ID);
-        plant = await PlantService.GetAllPlants();
+        bool confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete this plant?");
+        if (confirmed)
+        {
+            await PlantService.DeletePlant(PLANT_ID);
+            plant = await PlantService.GetAllPlants();
+        }
     }
 
 }
