@@ -3,6 +3,7 @@
 @inject NavigationManager NavigationManager
 @attribute [StreamRendering(true)]
 @inject IPlantService PlantService
+@inject IJSRuntime JSRuntime
 
 <!--***********************************************************************
 *	                             CSS/STYLING SECTION                      *
@@ -125,7 +126,8 @@
             {
             <div class="tile">
                 <!-- Shovel delete button in the top-right corner -->
-                <button @onclick="() => func(p.PLANT_ID)" class="delete-button"></button>
+                <button @onclick="() => DeletePlant(p.PLANT_ID)" class="delete-button"></button>
+
 
                 <span>@p.PLANT_NAME</span>
 
@@ -136,48 +138,80 @@
                          style="width: 75px; height: 80px; border-radius: 10px; margin-top: 0px;" />
                 }
 
-                <!-- Pull the list instead of hardcoding a water check-box -->
-                <!-- <input type="checkbox" id="watering-@p.PLANT_ID" name="watering-@p.PLANT_ID"> -->
-                <!-- <label for="watering-@p.PLANT_ID">Watering</label> -->
-
-                @if (@p.WATER_FREQ != 0)
+                <!-- COMMENT THIS  -->
+                @if (PlantFrequencies.ContainsKey(p.PLANT_ID))
                 {
-                    <input type="checkbox" id="watering-@p.PLANT_ID" name="watering-@p.PLANT_ID">
-                    <label for="watering-@p.PLANT_ID">Watering</label>
-                    <div>
-                        @if (@p.WATER_FREQ == 1)
+                    foreach (var field in PlantFrequencies[p.PLANT_ID])
+                    {
+                        if (field.Key == "Water" && GetWateringDays(field.Value).Contains(CurrentDay.DayOfWeek))
                         {
-                            <div>Water @p.WATER_FREQ time a day.</div>    
+                            <p>@field.Key Today</p>
                         }
-                    </div>
-                    <div>
-                        @if (@p.WATER_FREQ > 1)
-                        {
-                            <div>Water @p.WATER_FREQ times a day.</div>    
-                        }
-                    </div>
+                    }
                 }
+
             </div>
             }
         }
     }
 </div>
 
+<!-- Display the current day -->
+<p>Current Day: @CurrentDay.ToString("MMMM dd, yyy")</p>
+<button @onclick="GoToNextDay" class="btn btn-primary">Next Day &gt;&gt;</button>
+
 <!--***********************************************************************
 *	                             CODE SECTION                             *
 ************************************************************************-->
 @code {
     List<Plants>? plant = null;
+    // Tracks the current simulated day
+    private DateTime CurrentDay { get; set; } = DateTime.Now.Date;
+    private Dictionary<int, Dictionary<string, int>> PlantFrequencies { get; set; } = new();
+
 
     protected override async Task OnInitializedAsync()
     {
         plant = await PlantService.GetAllPlants();
+        foreach (var p in plant)
+        {
+            var frequencies = await PlantService.GetFrequencyFields(p.PLANT_ID);
+            PlantFrequencies[p.PLANT_ID] = frequencies;
+        }
     }
 
-    async Task func(int PLANT_ID)
+    async Task DeletePlant(int PLANT_ID)
     {
-        await PlantService.DeletePlant(PLANT_ID);
-        plant = await PlantService.GetAllPlants();
+        bool confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete this plant?");
+        if (confirmed)
+        {
+            await PlantService.DeletePlant(PLANT_ID);
+            plant = await PlantService.GetAllPlants();
+        }
     }
+
+    private void GoToNextDay()
+    {
+        CurrentDay = CurrentDay.AddDays(1);           
+    }
+
+    private List<DayOfWeek> GetWateringDays(int waterFreq)
+    {
+        var days = new List<DayOfWeek>();
+        var allDays = Enum.GetValues<DayOfWeek>().ToList();
+
+        if (waterFreq >= 7) return allDays; // Every day
+        if (waterFreq <= 0) return days;    // No watering
+
+        int interval = allDays.Count / waterFreq; // Evenly distribute days
+
+        for (int i = 0; i < waterFreq; i++)
+        {
+            days.Add(allDays[i * interval]);
+        }
+
+        return days;
+    }
+
 
 }
