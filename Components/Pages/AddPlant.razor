@@ -166,12 +166,12 @@ else if (showPrefilledForm)
     [Parameter]
     public int? PLANT_ID { get; set; }       // Plant ID from route parameter
     private int? selectedPublicPlantId;      // ID of selected public plant
-    List<Plant>? publicPlants = null;       // List of public plants
+    List<Plants>? publicPlants = null;       // List of public plants
     private bool showCustomForm = false;     // Show custom plant form
     private bool showPrefilledForm = false;  // Show prefilled plant form
 
     [SupplyParameterFromForm]
-    Plant plant { get; set; } = new Plant { PLANT_NAME = string.Empty }; 
+    Plants plant { get; set; } = new Plants { PLANT_NAME = string.Empty }; 
     private IBrowserFile? selectedFile;
     private const long MaxFileSize = 2 * 1024 * 1024;
 

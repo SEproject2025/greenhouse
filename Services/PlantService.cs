@@ -16,9 +16,9 @@ namespace greenhouse.Services
 			_context = context;
 		}
 
-        public async Task<Plant> AddPlants(Plant plants)
+        public async Task<Plants> AddPlants(Plants plants)
         {
-            _context.Plants.Add(plants);
+            _context.Plant.Add(plants);
 			await _context.SaveChangesAsync();
 
 			return plants;
@@ -26,7 +26,7 @@ namespace greenhouse.Services
 
 		public async Task<bool> DeletePlant(int PLANT_ID)
 		{
-			var dbPlant = await _context.Plants.FindAsync(PLANT_ID);
+			var dbPlant = await _context.Plant.FindAsync(PLANT_ID);
 			if (dbPlant != null)
 			{
 				_context.Remove(dbPlant);
@@ -36,24 +36,24 @@ namespace greenhouse.Services
 			return false;
 		}
 
-		public async Task<List<Plant>> GetAllPlants()
+		public async Task<List<Plants>> GetAllPlants()
 		{
-			var plant = await _context.Plants.ToListAsync();
+			var plant = await _context.Plant.ToListAsync();
 			return plant;
 		}
-		public async Task<List<Plant>> GetAllPublicPlants()
+		public async Task<List<Plants>> GetAllPublicPlants()
 		{
 
-			var PublicPlants = await _context.Plants
+			var PublicPlants = await _context.Plant
 				.Where(plant => plant.IS_PRIVATE == "N")
 				.ToListAsync();
 
 			return PublicPlants;
 		}
 
-		public async Task<Plant> GetPlantByID(int PLANT_ID)
+		public async Task<Plants> GetPlantByID(int PLANT_ID)
 		{
-			return await _context.Plants.FindAsync(PLANT_ID);
+			return await _context.Plant.FindAsync(PLANT_ID);
 		}
 	}
 }

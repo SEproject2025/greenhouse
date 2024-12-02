@@ -6,14 +6,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace greenhouse.Entities
 {
-	public class Plant
+	public class Plants
 	{
 		[Key]
 		public int PLANT_ID { get; set; }
 		public required string PLANT_NAME { get; set; }
 		public string? IS_PRIVATE { get; set; } = "Y"; // Default value set to "Y"
+		public string? USER_ID { get; set; }
         public byte[]? IMAGE_DATA { get; set; } // Property to store image data
-	    public virtual ApplicationUser Owner { get; set; }
 
     }
 }
