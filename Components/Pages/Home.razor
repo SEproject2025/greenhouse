@@ -1,5 +1,6 @@
 ﻿@page "/"
 @rendermode InteractiveServer
+@inject IJSRuntime IJSRuntime // Inject IJSRuntime for JavaScript interop
 
 <div @onclick="@(() => PopupVisible = true)">
     <button class="button">CLICK TO SHOW A POP-UP WINDOW</button>
@@ -7,7 +8,11 @@
 </div>
 
 <DxPopup @bind-Visible="@PopupVisible" AllowDrag="true">
-
+    <BodyContentTemplate>
+        <i>
+            <iframe src="/add-plants" title="Add Plants Page"></iframe>
+        </i>
+    </BodyContentTemplate>
 </DxPopup>
 
 @code {
