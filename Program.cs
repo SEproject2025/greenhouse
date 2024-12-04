@@ -5,6 +5,7 @@ using greenhouse.Components;
 using greenhouse.Data;
 using greenhouse.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,8 @@ builder.Services.AddDbContext<DataContext>(options =>
 		new MySqlServerVersion(new Version(8, 0, 23)) // Replace with your MySQL server version
 	)
 );
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<DataContext>();
 
 //  Registering IPlantService with AddScoped allows any other parts of the app to request IPlantService and receive an instance of PlantService.
 builder.Services.AddScoped<IPlantService, PlantService>();
@@ -40,5 +43,6 @@ app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
+app.MapRazorPages();
 
 app.Run();

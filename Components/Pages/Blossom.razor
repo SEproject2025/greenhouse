@@ -6,7 +6,8 @@
 *	                             HTML SECTION                             *
 ************************************************************************-->
 <h3>PlantList</h3>
-
+        <AuthorizeView>
+            <Authorized>
 @if (plant == null)
 {
 	<span>Loading...</span>
@@ -26,6 +27,12 @@ else
 		}
 	</ul>
 }
+            </Authorized>
+            <NotAuthorized>
+
+            </NotAuthorized>
+        </AuthorizeView>
+
 
 <!--***********************************************************************
 *	                             CODE SECTION                             *
