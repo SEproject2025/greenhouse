@@ -113,14 +113,31 @@
     button[type="submit"]:hover {
         background-color: #5AA74E;
     }
+
+    .button-container {
+        display: flex;
+        justify-content: center; /* Centers the buttons horizontally */
+        gap: 30px; /* Adds more spacing between the buttons */
+        margin-top: 20px; /* Adds some space above the buttons */
+    }
+
+    h3 {
+        font-size: 36px; /* Increase the font size to make the text bigger */
+        color: #2C6E49;
+        text-align: center;
+        margin-bottom: 20px;
+        font-family: 'Georgia', serif;
+    }
 </style>
 
 <!--***********************************************************************
 *	                             HTML SECTION                             *
 ************************************************************************-->
 <h3>Create Plant</h3>
-<button @onclick="ShowCustomForm" class="btn btn-secondary">Create Custom Plant</button>
-<button @onclick="ShowPrefilledForm" class="btn btn-secondary">Create Prefilled Plant</button>
+<div class="button-container">
+    <button @onclick="ShowCustomForm" class="btn btn-secondary">Create Custom Plant</button>
+    <button @onclick="ShowPrefilledForm" class="btn btn-secondary">Create Prefilled Plant</button>
+</div>
 
 @if (showCustomForm)
 {
