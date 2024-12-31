@@ -147,6 +147,10 @@
         <label>Plant Name</label>
         <InputText @bind-Value="plant.PLANT_NAME">@plant.PLANT_NAME</InputText>
 
+        <!-- Field for Watering Days-->
+        <label>Water Days</label>
+        <InputNumber @bind-Value="plant.WATER_FREQ"></InputNumber>
+        
         <!-- File input for uploading an image of the plant -->
         <label>Upload Image</label>
         <InputFile OnChange="HandleFileSelected" />
@@ -188,9 +192,13 @@ else if (showPrefilledForm)
     private bool showPrefilledForm = false;  // Show prefilled plant form
 
     [SupplyParameterFromForm]
-    Plants plant { get; set; } = new Plants { PLANT_NAME = string.Empty }; 
+    Plants plant { get; set; } = new Plants 
+    { 
+        PLANT_NAME = string.Empty,
+        WATER_FREQ = 7
+    }; 
     private IBrowserFile? selectedFile;
-    private const long MaxFileSize = 2 * 1024 * 1024;
+    private const long MaxFileSize = 2 * 1024 * 1024; // 2MG - currently not being applied
 
     // Handles file selection for image upload
     private async Task HandleFileSelected(InputFileChangeEventArgs e)
@@ -208,7 +216,11 @@ else if (showPrefilledForm)
     // Handles form submission
     async Task HandleSubmit()
     {
-        Console.WriteLine("The ID:", selectedPublicPlantId);
+        Console.WriteLine("-------------------------------------");
+        Console.WriteLine("The Name:" + plant.PLANT_NAME);
+        Console.WriteLine("The ID: " + plant.PLANT_ID);
+        Console.WriteLine("The W Freq: " + plant.WATER_FREQ);
+        Console.WriteLine("-------------------------------------");
 
         if (selectedPublicPlantId.HasValue)
         {
@@ -221,6 +233,12 @@ else if (showPrefilledForm)
 
         await PlantService.AddPlants(plant);
         NavigationManager.NavigateTo("/blossom_MVP");
+
+        Console.WriteLine("-------------------------------------");
+        Console.WriteLine("The ID (After being added): " + plant.PLANT_ID);
+        Console.WriteLine("The Image size: " + selectedFile.Size + " bytes");
+        Console.WriteLine("The MaxFileSize: " + MaxFileSize + " bytes");
+        Console.WriteLine("-------------------------------------");
     }
 
     // Initializes and fetches public plants list
