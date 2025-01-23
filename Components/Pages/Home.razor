@@ -63,3 +63,17 @@
 ************************************************************************-->
 @code {
 }
+
+
+<button @onclick="ShowPopup">Open Popup</button>
+
+<Popup IsVisible="@showPopup" />
+
+@code {
+    bool showPopup = false;
+
+    void ShowPopup()
+    {
+        showPopup = true;
+    }
+}
