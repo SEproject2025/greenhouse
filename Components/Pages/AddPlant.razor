@@ -216,12 +216,6 @@ else if (showPrefilledForm)
     // Handles form submission
     async Task HandleSubmit()
     {
-        Console.WriteLine("-------------------------------------");
-        Console.WriteLine("The Name:" + plant.PLANT_NAME);
-        Console.WriteLine("The ID: " + plant.PLANT_ID);
-        Console.WriteLine("The W Freq: " + plant.WATER_FREQ);
-        Console.WriteLine("-------------------------------------");
-
         if (selectedPublicPlantId.HasValue)
         {
             var selectedPlant = publicPlants?.FirstOrDefault(p => p.PLANT_ID == selectedPublicPlantId.Value);
@@ -233,12 +227,6 @@ else if (showPrefilledForm)
 
         await PlantService.AddPlants(plant);
         NavigationManager.NavigateTo("/blossom_MVP");
-
-        Console.WriteLine("-------------------------------------");
-        Console.WriteLine("The ID (After being added): " + plant.PLANT_ID);
-        Console.WriteLine("The Image size: " + selectedFile.Size + " bytes");
-        Console.WriteLine("The MaxFileSize: " + MaxFileSize + " bytes");
-        Console.WriteLine("-------------------------------------");
     }
 
     // Initializes and fetches public plants list
