@@ -1,4 +1,5 @@
 ﻿@page "/"
+@inject NavigationManager Navigation
 
 <!--***********************************************************************
 *	                             CSS/STYLING SECTION                      *
@@ -64,16 +65,25 @@
 @code {
 }
 
+<!--***********************************************************************
+*                                 MODAL POPUP                             *
+*************************************************************************-->
+<button @onclick="ShowModal">Show Popup</button>
 
-<button @onclick="ShowPopup">Open Popup</button>
-
-<Popup IsVisible="@showPopup" />
+<Modal IsVisible="@isModalVisible" IsVisibleChanged="@OnModalVisibilityChanged">
+    <iframe src="Pages/AddPlant.razor" width="100" height="400"></iframe>
+</Modal>
 
 @code {
-    bool showPopup = false;
+    private bool isModalVisible = false;
 
-    void ShowPopup()
+    private void ShowModal()
     {
-        showPopup = true;
+        isModalVisible = true;
+    }
+
+    private void OnModalVisibilityChanged(bool isVisible)
+    {
+        isModalVisible = isVisible;
     }
 }
