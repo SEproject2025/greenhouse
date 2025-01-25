@@ -1,4 +1,5 @@
 ﻿@page "/"
+@rendermode InteractiveServer
 @inject NavigationManager Navigation
 
 <!--***********************************************************************
@@ -71,7 +72,7 @@
 <button @onclick="ShowModal">Show Popup</button>
 
 <Modal IsVisible="@isModalVisible" IsVisibleChanged="@OnModalVisibilityChanged">
-    <iframe src="Pages/AddPlant.razor" width="100" height="400"></iframe>
+    <AddPlant />
 </Modal>
 
 @code {
