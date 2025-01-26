@@ -6,6 +6,7 @@ using greenhouse.Data;
 using greenhouse.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using BitzArt.Blazor.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,11 +21,13 @@ builder.Services.AddDbContext<DataContext>(options =>
 	)
 );
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<DataContext>();
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<DataContext>();
+
 
 //  Registering IPlantService with AddScoped allows any other parts of the app to request IPlantService and receive an instance of PlantService.
 builder.Services.AddScoped<IPlantService, PlantService>();
 
+builder.AddBlazorCookies();
 
 var app = builder.Build();
 

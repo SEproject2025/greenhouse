@@ -11,6 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="BitzArt.Blazor.Cookies.Client" Version="1.2.0" />
+    <PackageReference Include="BitzArt.Blazor.Cookies.Server" Version="1.2.0" />
     <PackageReference Include="Dapper" Version="2.1.35" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0" />

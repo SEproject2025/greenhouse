@@ -6,10 +6,11 @@
 using greenhouse.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace greenhouse.Data
 { 
-	public class DataContext : IdentityDbContext
+	public class DataContext : IdentityDbContext<ApplicationUser>
 	{
 		public DataContext(DbContextOptions<DataContext> options) 
 		   : base(options)
@@ -17,5 +18,9 @@ namespace greenhouse.Data
 
 		public DbSet<Plants> Plant { get; set; }
 	}
-	
+
+    public class ApplicationUser : IdentityUser
+    {
+		public string CustomTag {  get; set; }
+    }
 }
