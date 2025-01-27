@@ -1,4 +1,6 @@
 ﻿@page "/"
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
 
 <!--***********************************************************************
 *	                             CSS/STYLING SECTION                      *
@@ -62,4 +64,27 @@
 *	                             CODE SECTION                             *
 ************************************************************************-->
 @code {
+}
+
+<!--***********************************************************************
+*                                 MODAL POPUP                             *
+*************************************************************************-->
+<button @onclick="ShowModal">Show Popup</button>
+
+<Modal IsVisible="@isModalVisible" IsVisibleChanged="@OnModalVisibilityChanged">
+    <AddPlant />
+</Modal>
+
+@code {
+    private bool isModalVisible = false;
+
+    private void ShowModal()
+    {
+        isModalVisible = true;
+    }
+
+    private void OnModalVisibilityChanged(bool isVisible)
+    {
+        isModalVisible = isVisible;
+    }
 }
