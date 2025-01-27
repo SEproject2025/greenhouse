@@ -113,14 +113,31 @@
     button[type="submit"]:hover {
         background-color: #5AA74E;
     }
+
+    .button-container {
+        display: flex;
+        justify-content: center; /* Centers the buttons horizontally */
+        gap: 30px; /* Adds more spacing between the buttons */
+        margin-top: 20px; /* Adds some space above the buttons */
+    }
+
+    h3 {
+        font-size: 36px; /* Increase the font size to make the text bigger */
+        color: #2C6E49;
+        text-align: center;
+        margin-bottom: 20px;
+        font-family: 'Georgia', serif;
+    }
 </style>
 
 <!--***********************************************************************
 *	                             HTML SECTION                             *
 ************************************************************************-->
 <h3>Create Plant</h3>
-<button @onclick="ShowCustomForm" class="btn btn-secondary">Create Custom Plant</button>
-<button @onclick="ShowPrefilledForm" class="btn btn-secondary">Create Prefilled Plant</button>
+<div class="button-container">
+    <button @onclick="ShowCustomForm" class="btn btn-secondary">Create Custom Plant</button>
+    <button @onclick="ShowPrefilledForm" class="btn btn-secondary">Create Prefilled Plant</button>
+</div>
 
 @if (showCustomForm)
 {
@@ -130,6 +147,10 @@
         <label>Plant Name</label>
         <InputText @bind-Value="plant.PLANT_NAME">@plant.PLANT_NAME</InputText>
 
+        <!-- Field for Watering Days-->
+        <label>Water Days</label>
+        <InputNumber @bind-Value="plant.WATER_FREQ"></InputNumber>
+        
         <!-- File input for uploading an image of the plant -->
         <label>Upload Image</label>
         <InputFile OnChange="HandleFileSelected" />
@@ -171,9 +192,13 @@ else if (showPrefilledForm)
     private bool showPrefilledForm = false;  // Show prefilled plant form
 
     [SupplyParameterFromForm]
-    Plants plant { get; set; } = new Plants { PLANT_NAME = string.Empty }; 
+    Plants plant { get; set; } = new Plants 
+    { 
+        PLANT_NAME = string.Empty,
+        WATER_FREQ = 7
+    }; 
     private IBrowserFile? selectedFile;
-    private const long MaxFileSize = 2 * 1024 * 1024;
+    private const long MaxFileSize = 2 * 1024 * 1024; // 2MG - currently not being applied
 
     // Handles file selection for image upload
     private async Task HandleFileSelected(InputFileChangeEventArgs e)
@@ -191,8 +216,6 @@ else if (showPrefilledForm)
     // Handles form submission
     async Task HandleSubmit()
     {
-        Console.WriteLine("The ID:", selectedPublicPlantId);
-
         if (selectedPublicPlantId.HasValue)
         {
             var selectedPlant = publicPlants?.FirstOrDefault(p => p.PLANT_ID == selectedPublicPlantId.Value);

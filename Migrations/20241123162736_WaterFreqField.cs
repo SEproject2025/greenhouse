@@ -5,23 +5,24 @@
 namespace greenhouse.Migrations
 {
     /// <inheritdoc />
-    public partial class AddPlantImage : Migration
+    public partial class WaterFreqField : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<byte[]>(
-                name: "IMAGE_DATA",
+            migrationBuilder.AddColumn<int>(
+                name: "WATER_FREQ",
                 table: "Plant",
-                type: "longblob",
-                nullable: true);
+                type: "int",
+                nullable: false,
+                defaultValue: 0);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "IMAGE_DATA",
+                name: "WATER_FREQ",
                 table: "Plant");
         }
     }

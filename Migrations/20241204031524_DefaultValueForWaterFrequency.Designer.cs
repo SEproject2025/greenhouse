@@ -10,8 +10,8 @@ using greenhouse.Data;
 namespace greenhouse.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241031021931_AddIsPrivateAndUserID")]
-    partial class AddIsPrivateAndUserID
+    [Migration("20241204031524_DefaultValueForWaterFrequency")]
+    partial class DefaultValueForWaterFrequency
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,8 +27,10 @@ namespace greenhouse.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<byte[]>("IMAGE_DATA")
+                        .HasColumnType("longblob");
+
                     b.Property<string>("IS_PRIVATE")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("PLANT_NAME")
@@ -37,6 +39,9 @@ namespace greenhouse.Migrations
 
                     b.Property<string>("USER_ID")
                         .HasColumnType("longtext");
+
+                    b.Property<int>("WATER_FREQ")
+                        .HasColumnType("int");
 
                     b.HasKey("PLANT_ID");
 
