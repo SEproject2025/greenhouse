@@ -15,5 +15,6 @@ namespace greenhouse.Entities
 		public string?		   USER_ID	  { get; set; }
         public byte[]?		   IMAGE_DATA { get; set; } // Property to store image data
         public int WATER_FREQ { get; set; } = 7;
+        public int FERT_FREQ { get; set; } = 5;
     }
 }
