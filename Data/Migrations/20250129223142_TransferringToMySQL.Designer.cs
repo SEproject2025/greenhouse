@@ -12,8 +12,8 @@ using greenhouse.Data;
 namespace greenhouse.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250129214440_AddingFertField")]
-    partial class AddingFertField
+    [Migration("20250129223142_TransferringToMySQL")]
+    partial class TransferringToMySQL
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
