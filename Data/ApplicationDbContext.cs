@@ -3,8 +3,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace greenhouse.Data
 {
-    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options)
+    public class ApplicationDbContext: IdentityDbContext
     {
-
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+           : base(options)
+        { }
     }
 }

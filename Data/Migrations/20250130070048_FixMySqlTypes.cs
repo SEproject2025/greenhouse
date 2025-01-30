@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace greenhouse.Migrations
 {
     /// <inheritdoc />
-    public partial class TransferringToMySQL : Migration
+    public partial class FixMySqlTypes : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
