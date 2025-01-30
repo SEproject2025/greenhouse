@@ -218,6 +218,38 @@ namespace greenhouse.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("greenhouse.Entities.Plants", b =>
+                {
+                    b.Property<int>("PLANT_ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("PLANT_ID"));
+
+                    b.Property<int>("FERT_FREQ")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("IMAGE_DATA")
+                        .HasColumnType("longblob");
+
+                    b.Property<string>("IS_PRIVATE")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PLANT_NAME")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("USER_ID")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("WATER_FREQ")
+                        .HasColumnType("int");
+
+                    b.HasKey("PLANT_ID");
+
+                    b.ToTable("Plant");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)

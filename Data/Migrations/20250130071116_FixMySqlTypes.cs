@@ -369,6 +369,28 @@ namespace greenhouse.Migrations
                 oldType: "int")
                 .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn);
 
+            migrationBuilder.CreateTable(
+                name: "Plant",
+                columns: table => new
+                {
+                    PLANT_ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    PLANT_NAME = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IS_PRIVATE = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    USER_ID = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IMAGE_DATA = table.Column<byte[]>(type: "longblob", nullable: true),
+                    WATER_FREQ = table.Column<int>(type: "int", nullable: false),
+                    FERT_FREQ = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Plant", x => x.PLANT_ID);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
@@ -385,6 +407,9 @@ namespace greenhouse.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Plant");
+
             migrationBuilder.DropIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers");
