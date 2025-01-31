@@ -96,7 +96,7 @@ namespace greenhouse.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    UserId = table.Column<string>(type: "varchar(450)", nullable: false)
+                    UserId = table.Column<string>(type: "varchar(191)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ClaimType = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -118,13 +118,13 @@ namespace greenhouse.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "varchar(450)", nullable: false)
+                    LoginProvider = table.Column<string>(type: "varchar(191)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProviderKey = table.Column<string>(type: "varchar(450)", nullable: false)
+                    ProviderKey = table.Column<string>(type: "varchar(191)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ProviderDisplayName = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    UserId = table.Column<string>(type: "varchar(450)", nullable: false)
+                    UserId = table.Column<string>(type: "varchar(191)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -142,7 +142,7 @@ namespace greenhouse.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                  {
-                    UserId = table.Column<string>(type: "varchar(450)", nullable: false)
+                    UserId = table.Column<string>(type: "varchar(191)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     RoleId = table.Column<string>(type: "varchar(450)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
@@ -168,11 +168,11 @@ namespace greenhouse.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "varchar(450)", nullable: false)
+                    UserId = table.Column<string>(type: "varchar(191)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    LoginProvider = table.Column<string>(type: "varchar(450)", nullable: false)
+                    LoginProvider = table.Column<string>(type: "varchar(191)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Name = table.Column<string>(type: "varchar(450)", nullable: false)
+                    Name = table.Column<string>(type: "varchar(191)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Value = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
