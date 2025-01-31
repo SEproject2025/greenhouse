@@ -1,7 +1,6 @@
 using greenhouse.Components;
 using greenhouse.Components.Account;
 using greenhouse.Data;
-using greenhouse.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +15,6 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
-builder.Services.AddScoped<IPlantService, PlantService>();
 
 builder.Services.AddAuthentication(options =>
     {
