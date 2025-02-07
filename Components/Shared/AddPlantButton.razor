@@ -1,7 +1,8 @@
-﻿@inject NavigationManager NavigationManager
+﻿@using greenhouse.Components.Pages
+@inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
-<button @onclick="ShowModal" class="btn btn-success">Add Plant</button>
+<button @onclick="ShowModal">Add Plant</button>
 
 <Modal IsVisible="@isModalVisible" IsVisibleChanged="@OnModalVisibilityChanged">
     <AddPlant />
