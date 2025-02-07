@@ -1,11 +1,22 @@
 ﻿@inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
-<button @onclick="CreatePlant" class="btn btn-success">Add Plant</button>
+<button @onclick="ShowModal" class="btn btn-success">Add Plant</button>
+
+<Modal IsVisible="@isModalVisible" IsVisibleChanged="@OnModalVisibilityChanged">
+    <AddPlant />
+</Modal>
 
 @code {
-    void CreatePlant()
+    private bool isModalVisible = false;
+
+    private void ShowModal()
     {
-        NavigationManager.NavigateTo("/add-plants");
+        isModalVisible = true;
+    }
+
+    private void OnModalVisibilityChanged(bool isVisible)
+    {
+        isModalVisible = isVisible;
     }
 }
