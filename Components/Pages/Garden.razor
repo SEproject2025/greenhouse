@@ -5,6 +5,10 @@
 @inject IPlantService PlantService
 @inject IJSRuntime JSRuntime
 
+@using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
 <!--***********************************************************************
 *	                             CSS/STYLING SECTION                      *
 ************************************************************************-->
@@ -29,7 +33,7 @@
         gap: 20px; /* Space between tiles */
         padding: 10px;
     }
-    
+
   /* Delete button as a shovel icon in the top-left corner of the tile */
     .delete-button {
         position: absolute;
@@ -141,6 +145,15 @@
 ************************************************************************-->
 
 <h3 class="title">My Garden</h3>
+
+@if (user == null)
+{
+    <h4>null</h4>
+}
+else
+{
+    <h4>@user_email</h4>
+}
 <AddPlantButton/>
 
 <!-- Main content block for displaing the tile grid -->
@@ -153,37 +166,37 @@
     {
         @foreach (var p in plant)
         {
-            
+
             @if (p.IS_PRIVATE == "Y")
             {
-            <div class="tile">
-                <!-- Shovel delete button in the top-right corner -->
-                <button @onclick="() => DeletePlant(p.PLANT_ID)" class="delete-button"></button>
+                <div class="tile">
+                    <!-- Shovel delete button in the top-right corner -->
+                    <button @onclick="() => DeletePlant(p.PLANT_ID)" class="delete-button"></button>
 
 
-                <span>@p.PLANT_NAME</span>
+                    <span>@p.PLANT_NAME</span>
 
-                @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
-                {
-                    <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)" 
-                         alt="@p.PLANT_NAME" 
-                         style="width: 75px; height: 80px; border-radius: 10px; margin-top: 0px;" />
-                }
-
-                <!-- COMMENT THIS  -->
-                @if (PlantFrequencies.ContainsKey(p.PLANT_ID))
-                {
-                    foreach (var field in PlantFrequencies[p.PLANT_ID])
+                    @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
                     {
-                        if (field.Key == "Water" && GetWateringDays(field.Value).Contains(CurrentDay.DayOfWeek))
+                        <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)" 
+                        alt="@p.PLANT_NAME" 
+                        style="width: 75px; height: 80px; border-radius: 10px; margin-top: 0px;" />
+                    }
+
+                    <!-- COMMENT THIS  -->
+                    @if (PlantFrequencies.ContainsKey(p.PLANT_ID))
+                    {
+                        foreach (var field in PlantFrequencies[p.PLANT_ID])
                         {
+                            if (field.Key == "Water" && GetWateringDays(field.Value).Contains(CurrentDay.DayOfWeek))
+                            {
                                 <input type="checkbox" id="watering-@p.PLANT_ID" name="watering-@p.PLANT_ID">
                                 <label for="watering-@p.PLANT_ID">@field.Key</label>
+                            }
                         }
                     }
-                }
 
-            </div>
+                </div>
             }
         }
     }
@@ -203,6 +216,10 @@
     private DateTime CurrentDay { get; set; } = DateTime.Now.Date;
     private Dictionary<int, Dictionary<string, int>> PlantFrequencies { get; set; } = new();
 
+    private AuthenticationState? authState;
+    private ClaimsPrincipal? user;
+    private string? user_email;
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -212,6 +229,11 @@
             var frequencies = await PlantService.GetFrequencyFields(p.PLANT_ID);
             PlantFrequencies[p.PLANT_ID] = frequencies;
         }
+
+        authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        user = authState.User;
+        user_email = user.Identity.Name;
+
     }
 
     async Task DeletePlant(int PLANT_ID)

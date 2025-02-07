@@ -62,6 +62,18 @@ namespace greenhouse.Services
 			return await _context.Plant.FindAsync(PLANT_ID);
 		}
 
+		public async Task<List<Plants>> GetPlantsByUserEmail(string UserEmail)
+		{
+			var loggedin_user = await _context.Users.FindAsync(UserEmail);
+			var uuid = loggedin_user.Id;
+
+			var UserPlants = await _context.Plant
+				.Where(plant => plant.USER_ID == uuid)
+				.ToListAsync();
+
+			return UserPlants;
+        }
+
         // Retrieves frequency-related fields for a specific plant by its ID
         public async Task<Dictionary<string, int>> GetFrequencyFields(int plantId)
         {
