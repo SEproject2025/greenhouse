@@ -1,6 +1,7 @@
 ﻿@page "/add-plants"
 @page "/add-plants/{PLANT_ID:int}"
 @inject IPlantService PlantService
+@inject IUserServices UserServices
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
@@ -11,7 +12,6 @@
 
 @using greenhouse.Entities;
 @using Microsoft.EntityFrameworkCore;
-
 
 <!--***********************************************************************
 *	                             CSS/STYLING SECTION                      *
@@ -208,12 +208,9 @@ else if (showPrefilledForm)
     private IBrowserFile? selectedFile;
     private const long MaxFileSize = 2 * 1024 * 1024; // 2MG - currently not being applied
 
-    private string user_id;
     private AuthenticationState? authState;
     private ClaimsPrincipal? user;
     private string? user_email;
-    private ApplicationUser loggedin_user;
-    private ApplicationDbContext _context;
 
     // Handles file selection for image upload
     private async Task HandleFileSelected(InputFileChangeEventArgs e)
@@ -240,7 +237,7 @@ else if (showPrefilledForm)
             }
         }   
 
-        plant.USER_ID = GetUserUUID(user_email);
+        plant.USER_ID = await UserServices.GetUserID(user_email);
 
         await PlantService.AddPlants(plant);
         NavigationManager.NavigateTo("/Garden");
@@ -268,11 +265,5 @@ else if (showPrefilledForm)
     {
         showCustomForm = false;
         showPrefilledForm = true;
-    }
-
-    private string GetUserUUID(string email)
-    {
-        loggedin_user = _context.Users.Find(user_email);
-        return loggedin_user.Id;
     }
 }
