@@ -10,7 +10,7 @@ namespace greenhouse.Services
 		Task<List<Plants>> GetAllPlants();
 		Task<List<Plants>> GetAllPublicPlants();
 		Task<Plants>       GetPlantByID(int PLANT_ID);
-		Task<List<Plants>> GetPlantsByUserEmail(string UserEmail);
+		Task<List<Plants>> GetUserPlants(string user_id);
 		Task<Plants>       AddPlants(Plants plants);
 		Task<bool>         DeletePlant(int PLANT_ID);
 		Task<Dictionary<String, int>> GetFrequencyFields(int plantID);

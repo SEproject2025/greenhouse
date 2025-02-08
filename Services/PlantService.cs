@@ -62,13 +62,10 @@ namespace greenhouse.Services
 			return await _context.Plant.FindAsync(PLANT_ID);
 		}
 
-		public async Task<List<Plants>> GetPlantsByUserEmail(string UserEmail)
+		public async Task<List<Plants>> GetUserPlants(string user_id)
 		{
-			var loggedin_user = await _context.Users.FindAsync(UserEmail);
-			var uuid = loggedin_user.Id;
-
 			var UserPlants = await _context.Plant
-				.Where(plant => plant.USER_ID == uuid)
+				.Where(plant => plant.USER_ID == user_id)
 				.ToListAsync();
 
 			return UserPlants;

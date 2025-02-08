@@ -3,6 +3,7 @@
 @inject NavigationManager NavigationManager
 @attribute [StreamRendering(true)]
 @inject IPlantService PlantService
+@inject IUserServices UserServices
 @inject IJSRuntime JSRuntime
 
 @using Microsoft.AspNetCore.Authorization
@@ -219,20 +220,22 @@ else
     private AuthenticationState? authState;
     private ClaimsPrincipal? user;
     private string? user_email;
+    private string uuid;
 
 
     protected override async Task OnInitializedAsync()
     {
-        plant = await PlantService.GetAllPlants();
+        authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        user = authState.User;
+        user_email = user.Identity.Name;
+        uuid = await UserServices.GetUserID(user_email);
+
+        plant = await PlantService.GetUserPlants(uuid);
         foreach (var p in plant)
         {
             var frequencies = await PlantService.GetFrequencyFields(p.PLANT_ID);
             PlantFrequencies[p.PLANT_ID] = frequencies;
         }
-
-        authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        user = authState.User;
-        user_email = user.Identity.Name;
 
     }
 
