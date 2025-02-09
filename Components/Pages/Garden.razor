@@ -245,7 +245,7 @@ else
         if (confirmed)
         {
             await PlantService.DeletePlant(PLANT_ID);
-            plant = await PlantService.GetAllPlants();
+            plant = await PlantService.GetUserPlants(uuid);
         }
     }
 
