@@ -147,21 +147,21 @@
 
 <h3 class="title">My Garden</h3>
 
-@if (user == null)
-{
-    <h4>null</h4>
-}
-else
-{
-    <h4>@user_email</h4>
-}
 <AddPlantButton/>
 
 <!-- Main content block for displaing the tile grid -->
 <div class="tiles-container">
     @if (plant == null || !plant.Any())
     {
-        <p>Loading . . . </p>
+        @if (plant == null)
+        {
+            <p>Loading . . . </p>
+        }
+        else
+        {
+            <p>You have no plants</p>
+        }
+        
     }
     else
     {
