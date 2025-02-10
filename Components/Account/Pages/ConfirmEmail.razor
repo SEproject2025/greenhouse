@@ -13,6 +13,12 @@
 <h1>Confirm email</h1>
 <StatusMessage Message="@statusMessage" />
 
+<!-- Directs the user to the login page after account confirmation -->
+@if (statusMessage?.Contains("Thank you") == true)
+{
+    <p>Please continue to: <a href="Account/Login">Login</a></p>
+}
+
 @code {
     private string? statusMessage;
 
