@@ -1,23 +1,11 @@
-﻿@using greenhouse.Components.Pages
-@inject NavigationManager NavigationManager
+﻿@inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
-<button @onclick="ShowModal">Add Plant</button>
-
-<Modal IsVisible="@isModalVisible" IsVisibleChanged="@OnModalVisibilityChanged">
-    <AddPlant />
-</Modal>
+<button @onclick="CreatePlant" class="btn btn-success">Add Plant</button>
 
 @code {
-    private bool isModalVisible = false;
-
-    private void ShowModal()
+    void CreatePlant()
     {
-        isModalVisible = true;
-    }
-
-    private void OnModalVisibilityChanged(bool isVisible)
-    {
-        isModalVisible = isVisible;
+        NavigationManager.NavigateTo("/add-plants");
     }
 }
