@@ -1,17 +1,19 @@
-﻿// This is the implementation of IPlantService.
-// It contains the actual code for each method listed in IPlantService
-// --------------------------------------------------------------------
+﻿// This class and its inherited interface are used to directly 
+// interact with the Plants table in the MySQL database
+// -----------------------------------------------------------
 using greenhouse.Data;
 using greenhouse.Entities;
-using Microsoft.EntityFrameworkCore;
+using Microsoft .EntityFrameworkCore;
 
 namespace greenhouse.Services
 {
 	public class PlantService : IPlantService
 	{
-		private readonly ApplicationDbContext _context;
+        // The Db Context
+        private readonly ApplicationDbContext _context;
 
-		public PlantService(ApplicationDbContext context)
+        // Constructor - Fetches the Db context
+        public PlantService(ApplicationDbContext context)
 		{
 			_context = context;
 		}
@@ -38,38 +40,19 @@ namespace greenhouse.Services
 			return false;
 		}
 
-		// 
-		public async Task<List<Plants>> GetAllPlants()
+        // Gets all plants currently in database
+        public async Task<List<Plants>> GetAllPlants()
 		{
-			var plant = await _context.Plant.ToListAsync();
-			return plant;
+			return await _context.Plant.ToListAsync();
 		}
 
 		// Get all public plants not created by the user
 		public async Task<List<Plants>> GetAllPublicPlants()
 		{
-
-			var PublicPlants = await _context.Plant
-				.Where(plant => plant.IS_PRIVATE == "N")
-				.ToListAsync();
-
-			return PublicPlants;
+			return await _context.Plant
+                      .Where(plant => plant.IS_PRIVATE == "N")
+                      .ToListAsync(); ;
 		}
-
-		// Get a plant from the database by ID
-		public async Task<Plants> GetPlantByID(int PLANT_ID)
-		{
-			return await _context.Plant.FindAsync(PLANT_ID);
-		}
-
-		public async Task<List<Plants>> GetUserPlants(string user_id)
-		{
-			var UserPlants = await _context.Plant
-				.Where(plant => plant.USER_ID == user_id)
-				.ToListAsync();
-
-			return UserPlants;
-        }
 
         // Retrieves frequency-related fields for a specific plant by its ID
         public async Task<Dictionary<string, int>> GetFrequencyFields(int plantId)
@@ -90,5 +73,18 @@ namespace greenhouse.Services
             return frequencyFields;
         }
 
+        // Get a plant from the database by ID
+        public async Task<Plants> GetPlantByID(int PLANT_ID)
+		{
+			return await _context.Plant.FindAsync(PLANT_ID);
+		}
+
+        // Get the current user's plants
+        public async Task<List<Plants>> GetUserPlants(string user_id)
+		{
+			return await _context.Plant
+                      .Where(plant => plant.USER_ID == user_id)
+                      .ToListAsync(); ;
+        }
     }
 }

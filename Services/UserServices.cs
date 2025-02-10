@@ -1,22 +1,24 @@
-﻿// This is the implementation of IPlantService.
-// It contains the actual code for each method listed in IPlantService
-// --------------------------------------------------------------------
+﻿// This class and its inherited interface are used to directly 
+// interact with the Users table in the MySQL database
+// -----------------------------------------------------------
 using greenhouse.Data;
-using greenhouse.Entities;
-using Microsoft.EntityFrameworkCore;
+using Microsoft .EntityFrameworkCore;
 
 namespace greenhouse.Services
 {
-	public class UserServices : IUserServices
+    public class UserServices : IUserServices
 	{
+		// The Db Context
 		private readonly ApplicationDbContext _context;
 
+		// Constructor - Fetches the Db context
 		public UserServices(ApplicationDbContext context)
 		{
 			_context = context;
 		}
 
-		public async Task<string> GetUserID(string email)
+        // Gets the current user's UUID
+        public async Task<string> GetUserID(string email)
 		{
 			var user_list = await _context.Users
 				.Where(user => user.UserName == email)
@@ -25,6 +27,5 @@ namespace greenhouse.Services
 
             return user.Id;
 		}
-
     }
 }

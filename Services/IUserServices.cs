@@ -1,12 +1,11 @@
-﻿// This is an interface that defines what actions can be performed (EX: GetAllplants),
-// but it doesn’t contain any actual code. It’s like a menu that lists available options.
-// --------------------------------------------------------------------------------------
-using greenhouse.Data;
-
+﻿// This interface and its derived class are used to directly 
+// interact with the Users table in the MySQL database
+// ---------------------------------------------------------
 namespace greenhouse.Services
 {
-	public interface IUserServices
+    public interface IUserServices
 	{
+        // Gets the current user's UUID
 		Task<string> GetUserID(string email);
     }
 }

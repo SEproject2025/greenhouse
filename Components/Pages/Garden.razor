@@ -212,24 +212,36 @@
 *	                             CODE SECTION                             *
 ************************************************************************-->
 @code {
+
+    // The list of plants the user will be able to see in their garden
     List<Plants>? plant = null;
+
     // Tracks the current simulated day
     private DateTime CurrentDay { get; set; } = DateTime.Now.Date;
     private Dictionary<int, Dictionary<string, int>> PlantFrequencies { get; set; } = new();
 
+    // Used to obtain the current user's email and UUID
     private AuthenticationState? authState;
-    private ClaimsPrincipal? user;
+    private ClaimsPrincipal?     user;
+
+    // The current user's information used to uniquely identify them
     private string? user_email;
-    private string uuid;
+    private string  uuid;
 
 
+    /*************************************************/
+    /* ------------INITIALIZATION METHOD------------ */
+    /* Creates the list of the current user's plants */
+    /********************************************** **/
     protected override async Task OnInitializedAsync()
     {
+        // Gets the current user's UUID 
         authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         user = authState.User;
         user_email = user.Identity.Name;
         uuid = await UserServices.GetUserID(user_email);
 
+        // Gets the current user's plants
         plant = await PlantService.GetUserPlants(uuid);
         foreach (var p in plant)
         {
@@ -239,6 +251,7 @@
 
     }
 
+    /* Delete the specified plant from the MySql database */
     async Task DeletePlant(int PLANT_ID)
     {
         bool confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete this plant?");
@@ -249,11 +262,15 @@
         }
     }
 
+    /* Advances the internal day tracker by 1 */
     private void GoToNextDay()
     {
         CurrentDay = CurrentDay.AddDays(1);           
     }
 
+    // Anna- confirm that this is indeed what this method does 
+    // VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+    /* Creates a list of the days a plant should be watered */
     private List<DayOfWeek> GetWateringDays(int waterFreq)
     {
         var days = new List<DayOfWeek>();
@@ -271,6 +288,4 @@
 
         return days;
     }
-
-
 }
