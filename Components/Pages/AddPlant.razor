@@ -201,11 +201,11 @@ else if (showPrefilledForm)
 
     // Default values for new plants
     [SupplyParameterFromForm]
-    Plants plant { get; set; } = new Plants 
-    { 
+    Plants plant { get; set; } = new Plants
+    {
         PLANT_NAME = string.Empty,
         WATER_FREQ = 7
-    }; 
+    };
     private IBrowserFile? selectedFile;
     private const long MaxFileSize = 2 * 1024 * 1024; // 2MG - currently not being applied
 
@@ -240,7 +240,7 @@ else if (showPrefilledForm)
         }
     }
 
-// Handles form submission
+    // Handles form submission
     [Parameter] public EventCallback OnSubmit { get; set; } // Notify parent when submitting
 
     async Task HandleSubmit()
@@ -254,6 +254,8 @@ else if (showPrefilledForm)
             }
         }
 
+        plant.USER_ID = await UserServices.GetUserID(user_email);
+
         await PlantService.AddPlants(plant);
 
         // Notify the parent (ReferencePage) to close the modal
@@ -263,11 +265,7 @@ else if (showPrefilledForm)
         NavigationManager.NavigateTo("/Garden", forceLoad: true);
     }
 
-    // Initializes and fetches public plants list
-    protected override async Task OnInitializedAsync()
-    {
-        publicPlants = await PlantService.GetAllPublicPlants();
-    }
+
 
     // Displays the custom plant form
     private void ShowCustomForm()
