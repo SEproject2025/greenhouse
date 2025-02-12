@@ -240,9 +240,7 @@ else if (showPrefilledForm)
         }
     }
 
-// Handles form submission
-    [Parameter] public EventCallback OnSubmit { get; set; } // Notify parent when submitting
-
+    // Handles form submission; adds new plant to current user's garden
     async Task HandleSubmit()
     {
         if (selectedPublicPlantId.HasValue)
@@ -252,34 +250,25 @@ else if (showPrefilledForm)
             {
                 plant.PLANT_NAME = selectedPlant.PLANT_NAME;
             }
-        }
+        }   
+
+        plant.USER_ID = await UserServices.GetUserID(user_email);
 
         await PlantService.AddPlants(plant);
-
-        // Notify the parent (ReferencePage) to close the modal
-        await OnSubmit.InvokeAsync();
-
-        // Navigate to the garden page
-        NavigationManager.NavigateTo("/Garden", forceLoad: true);
-    }
-
-    // Initializes and fetches public plants list
-    protected override async Task OnInitializedAsync()
-    {
-        publicPlants = await PlantService.GetAllPublicPlants();
+        NavigationManager.NavigateTo("/Garden");
     }
 
     // Displays the custom plant form
     private void ShowCustomForm()
     {
-        showCustomForm = true;
+        showCustomForm    = true;
         showPrefilledForm = false;
     }
 
     // Displays the prefilled plant form
     private void ShowPrefilledForm()
     {
-        showCustomForm = false;
+        showCustomForm    = false;
         showPrefilledForm = true;
     }
 }

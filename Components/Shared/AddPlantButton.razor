@@ -1,35 +1,11 @@
-@using greenhouse.Components.Pages
-@inject NavigationManager NavigationManager
+﻿@inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
-<button @onclick="ShowModal">Add Plant</button>
-
-<!-- Reference the Modal component -->
-<Modal IsVisible="@isModalVisible" IsVisibleChanged="@OnModalVisibilityChanged" @ref="modalRef">
-    <AddPlant OnSubmit="CloseModalOnSubmit" />
-</Modal>
+<button @onclick="CreatePlant" class="btn btn-success">Add Plant</button>
 
 @code {
-    private bool isModalVisible = false;
-    private Modal? modalRef; // Declare modalRef properly
-
-    private void ShowModal()
+    void CreatePlant()
     {
-        isModalVisible = true;
-    }
-
-    private void OnModalVisibilityChanged(bool isVisible)
-    {
-        isModalVisible = isVisible;
-    }
-
-    // Method that gets called when the submit button is clicked in AddPlant
-    public async Task CloseModalOnSubmit()
-    {
-        if (modalRef is not null)
-        {
-            await modalRef.CloseFromSubmit();
-        }
+        NavigationManager.NavigateTo("/add-plants");
     }
 }
-
