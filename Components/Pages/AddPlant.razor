@@ -254,9 +254,11 @@ else if (showPrefilledForm)
             }
         }
 
+        plant.USER_ID = await UserServices.GetUserID(user_email);
+
         await PlantService.AddPlants(plant);
 
-        // Notify the parent (ReferencePage) to close the modal
+        // Notify AddPlantButton to close the modal
         await OnSubmit.InvokeAsync();
 
         // Navigate to the garden page
