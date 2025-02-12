@@ -1,7 +1,7 @@
 ﻿@if (IsVisible)
 {
-    <div class="modal-overlay">
-        <div class="modal-content">
+    <div class="modal-overlay" @onclick="HandleOverlayClick">
+        <div class="modal-content" @onclick:stopPropagation="true">
             <button @onclick="ClosePopup" class="close-button">&times;</button>
             @ChildContent
         </div>
@@ -13,13 +13,27 @@
     [Parameter] public EventCallback<bool> IsVisibleChanged { get; set; }
     [Parameter] public RenderFragment ChildContent { get; set; }
 
-    private void ClosePopup()
+
+
+    public async Task ClosePopup()
     {
         IsVisible = false;
-        IsVisibleChanged.InvokeAsync(IsVisible);
+        await IsVisibleChanged.InvokeAsync(IsVisible);
+    }
+
+    public async Task CloseFromSubmit() // Allows external components to close the modal
+    {
+        await ClosePopup();
+    }
+
+    private async Task HandleOverlayClick()
+    {
+        await ClosePopup();
     }
 }
 
+
+<!-- Css for modal popup -->
 <style>
     .modal-overlay {
         position: fixed;
@@ -38,7 +52,10 @@
         background: white;
         padding: 20px;
         border-radius: 8px;
-        min-width: 300px;
+        position: relative;
+        width: 50%;       /* Adjust this percentage as needed   */
+        max-width: 400px; /* Ensures it doesn’t get too wide    */
+        min-width: 250px; /* Prevents it from getting too small */
     }
 
     .close-button {
