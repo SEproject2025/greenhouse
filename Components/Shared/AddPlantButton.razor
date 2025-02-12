@@ -4,12 +4,14 @@
 
 <button @onclick="ShowModal">Add Plant</button>
 
-<Modal IsVisible="@isModalVisible" IsVisibleChanged="@OnModalVisibilityChanged">
-    <AddPlant />
+<!-- Reference the Modal component -->
+<Modal IsVisible="@isModalVisible" IsVisibleChanged="@OnModalVisibilityChanged" @ref="modalRef">
+    <AddPlant OnSubmit="CloseModalOnSubmit" />
 </Modal>
 
 @code {
     private bool isModalVisible = false;
+    private Modal? modalRef; // Declare modalRef properly
 
     private void ShowModal()
     {
@@ -19,5 +21,14 @@
     private void OnModalVisibilityChanged(bool isVisible)
     {
         isModalVisible = isVisible;
+    }
+
+    // Method that gets called when the submit button is clicked in AddPlant
+    public async Task CloseModalOnSubmit()
+    {
+        if (modalRef is not null)
+        {
+            await modalRef.CloseFromSubmit();
+        }
     }
 }

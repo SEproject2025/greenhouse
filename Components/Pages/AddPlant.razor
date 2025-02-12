@@ -214,6 +214,8 @@ else if (showPrefilledForm)
     }
 
     // Handles form submission
+    [Parameter] public EventCallback OnSubmit { get; set; } // Notify parent when submitting
+
     async Task HandleSubmit()
     {
         if (selectedPublicPlantId.HasValue)
@@ -226,7 +228,12 @@ else if (showPrefilledForm)
         }
 
         await PlantService.AddPlants(plant);
-        NavigationManager.NavigateTo("/Garden");
+
+        // Notify the parent (ReferencePage) to close the modal
+        await OnSubmit.InvokeAsync();
+
+        // Navigate to the garden page
+        NavigationManager.NavigateTo("/Garden", forceLoad: true);
     }
 
     // Initializes and fetches public plants list
