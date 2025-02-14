@@ -18,7 +18,7 @@
     /*********************************************************************/
     .main {
         margin: 50px auto;
-        width: 700px; 
+        width: 700px;
         padding-top: 10px;
         padding-bottom: 10px;
         background-color: #725D4C;
@@ -26,16 +26,16 @@
         box-shadow: 10px 10px 8px #888888;
     }
 
-    /* Inner Container for the grid                                       */
-    .main .inner {
-        display: flex;
-        flex-wrap: wrap;         /* Allows items to wrap to the next line */
-        justify-content: center; /* Centers items horizontally            */
-        gap: 20px;               /* Space between tiles                   */
-        padding: 10px;
-    }
-    
-  /* Delete button as a shovel icon in the top-left corner of the tile    */
+        /* Inner Container for the grid                                       */
+        .main .inner {
+            display: flex;
+            flex-wrap: wrap; /* Allows items to wrap to the next line */
+            justify-content: center; /* Centers items horizontally            */
+            gap: 20px; /* Space between tiles                   */
+            padding: 10px;
+        }
+
+    /* Delete button as a shovel icon in the top-left corner of the tile    */
     .delete-button {
         position: absolute;
         top: 10px;
@@ -49,9 +49,9 @@
         outline: none;
     }
 
-    .delete-button:hover {
-        opacity: 0.8;
-    }
+        .delete-button:hover {
+            opacity: 0.8;
+        }
     /*********************************************************************/
     /* Random Styles for page                                            */
     /*********************************************************************/
@@ -76,19 +76,19 @@
         transition: background-color 0.3s ease;
     }
 
-    button.btn:hover {
-        background-color: #5AA74E;
-    }
+        button.btn:hover {
+            background-color: #5AA74E;
+        }
 
     /*********************************************************************/
     /* Container for all tiles                                           */
     /*********************************************************************/
     .tiles-container {
         display: flex;
-        flex-wrap: wrap;         /* Allows tiles to wrap onto new rows    */
+        flex-wrap: wrap; /* Allows tiles to wrap onto new rows    */
         justify-content: center; /* Centers tiles on the page             */
-        gap: 50px;               /* Space between tiles                   */
-        padding: 30px;           /* Optional padding around the container */
+        gap: 50px; /* Space between tiles                   */
+        padding: 30px; /* Optional padding around the container */
     }
 
     /* Styling for individual tiles                                       */
@@ -105,40 +105,40 @@
         transition: transform 0.2s, box-shadow 0.2s;
     }
 
-    .tile:hover {
-        transform: scale(1.05);
-        box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.3), -8px -8px 20px rgba(255, 255, 255, 0.2);
-    }
+        .tile:hover {
+            transform: scale(1.05);
+            box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.3), -8px -8px 20px rgba(255, 255, 255, 0.2);
+        }
 
-    /* Styling for the plant name - targets spans inside the tiles       */
-    /*********************************************************************/
-    .tile span {
-        position: absolute;
-        top: 15%;
-        left: 200px;
-        color: black;
-        font-size: 18px;
-        font-family: Arial, sans-serif;
-    }
+        /* Styling for the plant name - targets spans inside the tiles       */
+        /*********************************************************************/
+        .tile span {
+            position: absolute;
+            top: 15%;
+            left: 200px;
+            color: black;
+            font-size: 18px;
+            font-family: Arial, sans-serif;
+        }
 
-    /* Styling for formatting checkbox - targets checkbox input          */
-    /*********************************************************************/
-    .tile input[type="checkbox"] {
-        position: absolute;
-        top: 60%;  
-        left: 25px; 
-    }
+        /* Styling for formatting checkbox - targets checkbox input          */
+        /*********************************************************************/
+        .tile input[type="checkbox"] {
+            position: absolute;
+            top: 60%;
+            left: 25px;
+        }
 
-    /* Styling for the checkbox label - targets labels                   */
-    /*********************************************************************/
-    .tile label {
-        position: absolute;
-        top: 58%;        
-        left: 40px;       
-        color: black;
-        font-family: Arial, sans-serif;
-        font-size: 14px;
-    }
+        /* Styling for the checkbox label - targets labels                   */
+        /*********************************************************************/
+        .tile label {
+            position: absolute;
+            top: 58%;
+            left: 40px;
+            color: black;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
 </style>
 
 <!--***********************************************************************
@@ -147,7 +147,13 @@
 
 <h3 class="title">My Garden</h3>
 
-<AddPlantButton/>
+<AddPlantButton />
+
+
+@foreach (var b in checkBoxValues)
+{
+   <p>@b</p>
+}
 
 <!-- Main content block for displaing the tile grid -->
 <div class="tiles-container">
@@ -161,12 +167,14 @@
         {
             <p>You have no plants</p>
         }
-        
+
     }
     else
     {
+        i = 0;
         @foreach (var p in plant)
         {
+
 
             @if (p.IS_PRIVATE == "Y")
             {
@@ -179,19 +187,21 @@
 
                     @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
                     {
-                        <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)" 
-                        alt="@p.PLANT_NAME" 
+                        <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)"
+                        alt="@p.PLANT_NAME"
                         style="width: 75px; height: 80px; border-radius: 10px; margin-top: 0px;" />
                     }
 
                     <!-- COMMENT THIS  -->
                     @if (PlantFrequencies.ContainsKey(p.PLANT_ID))
                     {
+                        int local_index = i;
                         foreach (var field in PlantFrequencies[p.PLANT_ID])
                         {
                             if (field.Key == "Water" && GetWateringDays(field.Value).Contains(CurrentDay.DayOfWeek))
                             {
-                                <input type="checkbox" id="watering-@p.PLANT_ID" name="watering-@p.PLANT_ID">
+                                <input type="checkbox" id="watering-@p.PLANT_ID" @bind="@checkBoxValues[local_index]" name="watering-@p.PLANT_ID">
+                                i++;
                                 <label for="watering-@p.PLANT_ID">@field.Key</label>
                             }
                         }
@@ -214,7 +224,7 @@
 @code {
 
     // The list of plants the user will be able to see in their garden
-    List<Plants>? plant = null;
+    List<Plants>? plant = new List<Plants>();
 
     // Tracks the current simulated day
     private DateTime CurrentDay { get; set; } = DateTime.Now.Date;
@@ -222,11 +232,14 @@
 
     // Used to obtain the current user's email and UUID
     private AuthenticationState? authState;
-    private ClaimsPrincipal?     user;
+    private ClaimsPrincipal? user;
 
     // The current user's information used to uniquely identify them
     private string? user_email;
-    private string  uuid;
+    private string uuid;
+
+    private List<bool> checkBoxValues = new List<bool>();
+    private int i;
 
 
     /*************************************************/
@@ -235,7 +248,7 @@
     /********************************************** **/
     protected override async Task OnInitializedAsync()
     {
-        // Gets the current user's UUID 
+        // Gets the current user's UUID
         authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         user = authState.User;
         user_email = user.Identity.Name;
@@ -243,11 +256,14 @@
 
         // Gets the current user's plants
         plant = await PlantService.GetUserPlants(uuid);
+
         foreach (var p in plant)
         {
             var frequencies = await PlantService.GetFrequencyFields(p.PLANT_ID);
             PlantFrequencies[p.PLANT_ID] = frequencies;
         }
+
+        checkBoxValues = Enumerable.Repeat(false, plant.Count).ToList();
 
     }
 
@@ -265,10 +281,11 @@
     /* Advances the internal day tracker by 1 */
     private void GoToNextDay()
     {
-        CurrentDay = CurrentDay.AddDays(1);           
+        CurrentDay = CurrentDay.AddDays(1);
+        checkBoxValues = Enumerable.Repeat(false, plant.Count).ToList();
     }
 
-    // Anna- confirm that this is indeed what this method does 
+    // Anna- confirm that this is indeed what this method does
     // VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
     /* Creates a list of the days a plant should be watered */
     private List<DayOfWeek> GetWateringDays(int waterFreq)
