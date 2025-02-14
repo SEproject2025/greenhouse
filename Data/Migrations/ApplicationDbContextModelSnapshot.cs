@@ -256,7 +256,7 @@ namespace greenhouse.Migrations
 
                     b.HasKey("PLANT_ID");
 
-                    b.ToTable("Plant");
+                    b.ToTable("Plant", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
