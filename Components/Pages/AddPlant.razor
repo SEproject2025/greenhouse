@@ -147,10 +147,6 @@
     <button @onclick="ShowPrefilledForm" class="btn btn-secondary">Create Prefilled Plant</button>
 </div>
 
-<!-- Dropdown list for avalible plants -->
-<label>Select a Plant</label>
-<PlantDropdown />
-
 @if (showCustomForm)
 {
     <!-- Form to create a CUSTOM a plant -->
@@ -166,6 +162,10 @@
         <!-- File input for uploading an image of the plant -->
         <label>Upload Image</label>
         <InputFile OnChange="HandleFileSelected" />
+
+        <!-- Dropdown list for avalible plants
+        <label>Select a Plant</label>
+        <PlantDropdown /> -->
 
         <!-- Submit button to save the plant details -->
         <button type="submit" class="btn btn-primary">Submit</button>
