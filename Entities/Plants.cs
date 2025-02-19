@@ -11,10 +11,13 @@ namespace greenhouse.Entities
 		[Key]
 		public int			   PLANT_ID	  { get; set; }
 		public required string PLANT_NAME { get; set; }
-		public string?		   IS_PRIVATE { get; set; } = "Y"; // Default value set to "Y" testststststs
-		public string?		   USER_ID	  { get; set; }
-        public byte[]?		   IMAGE_DATA { get; set; } // Property to store image data
-        public int WATER_FREQ { get; set; } = 7;
-        public int FERT_FREQ { get; set; } = 5;
+		public string?	IS_PRIVATE { get; set; } = "Y"; 
+		public string?	USER_ID	  { get; set; }
+        public byte[]?	IMAGE_DATA { get; set; } 
+        public int      WATER_FREQ { get; set; }
+        public int      FERT_FREQ { get; set; }
+        public int      WEED_FREQ { get; set; }
+        public int      PRUNE_FREQ { get; set; }
+        public int      PEST_FREQ { get; set; }
     }
 }
