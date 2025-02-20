@@ -212,73 +212,33 @@
 
 @if (showCustomForm)
 {
-    <!-- Form to create a CUSTOM a plant -->
     <EditForm Model="plant" OnSubmit="HandleSubmit" FormName="editPlant">
-        <!-- Input field for plant name-->
         <label>Plant Name</label>
-        <InputText @bind-Value="plant.PLANT_NAME">@plant.PLANT_NAME</InputText>
+        <InputText @bind-Value="plant.PLANT_NAME"></InputText>
 
-        <label>Days in a week to water</label>
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <label class="switch">
-                <input type="checkbox">
-                <span class="slider round"></span>
-            </label>
-            <div>
-                <!-- Field for Watering Days-->
-                <InputNumber @bind-Value="plant.WATER_FREQ"></InputNumber>
-            </div>
-		</div>
-
-        <label>Days in a week to weed</label>
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <label class="switch">
-                <input type="checkbox">
-                <span class="slider round"></span>
-            </label>
-            <div>
-                <!-- Field for Weeding Days-->
-                <InputNumber @bind-Value="plant.WEED_FREQ"></InputNumber>
-            </div>
-        </div>
-
-        <label>Days in a week to prune</label>
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <label class="switch">
-                <input type="checkbox">
-                <span class="slider round"></span>
-            </label>
-            <div>
-                <!-- Field for Pruning Days-->
-                <InputNumber @bind-Value="plant.PRUNE_FREQ"></InputNumber>
-            </div>
-        </div>
-
-        <label>Days in a week to check for pests</label>
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <label class="switch">
-                <input type="checkbox">
-                <span class="slider round"></span>
-            </label>
-            <div>
-                <!-- Field for Pests Days-->
-                <InputNumber @bind-Value="plant.PEST_FREQ"></InputNumber>
-            </div>
-        </div>
-
-        <!-- File input for uploading an image of the plant -->
         <label>Upload Image</label>
         <InputFile OnChange="HandleFileSelected" />
 
-        <!-- Submit button to save the plant details -->
+        <h4>Task Frequencies</h4>
+
+        <label>Watering Frequency (days per week)</label>
+        <InputNumber @bind-Value="waterFreq"></InputNumber>
+
+        <label>Weeding Frequency (days per week)</label>
+        <InputNumber @bind-Value="weedFreq"></InputNumber>
+
+        <label>Pruning Frequency (days per week)</label>
+        <InputNumber @bind-Value="pruneFreq"></InputNumber>
+
+        <label>Pest Control Frequency (days per week)</label>
+        <InputNumber @bind-Value="pestFreq"></InputNumber>
+
         <button type="submit" class="btn btn-primary">Submit</button>
     </EditForm>
 }
 else if (showPrefilledForm)
 {
-    <!-- Form to create a PRE-FILLED a plant -->
     <EditForm Model="plant" OnSubmit="HandleSubmit" FormName="editPlant">
-        <!-- Dropdown to select a public plant -->
         <label>Select a Public Plant</label>
         <InputSelect @bind-Value="selectedPublicPlantId">
             <option value="">-- Select a public plant --</option>
@@ -290,7 +250,7 @@ else if (showPrefilledForm)
                 }
             }
         </InputSelect>
-        <!-- Submit button to save the plant details -->
+
         <button type="submit" class="btn btn-primary">Submit</button>
     </EditForm>
 }
@@ -300,45 +260,45 @@ else if (showPrefilledForm)
 ************************************************************************-->
 @code {
     [Parameter]
-    public  int?  PLANT_ID { get; set; }     // Plant ID from route parameter
-    private int?  selectedPublicPlantId;     // ID of selected public plant
-    List<Plants>? publicPlants = null;       // List of public plants
-    private bool  showCustomForm = false;    // Show custom plant form
-    private bool  showPrefilledForm = false; // Show prefilled plant form
+    public int? PLANT_ID { get; set; } // Plant ID from route parameter
 
-    // Default values for new plants
-    [SupplyParameterFromForm]
-    Plants plant { get; set; } = new Plants 
-    { 
-        PLANT_NAME = string.Empty,
-        WATER_FREQ = 7
-    }; 
+    private int? selectedPublicPlantId; // ID of selected public plant
+    List<Plants>? publicPlants = null; // List of public plants
+    private bool showCustomForm = false; // Show custom plant form
+    private bool showPrefilledForm = false; // Show prefilled plant form
+
+    // Plant model
+    Plants plant { get; set; } = new Plants
+        {
+            PLANT_NAME = string.Empty
+        };
+
+    // Task frequencies (instead of storing in Plants entity)
+    private int waterFreq;
+    private int weedFreq;
+    private int pruneFreq;
+    private int pestFreq;
+
     private IBrowserFile? selectedFile;
-    private const long MaxFileSize = 2 * 1024 * 1024; // 2MG - currently not being applied
+    private const long MaxFileSize = 2 * 1024 * 1024; // 2MB
 
-    // Used to obtain the current user's email
     private AuthenticationState? authState;
-    private ClaimsPrincipal?     user;
-    private string?              user_email;
+    private ClaimsPrincipal? user;
+    private string? user_email;
 
-    /**********************************************************/
-    /* -----------------INITIALIZATION METHOD---------------- */
-    /* Fetches the public plants and the current user's email */
-    /**********************************************************/
+    // Fetch public plants and get user details
     protected override async Task OnInitializedAsync()
     {
         publicPlants = await PlantService.GetAllPublicPlants();
-
-        authState  = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        user       = authState.User;
+        authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        user = authState.User;
         user_email = user.Identity.Name;
     }
 
-    // Handles file selection for image upload
+    // Handle image upload
     private async Task HandleFileSelected(InputFileChangeEventArgs e)
     {
         selectedFile = e.File;
-
         if (selectedFile != null)
         {
             using var memoryStream = new MemoryStream();
@@ -347,42 +307,45 @@ else if (showPrefilledForm)
         }
     }
 
-    // Handles form submission; adds new plant to current user's garden
-    [Parameter] public EventCallback OnSubmit { get; set; } // Notify parent when submitting
-
+    // Handle form submission
     async Task HandleSubmit()
     {
-        if (selectedPublicPlantId.HasValue)
+        plant.USER_ID = await UserServices.GetUserID(user_email);
+        var addedPlant = await PlantService.AddPlants(plant);
+
+        if (addedPlant != null)
         {
-            var selectedPlant = publicPlants?.FirstOrDefault(p => p.PLANT_ID == selectedPublicPlantId.Value);
-            if (selectedPlant != null)
+            // Create and save individual tasks
+            var taskList = new List<PlantTask>
             {
-                plant.PLANT_NAME = selectedPlant.PLANT_NAME;
+                new PlantTask { PLANT_ID = addedPlant.PLANT_ID, TASK_NAME = "Watering", FREQ = waterFreq },
+                new PlantTask { PLANT_ID = addedPlant.PLANT_ID, TASK_NAME = "Weeding", FREQ = weedFreq },
+                new PlantTask { PLANT_ID = addedPlant.PLANT_ID, TASK_NAME = "Pruning", FREQ = pruneFreq },
+                new PlantTask { PLANT_ID = addedPlant.PLANT_ID, TASK_NAME = "Pest Control", FREQ = pestFreq }
+            };
+
+            foreach (var task in taskList)
+            {
+                if (task.FREQ > 0) // Only save tasks with a valid frequency
+                {
+                    await PlantService.AddTask(task);
+                }
             }
         }
 
-        plant.USER_ID = await UserServices.GetUserID(user_email);
-
-        await PlantService.AddPlants(plant);
-
-        // Notify AddPlantButton to close the modal
-        await OnSubmit.InvokeAsync();
-
-        // Navigate to the garden page
+       // await OnSubmit.InvokeAsync();
         NavigationManager.NavigateTo("/Garden", forceLoad: true);
     }
 
-    // Displays the custom plant form
     private void ShowCustomForm()
     {
-        showCustomForm    = true;
+        showCustomForm = true;
         showPrefilledForm = false;
     }
 
-    // Displays the prefilled plant form
     private void ShowPrefilledForm()
     {
-        showCustomForm    = false;
+        showCustomForm = false;
         showPrefilledForm = true;
     }
 }

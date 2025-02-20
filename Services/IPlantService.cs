@@ -19,14 +19,25 @@ namespace greenhouse.Services
         // Get all public plants not created by the user
         Task<List<Plants>> GetAllPublicPlants();
 
+        /*
         // Retrieves frequency-related fields for a specific plant by its ID
         Task<Dictionary<String, int>> 
                            GetFrequencyFields(int plantID);
+        */
 
         // Get a plant from the database by ID
         Task<Plants>       GetPlantByID(int PLANT_ID);
 
 		// Get the current user's plants
 		Task<List<Plants>> GetUserPlants(string user_id);
+
+
+
+        // ************************************************************
+        // NEW METHODS FOR PlantTask
+        // ************************************************************
+        Task<List<PlantTask>> GetTasksForPlant(int PLANT_ID);
+        Task<bool> AddTask(PlantTask task);
+
     }
 }

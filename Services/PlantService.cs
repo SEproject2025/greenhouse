@@ -54,6 +54,7 @@ namespace greenhouse.Services
                       .ToListAsync(); ;
 		}
 
+        /*
         // Retrieves frequency-related fields for a specific plant by its ID
         public async Task<Dictionary<string, int>> GetFrequencyFields(int plantId)
         {
@@ -72,6 +73,7 @@ namespace greenhouse.Services
 
             return frequencyFields;
         }
+        */
 
         // Get a plant from the database by ID
         public async Task<Plants> GetPlantByID(int PLANT_ID)
@@ -85,6 +87,26 @@ namespace greenhouse.Services
 			return await _context.Plant
                       .Where(plant => plant.USER_ID == user_id)
                       .ToListAsync(); ;
+        }
+
+
+        // ************************************************************
+        // NEW METHODS FOR PlantTask
+        // ************************************************************
+        // Get tasks for a specific plant
+        public async Task<List<PlantTask>> GetTasksForPlant(int PLANT_ID)
+        {
+            return await _context.PlantTasks
+                .Where(task => task.PLANT_ID == PLANT_ID)
+                .ToListAsync();
+        }
+
+        // Add task to PlantTask table
+        public async Task<bool> AddTask(PlantTask task)
+        {
+            _context.PlantTasks.Add(task);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }
