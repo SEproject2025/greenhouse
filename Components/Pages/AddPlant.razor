@@ -263,8 +263,9 @@ else if (showPrefilledForm)
             }
         </InputSelect>
 
-         <!-- Submit button to save the selected plant -->
+        <!-- Buttons to submit or edit the selected plant -->
         <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-secondary" @onclick="EditSelectedPlant">Edit</button>
     </EditForm>
 }
 
@@ -404,6 +405,46 @@ else if (showPrefilledForm)
         await OnSubmit.InvokeAsync();
         // Navigate back to the garden page and refresh the data
         NavigationManager.NavigateTo("/Garden", forceLoad: true);
+    }
+
+    // ******************************************************************************
+    // Code for the EDIT button
+    // ******************************************************************************
+    private async Task EditSelectedPlant()
+    {
+        if (selectedPublicPlantId.HasValue)
+        {
+            // Fetch the existing plant details
+            var originalPlant = await PlantService.GetPlantByID(selectedPublicPlantId.Value);
+
+            if (originalPlant != null)
+            {
+                // Prefill the custom plant form with the selected plant's data
+                plant = new Plants
+                    {
+                        PLANT_NAME = originalPlant.PLANT_NAME,
+                        IMAGE_DATA = originalPlant.IMAGE_DATA,
+                        USER_ID = await UserServices.GetUserID(user_email),
+                        IS_PRIVATE = "Y" // Ensures it's saved under the current user
+                    };
+
+                // Fetch and prefill task frequencies
+                var originalTasks = await PlantService.GetTasksForPlant(originalPlant.PLANT_ID);
+                foreach (var task in originalTasks)
+                {
+                    switch (task.TASK_NAME)
+                    {
+                        case "Watering": waterFreq = task.FREQ ?? 0; break;  // Use ?? 0 to handle nulls?? ion know
+                        case "Weeding": weedFreq = task.FREQ ?? 0; break;
+                        case "Pruning": pruneFreq = task.FREQ ?? 0; break;
+                        case "Pest Control": pestFreq = task.FREQ ?? 0; break;
+                    }
+                }
+
+                // Switch to the custom plant form
+                ShowCustomForm();
+            }
+        }
     }
 
     // ******************************************************************************
