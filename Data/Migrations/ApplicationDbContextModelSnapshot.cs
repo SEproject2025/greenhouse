@@ -244,16 +244,13 @@ namespace greenhouse.Migrations
                     b.Property<int>("PLANT_ID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PLANT_ID1")
-                        .HasColumnType("int");
-
                     b.Property<string>("TASK_NAME")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("TASK_ID");
 
-                    b.HasIndex("PLANT_ID1");
+                    b.HasIndex("PLANT_ID");
 
                     b.ToTable("PlantTasks");
                 });
@@ -339,7 +336,9 @@ namespace greenhouse.Migrations
                 {
                     b.HasOne("greenhouse.Entities.Plants", "Plant")
                         .WithMany()
-                        .HasForeignKey("PLANT_ID1");
+                        .HasForeignKey("PLANT_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Plant");
                 });

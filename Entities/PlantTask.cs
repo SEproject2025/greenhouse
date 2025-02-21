@@ -8,7 +8,7 @@ namespace greenhouse.Entities
         [Key]
         public int TASK_ID { get; set; } // Primary Key
 
-        [ForeignKey("Plants")]
+        [ForeignKey("Plant")]
         public int PLANT_ID { get; set; } // Foreign Key - Links to Plant
         public required string TASK_NAME { get; set; } // Task Type (Water, Weed, etc.)
         public int FREQ { get; set; } // Number of days between tasks
