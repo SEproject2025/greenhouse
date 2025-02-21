@@ -204,23 +204,31 @@
 <!--***********************************************************************
 *	                             HTML SECTION                             *
 ************************************************************************-->
+<!-- Page Title -->
 <h3>Create Plant</h3>
+
+<!-- Buttons to choose between creating a custom plant or using a prefilled plant -->
 <div class="button-container">
     <button @onclick="ShowCustomForm" class="btn btn-secondary">Create Custom Plant</button>
     <button @onclick="ShowPrefilledForm" class="btn btn-secondary">Create Prefilled Plant</button>
 </div>
 
+<!-- Display the form for creating a custom plant -->
 @if (showCustomForm)
 {
     <EditForm Model="plant" OnSubmit="HandleSubmit" FormName="editPlant">
+
+        <!-- Input field for plant name -->
         <label>Plant Name</label>
         <InputText @bind-Value="plant.PLANT_NAME"></InputText>
 
+        <!-- Input field for image upload -->
         <label>Upload Image</label>
         <InputFile OnChange="HandleFileSelected" />
 
         <h4>Task Frequencies</h4>
 
+        <!-- Input fields for task frequencies (days per week) -->
         <label>Watering Frequency (days per week)</label>
         <InputNumber @bind-Value="waterFreq"></InputNumber>
 
@@ -233,12 +241,16 @@
         <label>Pest Control Frequency (days per week)</label>
         <InputNumber @bind-Value="pestFreq"></InputNumber>
 
+        <!-- Submit button to save the plant -->
         <button type="submit" class="btn btn-primary">Submit</button>
     </EditForm>
 }
-else if (showPrefilledForm)
+// Display the form for selecting a prefilled plant 
+else if (showPrefilledForm) 
 {
     <EditForm Model="plant" OnSubmit="HandleSubmit" FormName="editPlant">
+
+        <!-- Dropdown to select an existing public plant -->
         <label>Select a Public Plant</label>
         <InputSelect @bind-Value="selectedPublicPlantId">
             <option value="">-- Select a public plant --</option>
@@ -251,6 +263,7 @@ else if (showPrefilledForm)
             }
         </InputSelect>
 
+         <!-- Submit button to save the selected plant -->
         <button type="submit" class="btn btn-primary">Submit</button>
     </EditForm>
 }
@@ -262,33 +275,31 @@ else if (showPrefilledForm)
     [Parameter]
     public EventCallback OnSubmit { get; set; } // Notify parent when submitting
 
-    public int? PLANT_ID { get; set; } // Plant ID from route parameter
-
-    private int? selectedPublicPlantId; // ID of selected public plant
-    List<Plants>? publicPlants = null; // List of public plants
-    private bool showCustomForm = false; // Show custom plant form
-    private bool showPrefilledForm = false; // Show prefilled plant form
-
-    // Plant model
-    Plants plant { get; set; } = new Plants
-        {
-            PLANT_NAME = string.Empty
-        };
+    public int?   PLANT_ID { get; set; }        // Plant ID from route parameter
+    private int?  selectedPublicPlantId;        // ID of selected public plant
+    List<Plants>? publicPlants = null;          // List of public plants
+    private bool  showCustomForm = false;       // Show custom plant form
+    private bool  showPrefilledForm = false;    // Show prefilled plant form
 
     // Task frequencies (instead of storing in Plants entity)
-    private int waterFreq;
-    private int weedFreq;
-    private int pruneFreq;
-    private int pestFreq;
+    private int   waterFreq;
+    private int   weedFreq;
+    private int   pruneFreq;
+    private int   pestFreq;
 
-    private IBrowserFile? selectedFile;
-    private const long MaxFileSize = 2 * 1024 * 1024; // 2MB
+    // Plant model
+    Plants plant { get; set; } = new Plants { PLANT_NAME = string.Empty };
 
-    private AuthenticationState? authState;
-    private ClaimsPrincipal? user;
-    private string? user_email;
+    private IBrowserFile? selectedFile;               // Stores the selected file for upload
+    private const long MaxFileSize = 2 * 1024 * 1024; // Maximum file size (2MB)
 
+    private AuthenticationState? authState;           // Holds authentication state
+    private ClaimsPrincipal? user;                    // Stores user information
+    private string? user_email;                       // Stores the user's email
+
+    // ******************************************************************************
     // Fetch public plants and get user details
+    // ******************************************************************************
     protected override async Task OnInitializedAsync()
     {
         publicPlants = await PlantService.GetAllPublicPlants();
@@ -297,7 +308,9 @@ else if (showPrefilledForm)
         user_email = user.Identity.Name;
     }
 
+    // ******************************************************************************
     // Handle image upload
+    // ******************************************************************************
     private async Task HandleFileSelected(InputFileChangeEventArgs e)
     {
         selectedFile = e.File;
@@ -309,9 +322,11 @@ else if (showPrefilledForm)
         }
     }
 
+    // ******************************************************************************
     // Handles the submission of a new plant, either as a pre-filled copy of an existing plant
     // or as a custom user-created plant. If a pre-filled plant is selected, it clones the
     // existing plant and its associated tasks. Otherwise, it creates a new custom plant.
+    // ******************************************************************************
     async Task HandleSubmit()
     {
         // Get the user's unique ID
@@ -391,12 +406,18 @@ else if (showPrefilledForm)
         NavigationManager.NavigateTo("/Garden", forceLoad: true);
     }
 
+    // ******************************************************************************
+    // Show Custom Form
+    // ******************************************************************************
     private void ShowCustomForm()
     {
         showCustomForm = true;
         showPrefilledForm = false;
     }
 
+    // ******************************************************************************
+    // Show Pre-Filled Form
+    // ******************************************************************************
     private void ShowPrefilledForm()
     {
         showCustomForm = false;

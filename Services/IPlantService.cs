@@ -31,12 +31,10 @@ namespace greenhouse.Services
 		// Get the current user's plants
 		Task<List<Plants>> GetUserPlants(string user_id);
 
-
-
-        // ************************************************************
-        // NEW METHODS FOR PlantTask
-        // ************************************************************
+        // Retrieves a list of PlantTask records associated with a specific plant ID.
         Task<List<PlantTask>> GetTasksForPlant(int PLANT_ID);
+
+        // Adds a new task to the PlantTasks table
         Task<bool> AddTask(PlantTask task);
 
     }
