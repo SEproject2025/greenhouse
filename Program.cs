@@ -8,9 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Enable detailed errors in Blazor Server
-builder.Services.AddServerSideBlazor()
-    .AddCircuitOptions(options => { options.DetailedErrors = true; });
+
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
