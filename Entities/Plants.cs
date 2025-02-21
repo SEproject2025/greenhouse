@@ -14,10 +14,5 @@ namespace greenhouse.Entities
 		public string?	IS_PRIVATE { get; set; } = "Y"; 
 		public string?	USER_ID	  { get; set; }
         public byte[]?	IMAGE_DATA { get; set; } 
-        public int      WATER_FREQ { get; set; }
-        public int      FERT_FREQ { get; set; }
-        public int      WEED_FREQ { get; set; }
-        public int      PRUNE_FREQ { get; set; }
-        public int      PEST_FREQ { get; set; }
     }
 }
