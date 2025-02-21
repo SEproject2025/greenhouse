@@ -98,6 +98,17 @@ namespace greenhouse.Services
         {
             return await _context.PlantTasks
                 .Where(task => task.PLANT_ID == PLANT_ID)
+                .Select(task => new PlantTask
+                {
+                    TASK_ID = task.TASK_ID,
+                    PLANT_ID = task.PLANT_ID,
+                    TASK_NAME = task.TASK_NAME,
+                    FREQ = task.FREQ ?? 0,           // Use 0 if NULL
+                    DAYS_UNTIL = task.DAYS_UNTIL ?? 0, // Use 0 if NULL
+                    IS_COMPLETED = task.IS_COMPLETED,
+                    DONE_DATE = task.DONE_DATE,
+                    OVERDUE = task.OVERDUE ?? 0      // Use 0 if NULL
+                })
                 .ToListAsync();
         }
 
