@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using greenhouse.Data;
 
@@ -11,9 +12,11 @@ using greenhouse.Data;
 namespace greenhouse.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250214012608_AddingFrequencyFields")]
+    partial class AddingFrequencyFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -218,43 +221,6 @@ namespace greenhouse.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("greenhouse.Entities.PlantTask", b =>
-                {
-                    b.Property<int>("TASK_ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("TASK_ID"));
-
-                    b.Property<int?>("DAYS_UNTIL")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DONE_DATE")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int?>("FREQ")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IS_COMPLETED")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<int?>("OVERDUE")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PLANT_ID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TASK_NAME")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("TASK_ID");
-
-                    b.HasIndex("PLANT_ID");
-
-                    b.ToTable("PlantTasks");
-                });
-
             modelBuilder.Entity("greenhouse.Entities.Plants", b =>
                 {
                     b.Property<int>("PLANT_ID")
@@ -263,18 +229,33 @@ namespace greenhouse.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("PLANT_ID"));
 
+                    b.Property<int>("FERT_FREQ")
+                        .HasColumnType("int");
+
                     b.Property<byte[]>("IMAGE_DATA")
                         .HasColumnType("longblob");
 
                     b.Property<string>("IS_PRIVATE")
                         .HasColumnType("longtext");
 
+                    b.Property<int>("PEST_FREQ")
+                        .HasColumnType("int");
+
                     b.Property<string>("PLANT_NAME")
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int>("PRUNE_FREQ")
+                        .HasColumnType("int");
+
                     b.Property<string>("USER_ID")
                         .HasColumnType("longtext");
+
+                    b.Property<int>("WATER_FREQ")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WEED_FREQ")
+                        .HasColumnType("int");
 
                     b.HasKey("PLANT_ID");
 
@@ -330,17 +311,6 @@ namespace greenhouse.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("greenhouse.Entities.PlantTask", b =>
-                {
-                    b.HasOne("greenhouse.Entities.Plants", "Plant")
-                        .WithMany()
-                        .HasForeignKey("PLANT_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Plant");
                 });
 #pragma warning restore 612, 618
         }
