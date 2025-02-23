@@ -343,10 +343,11 @@ else if (showPrefilledForm)
     private ClaimsPrincipal? user;                    // Stores user information
     private string? user_email;                       // Stores the user's email
 
-    private bool IsWaterEnabled { get; set; } = false;
-    private bool IsWeedEnabled { get; set; } = false;
-    private bool IsPruneEnabled { get; set; } = false;
-    private bool IsPestEnabled { get; set; } = false;
+    // Activate variables
+    private bool isWaterEnabled { get; set; } = false;
+    private bool isWeedEnabled  { get; set; } = false;
+    private bool isPruneEnabled { get; set; } = false;
+    private bool isPestEnabled  { get; set; } = false;
 
     // ******************************************************************************
     // Fetch public plants and get user details
@@ -370,6 +371,108 @@ else if (showPrefilledForm)
             using var memoryStream = new MemoryStream();
             await selectedFile.OpenReadStream().CopyToAsync(memoryStream);
             plant.IMAGE_DATA = memoryStream.ToArray();
+        }
+    }
+
+    // ******************************************************************************
+    // Handle zero value toggle firlds
+    // ******************************************************************************
+    // private void OnToggleChanged(ChangeEventArgs e)
+    // {
+    //     if (!IsWaterEnabled)
+    //         waterFreq = 0;
+    //         StateHasChanged(); Force UI to update and reflect the change
+
+    //     if (!IsWeedEnabled)
+    //         weedFreq = 0;
+    //         StateHasChanged();
+
+    //     if (!IsPruneEnabled)
+    //         pruneFreq = 0;
+    //         StateHasChanged();
+
+    //     if (!IsPestEnabled)
+    //         pestFreq = 0;
+    //         StateHasChanged();
+    // }
+
+    private bool IsWaterEnabled
+    {
+        get => isWaterEnabled;
+        set
+        {
+            isWaterEnabled = value;
+            if (!isWaterEnabled)
+                waterFreq = 0; // Auto-reset when disabled
+        }
+    }
+    private int WaterFreq
+    {
+        get => waterFreq;
+        set
+        {
+            waterFreq = value;
+            StateHasChanged(); // Force UI to update and reflect the change
+        }
+    }
+
+    private bool IsWeedEnabled
+    {
+        get => isWeedEnabled;
+        set
+        {
+            isWeedEnabled = value;
+            if (!isWeedEnabled)
+                weedFreq = 0;
+        }
+    }
+    private int WeedFreq
+    {
+        get => weedFreq;
+        set
+        {
+            weedFreq = value;
+            StateHasChanged();
+        }
+    }
+
+    private bool IsPruneEnabled
+    {
+        get => isPruneEnabled;
+        set
+        {
+            isPruneEnabled = value;
+            if (!isPruneEnabled)
+                pruneFreq = 0;
+        }
+    }
+    private int PruneFreq
+    {
+        get => pruneFreq;
+        set
+        {
+            weedFreq = value;
+            StateHasChanged();
+        }
+    }
+
+    private bool IsPestEnabled
+    {
+        get => isPestEnabled;
+        set
+        {
+            isPestEnabled = value;
+            if (!isPestEnabled)
+                pestFreq = 0;
+        }
+    }
+    private int PestFreq
+    {
+        get => pestFreq;
+        set
+        {
+            pestFreq = value;
+            StateHasChanged();
         }
     }
 
