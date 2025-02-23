@@ -196,9 +196,14 @@
         border-radius: 34px;
     }
 
-        .slider.round:before {
-            border-radius: 50%;
-        }
+    .slider.round:before {
+        border-radius: 50%;
+    }
+
+    .disabled-section {
+        pointer-events: none;
+        opacity: 0.5;
+    }
 </style>
 
 <!--***********************************************************************
@@ -233,12 +238,12 @@
         <label>Watering Frequency (days per week)</label>
         <div style="display: flex; align-items: center; gap: 10px;">
             <label class="switch">
-                <input type="checkbox">
+                <input type="checkbox" @bind="IsWaterEnabled">
                 <span class="slider round"></span>
             </label>
 
-            <div>
-                <InputNumber @bind-Value="waterFreq"></InputNumber>
+            <div class="@(IsWaterEnabled ? "" : "disabled-section")">
+                <InputNumber @bind-Value="waterFreq" disabled="@(IsWaterEnabled ? null : "disabled")"></InputNumber>
             </div>
         </div>
 
@@ -246,12 +251,12 @@
         <label>Weeding Frequency (days per week)</label>
         <div style="display: flex; align-items: center; gap: 10px;">
             <label class="switch">
-                <input type="checkbox">
+                <input type="checkbox" @bind="IsWeedEnabled">
                 <span class="slider round"></span>
             </label>
 
-            <div>
-                <InputNumber @bind-Value="weedFreq"></InputNumber>
+            <div class="@(IsWeedEnabled ? "" : "disabled-section")">
+                <InputNumber @bind-Value="weedFreq" disabled="@(IsWeedEnabled ? null : "disabled")"></InputNumber>
             </div>
         </div>
 
@@ -259,12 +264,12 @@
         <label>Pruning Frequency (days per week)</label>
         <div style="display: flex; align-items: center; gap: 10px;">
             <label class="switch">
-                <input type="checkbox">
+                <input type="checkbox" @bind="IsPruneEnabled">
                 <span class="slider round"></span>
             </label>
 
-            <div>
-                <InputNumber @bind-Value="pruneFreq"></InputNumber>
+            <div class="@(IsPruneEnabled ? "" : "disabled-section")">
+                <InputNumber @bind-Value="pruneFreq" disabled="@(IsPruneEnabled ? null : "disabled")"></InputNumber>
             </div>
         </div>
 
@@ -272,12 +277,12 @@
         <label>Pest Control Frequency (days per week)</label>
         <div style="display: flex; align-items: center; gap: 10px;">
             <label class="switch">
-                <input type="checkbox">
+                <input type="checkbox" @bind="IsPestEnabled">
                 <span class="slider round"></span>
             </label>
 
-            <div>
-                <InputNumber @bind-Value="pestFreq"></InputNumber>
+            <div class="@(IsPestEnabled ? "" : "disabled-section")">
+                <InputNumber @bind-Value="pestFreq" disabled="@(IsPestEnabled ? null : "disabled")"></InputNumber>
             </div>
         </div>
         
@@ -337,6 +342,11 @@ else if (showPrefilledForm)
     private AuthenticationState? authState;           // Holds authentication state
     private ClaimsPrincipal? user;                    // Stores user information
     private string? user_email;                       // Stores the user's email
+
+    private bool IsWaterEnabled { get; set; } = false;
+    private bool IsWeedEnabled { get; set; } = false;
+    private bool IsPruneEnabled { get; set; } = false;
+    private bool IsPestEnabled { get; set; } = false;
 
     // ******************************************************************************
     // Fetch public plants and get user details
