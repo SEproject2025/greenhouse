@@ -229,18 +229,58 @@
         <h4>Task Frequencies</h4>
 
         <!-- Input fields for task frequencies (days per week) -->
+        <!--Watering-->
         <label>Watering Frequency (days per week)</label>
-        <InputNumber @bind-Value="waterFreq"></InputNumber>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <label class="switch">
+                <input type="checkbox">
+                <span class="slider round"></span>
+            </label>
 
+            <div>
+                <InputNumber @bind-Value="waterFreq"></InputNumber>
+            </div>
+        </div>
+
+        <!--Weeding. Weed is life-->
         <label>Weeding Frequency (days per week)</label>
-        <InputNumber @bind-Value="weedFreq"></InputNumber>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <label class="switch">
+                <input type="checkbox">
+                <span class="slider round"></span>
+            </label>
 
+            <div>
+                <InputNumber @bind-Value="weedFreq"></InputNumber>
+            </div>
+        </div>
+
+        <!--Pruning-->
         <label>Pruning Frequency (days per week)</label>
-        <InputNumber @bind-Value="pruneFreq"></InputNumber>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <label class="switch">
+                <input type="checkbox">
+                <span class="slider round"></span>
+            </label>
 
+            <div>
+                <InputNumber @bind-Value="pruneFreq"></InputNumber>
+            </div>
+        </div>
+
+        <!--Debugging-->
         <label>Pest Control Frequency (days per week)</label>
-        <InputNumber @bind-Value="pestFreq"></InputNumber>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <label class="switch">
+                <input type="checkbox">
+                <span class="slider round"></span>
+            </label>
 
+            <div>
+                <InputNumber @bind-Value="pestFreq"></InputNumber>
+            </div>
+        </div>
+        
         <!-- Submit button to save the plant -->
         <button type="submit" class="btn btn-primary">Submit</button>
     </EditForm>
