@@ -6,7 +6,7 @@
 
 <!-- Reference the Modal component -->
 <Modal IsVisible="@isModalVisible" IsVisibleChanged="@OnModalVisibilityChanged" @ref="modalRef">
-    <AddPlant OnSubmit="CloseModalOnSubmit" />
+    <AddPlant OnSubmit="@CloseModalOnSubmit" />
 </Modal>
 
 @code {

@@ -11,5 +11,7 @@ namespace greenhouse.Data
         { }
 
         public DbSet<Plants> Plant { get; set; }
+        public DbSet<PlantTask> PlantTasks { get; set; }
+
     }
 }

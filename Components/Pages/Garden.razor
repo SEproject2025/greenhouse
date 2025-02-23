@@ -184,7 +184,7 @@
                         style="width: 75px; height: 80px; border-radius: 10px; margin-top: 0px;" />
                     }
 
-                    <!-- COMMENT THIS  -->
+                    @*
                     @if (PlantFrequencies.ContainsKey(p.PLANT_ID))
                     {
                         foreach (var field in PlantFrequencies[p.PLANT_ID])
@@ -195,8 +195,8 @@
                                 <label for="watering-@p.PLANT_ID">@field.Key</label>
                             }
                         }
-                    }
-
+                    } 
+                     *@
                 </div>
             }
         }
@@ -243,12 +243,13 @@
 
         // Gets the current user's plants
         plant = await PlantService.GetUserPlants(uuid);
+        @*
         foreach (var p in plant)
         {
             var frequencies = await PlantService.GetFrequencyFields(p.PLANT_ID);
             PlantFrequencies[p.PLANT_ID] = frequencies;
         }
-
+        *@
     }
 
     /* Delete the specified plant from the MySql database */
@@ -259,15 +260,18 @@
         {
             await PlantService.DeletePlant(PLANT_ID);
             plant = await PlantService.GetUserPlants(uuid);
+            StateHasChanged();
         }
     }
 
     /* Advances the internal day tracker by 1 */
     private void GoToNextDay()
     {
-        CurrentDay = CurrentDay.AddDays(1);           
+        CurrentDay = CurrentDay.AddDays(1);
+        StateHasChanged();
     }
 
+    @*
     // Anna- confirm that this is indeed what this method does 
     // VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
     /* Creates a list of the days a plant should be watered */
@@ -288,4 +292,5 @@
 
         return days;
     }
+    *@
 }
