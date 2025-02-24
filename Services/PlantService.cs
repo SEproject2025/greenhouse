@@ -21,7 +21,7 @@ namespace greenhouse.Services
 		}
 
         // ******************************************************************************
-        // Add a plant to the page and the database
+        // Adds a plant to the page and the database
         // ******************************************************************************
         public async Task<Plants> AddPlants(Plants plants)
         {
@@ -32,7 +32,7 @@ namespace greenhouse.Services
         }
 
         // ******************************************************************************
-        // Delete a plant from the page and the database
+        // Deletes a plant from the page and the database
         // ******************************************************************************
         public async Task<bool> DeletePlant(int PLANT_ID)
 		{
@@ -55,15 +55,36 @@ namespace greenhouse.Services
 		}
 
         // ******************************************************************************
-        // Get all public plants not created by the user
+        // Gets all public plants not created by the user
         // ******************************************************************************
         public async Task<List<Plants>> GetAllPublicPlants()
 		{
-			return await _context.Plant
+            return await _context.Plant
                       .Where(plant => plant.IS_PRIVATE == "N")
-                      .ToListAsync(); ;
+                      .ToListAsync();
 		}
 
+        // ******************************************************************************
+        // Gets all tasks for every plant a user is growing
+        // ******************************************************************************
+        public async Task<List<PlantTask>> GetAllUserTasks(string uuid)
+        {
+            var user_plants = await GetUserPlants(uuid);
+            var user_tasks = new List<PlantTask>();
+            var indi_p_tasks = new List<PlantTask>();
+            
+
+            foreach (var p in user_plants)
+            {
+                var plant_id = p.PLANT_ID;
+                indi_p_tasks = await _context.PlantTasks.Where(task => task.PLANT_ID == plant_id)
+                                                      .ToListAsync();
+                user_tasks.AddRange(indi_p_tasks);
+            }
+
+            return user_tasks;
+
+        }
         /*
         // ******************************************************************************
         // Retrieves frequency-related fields for a specific plant by its ID
@@ -88,7 +109,7 @@ namespace greenhouse.Services
         */
 
         // ******************************************************************************
-        // Get a plant from the database by ID
+        // Gets a plant from the database by ID
         // ******************************************************************************
         public async Task<Plants> GetPlantByID(int PLANT_ID)
 		{
@@ -96,7 +117,7 @@ namespace greenhouse.Services
 		}
 
         // ******************************************************************************
-        // Get the current user's plants
+        // Gets the current user's plants
         // ******************************************************************************
         public async Task<List<Plants>> GetUserPlants(string user_id)
 		{

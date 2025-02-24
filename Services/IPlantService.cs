@@ -7,17 +7,20 @@ namespace greenhouse.Services
 {
 	public interface IPlantService
 	{
-        // Add a plant to the page and the database
+        // Adds a plant to the page and the database
         Task<Plants>      AddPlants(Plants plants);
 
-        // Delete a plant from the page and the database
+        // Deletes a plant from the page and the database
         Task<bool>         DeletePlant(int PLANT_ID);
 
         // Gets all plants currently in database
         Task<List<Plants>> GetAllPlants();
 
-        // Get all public plants not created by the user
+        // Gets all public plants not created by the user
         Task<List<Plants>> GetAllPublicPlants();
+
+        // Gets all tasks for every plant a user is growing
+        Task<List<PlantTask>> GetAllUserTasks(string uuid);
 
         /*
         // Retrieves frequency-related fields for a specific plant by its ID
@@ -25,10 +28,10 @@ namespace greenhouse.Services
                            GetFrequencyFields(int plantID);
         */
 
-        // Get a plant from the database by ID
+        // Gets a plant from the database by ID
         Task<Plants>       GetPlantByID(int PLANT_ID);
 
-		// Get the current user's plants
+		// Gets the current user's plants
 		Task<List<Plants>> GetUserPlants(string user_id);
 
         // Retrieves a list of PlantTask records associated with a specific plant ID.

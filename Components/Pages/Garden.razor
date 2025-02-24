@@ -34,7 +34,7 @@
         gap: 20px;               /* Space between tiles                   */
         padding: 10px;
     }
-    
+
   /* Delete button as a shovel icon in the top-left corner of the tile    */
     .delete-button {
         position: absolute;
@@ -147,6 +147,15 @@
 
 <h3 class="title">My Garden</h3>
 
+<p>before</p>
+<p>@all_tasks.Count</p>
+@foreach(var t in all_tasks)
+{
+    <p>@t.TASK_ID, @t.PLANT_ID, @t.TASK_NAME, @t.FREQ</p>
+    <br />
+}
+<p>after</p>
+
 <AddPlantButton/>
 
 <!-- Main content block for displaing the tile grid -->
@@ -161,7 +170,7 @@
         {
             <p>You have no plants</p>
         }
-        
+
     }
     else
     {
@@ -183,6 +192,21 @@
                         alt="@p.PLANT_NAME" 
                         style="width: 75px; height: 80px; border-radius: 10px; margin-top: 0px;" />
                     }
+
+                    <div class="d-flex flex-column gap-2">
+                        @foreach (var t in all_tasks)
+                        {
+                            @if (p.PLANT_ID == t.PLANT_ID)
+                            {
+                                <div class="d-flex align-items-center gap-2">
+                                    <input type="checkbox" id="@t.TASK_NAME-@p.PLANT_ID" name="@t.TASK_NAME-@p.PLANT_ID">
+                                    <label for="@t.TASK_NAME-@p.PLANT_ID">@t.TASK_NAME</label>
+                                </div>
+                            }
+                        }
+                    </div>
+
+
 
                     @*
                     @if (PlantFrequencies.ContainsKey(p.PLANT_ID))
@@ -216,6 +240,9 @@
     // The list of plants the user will be able to see in their garden
     List<Plants>? plant = null;
 
+    // The list of currently active tasks
+    List<PlantTask> all_tasks = new List<PlantTask>();
+
     // Tracks the current simulated day
     private DateTime CurrentDay { get; set; } = DateTime.Now.Date;
     private Dictionary<int, Dictionary<string, int>> PlantFrequencies { get; set; } = new();
@@ -227,6 +254,14 @@
     // The current user's information used to uniquely identify them
     private string? user_email;
     private string  uuid;
+
+    private class IndividualPlantTask
+    {
+        public DateOnly Date { get; set; }
+        public int TemperatureC { get; set; }
+        public string? Summary { get; set; }
+        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    }
 
 
     /*************************************************/
@@ -243,13 +278,16 @@
 
         // Gets the current user's plants
         plant = await PlantService.GetUserPlants(uuid);
-        @*
-        foreach (var p in plant)
+
+        all_tasks = await PlantService.GetAllUserTasks(uuid);
+
+      @* foreach (var p in plant)
         {
-            var frequencies = await PlantService.GetFrequencyFields(p.PLANT_ID);
-            PlantFrequencies[p.PLANT_ID] = frequencies;
-        }
-        *@
+           // var frequencies = await PlantService.GetFrequencyFields(p.PLANT_ID);
+           // PlantFrequencies[p.PLANT_ID] = frequencies;
+           
+        }*@
+        
     }
 
     /* Delete the specified plant from the MySql database */
