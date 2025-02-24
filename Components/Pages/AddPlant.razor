@@ -231,6 +231,10 @@
         <label>Upload Image</label>
         <InputFile OnChange="HandleFileSelected" />
 
+        <!-- Dropdown list for avalible plants -->
+        <label>Select a Plant</label>
+        <PlantDropdown />
+      
         <h4>Task Frequencies</h4>
 
         <!-- Input fields for task frequencies (days per week) -->
@@ -285,8 +289,8 @@
                 <InputNumber @bind-Value="pestFreq" disabled="@(IsPestEnabled ? null : "disabled")"></InputNumber>
             </div>
         </div>
-        
-        <!-- Submit button to save the plant -->
+
+        <!-- Submit button to save the plant details -->
         <button type="submit" class="btn btn-primary">Submit</button>
     </EditForm>
 }
