@@ -137,7 +137,7 @@ namespace greenhouse.Services
         }
 
         // ******************************************************************************
-        //            UPDATE PLANT
+        // Updates an existing plant's details in the database.
         // ******************************************************************************
         public async Task<bool> UpdatePlant(Plants plant)
         {
@@ -147,7 +147,7 @@ namespace greenhouse.Services
         }
 
         // ******************************************************************************
-        //         UPDATE TASK
+        // Updates an existing plant task's details in the database.
         // ******************************************************************************
         public async Task<bool> UpdateTask(PlantTask task)
         {
