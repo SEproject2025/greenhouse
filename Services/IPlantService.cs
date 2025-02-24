@@ -37,5 +37,11 @@ namespace greenhouse.Services
         // Adds a new task to the PlantTasks table
         Task<bool> AddTask(PlantTask task);
 
+        // Update an existing plant's details in the database
+        Task<bool> UpdatePlant(Plants plant);
+
+        // Update an existing task's details in the database
+        Task<bool> UpdateTask(PlantTask task);
+
     }
 }
