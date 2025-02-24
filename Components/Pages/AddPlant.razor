@@ -253,7 +253,7 @@
 // Display the form for selecting a prefilled plant 
 else if (showPrefilledForm) 
 {
-    <EditForm Model="plant" OnSubmit="HandleSubmit" FormName="editPlant">
+    <EditForm Model="plant" OnSubmit="PrefillHandleSubmit" FormName="editPlant">
 
         <!-- Dropdown to select an existing public plant -->
         <label>Select a Public Plant</label>
@@ -400,6 +400,86 @@ else if (showPrefilledForm)
                 {
                     // Only save tasks that have a valid frequency
                     if (task.FREQ > 0) 
+                    {
+                        await PlantService.AddTask(task);
+                    }
+                }
+            }
+        }
+        // Notify the parent component that the submission is complete
+        await OnSubmit.InvokeAsync();
+        // Navigate back to the garden page and refresh the data
+        NavigationManager.NavigateTo("/Garden", forceLoad: true);
+    }
+
+    //**********************************************************************************************/
+    async Task PrefillHandleSubmit()
+    {
+        // Get the user's unique ID
+        plant.USER_ID = await UserServices.GetUserID(user_email);
+
+        // Check if the user selected a pre-filled plant
+        if (selectedPublicPlantId.HasValue)
+        {
+            // Retrieve the original plant from the database
+            var originalPlant = await PlantService.GetPlantByID(selectedPublicPlantId.Value);
+            if (originalPlant != null)
+            {
+                // Create a new plant based on the original, but assign it to the current user
+                plant = new Plants
+                    {
+                        PLANT_NAME = originalPlant.PLANT_NAME,
+                        IMAGE_DATA = originalPlant.IMAGE_DATA,
+                        USER_ID = await UserServices.GetUserID(user_email),
+                        IS_PRIVATE = "Y"
+                    };
+
+                // Save the new plant to the database
+                var newPlant = await PlantService.AddPlants(plant);
+
+                if (newPlant != null)
+                {
+                    // Retrieve the original plant's tasks
+                    var originalTasks = await PlantService.GetTasksForPlant(originalPlant.PLANT_ID);
+                    foreach (var task in originalTasks)
+                    {
+                        // Create a new task linked to the newly created plant
+                        var newTask = new PlantTask
+                            {
+                                PLANT_ID = newPlant.PLANT_ID, // Assign the new plant's ID
+                                TASK_NAME = task.TASK_NAME,
+                                FREQ = task.FREQ,
+                                DAYS_UNTIL = task.DAYS_UNTIL,
+                                IS_COMPLETED = false, // Reset task status
+                                DONE_DATE = null,
+                                OVERDUE = 0
+                            };
+                        // Save the cloned task in the database
+                        await PlantService.AddTask(newTask);
+                    }
+                }
+            }
+        }
+        else
+        {
+            // Create a custom plant with user-defined details
+            var addedPlant = await PlantService.AddPlants(plant);
+
+            if (addedPlant != null)
+            {
+                // Define tasks based on user input for frequency
+                var taskList = new List<PlantTask>
+                {
+                    new PlantTask { PLANT_ID = addedPlant.PLANT_ID, TASK_NAME = "Watering", FREQ = waterFreq },
+                    new PlantTask { PLANT_ID = addedPlant.PLANT_ID, TASK_NAME = "Weeding", FREQ = weedFreq },
+                    new PlantTask { PLANT_ID = addedPlant.PLANT_ID, TASK_NAME = "Pruning", FREQ = pruneFreq },
+                    new PlantTask { PLANT_ID = addedPlant.PLANT_ID, TASK_NAME = "Pest Control", FREQ = pestFreq }
+                };
+
+                foreach (var task in taskList)
+                {
+                    // Only save tasks that have a valid frequency
+                    if (task.FREQ > 0)
                     {
                         await PlantService.AddTask(task);
                     }
