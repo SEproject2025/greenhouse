@@ -134,6 +134,26 @@ namespace greenhouse.Services
             _context.PlantTasks.Add(task);                  // Adds the new task record to the database context     
             await _context.SaveChangesAsync();              // Saves changes asynchronously to persist the new task
             return true;                                    // Returns true to indicate successful insertion
-        }  
+        }
+
+        // ******************************************************************************
+        // Updates an existing plant's details in the database.
+        // ******************************************************************************
+        public async Task<bool> UpdatePlant(Plants plant)
+        {
+            _context.Plant.Update(plant);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        // ******************************************************************************
+        // Updates an existing plant task's details in the database.
+        // ******************************************************************************
+        public async Task<bool> UpdateTask(PlantTask task)
+        {
+            _context.PlantTasks.Update(task);
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }
