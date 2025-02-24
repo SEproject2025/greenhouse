@@ -196,9 +196,14 @@
         border-radius: 34px;
     }
 
-        .slider.round:before {
-            border-radius: 50%;
-        }
+    .slider.round:before {
+        border-radius: 50%;
+    }
+
+    .disabled-section {
+        pointer-events: none;
+        opacity: 0.5;
+    }
 </style>
 
 <!--***********************************************************************
@@ -234,17 +239,53 @@
         <h4>Task Frequencies</h4>
 
         <!-- Input fields for task frequencies (days per week) -->
+        <!--Watering-->
         <label>Watering Frequency (days per week)</label>
-        <InputNumber @bind-Value="waterFreq"></InputNumber>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <label class="switch">
+                <input type="checkbox" @bind="IsWaterEnabled">
+                <span class="slider round"></span>
+            </label>
+            <div class="@(IsWaterEnabled ? "" : "disabled-section")">
+                <InputNumber @bind-Value="waterFreq" disabled="@(IsWaterEnabled ? null : "disabled")"></InputNumber>
+            </div>
+        </div>
 
+        <!--Weeding-->
         <label>Weeding Frequency (days per week)</label>
-        <InputNumber @bind-Value="weedFreq"></InputNumber>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <label class="switch">
+                <input type="checkbox" @bind="IsPruneEnabled">
+                <span class="slider round"></span>
+            </label>
+            <div class="@(IsPruneEnabled ? "" : "disabled-section")">
+                <InputNumber @bind-Value="pruneFreq" disabled="@(IsPruneEnabled ? null : "disabled")"></InputNumber>
+            </div>
+        </div>
 
+        <!--Pruning-->
         <label>Pruning Frequency (days per week)</label>
-        <InputNumber @bind-Value="pruneFreq"></InputNumber>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <label class="switch">
+                <input type="checkbox" @bind="IsPruneEnabled">
+                <span class="slider round"></span>
+            </label>
+            <div class="@(IsPruneEnabled ? "" : "disabled-section")">
+                <InputNumber @bind-Value="pruneFreq" disabled="@(IsPruneEnabled ? null : "disabled")"></InputNumber>
+            </div>
+        </div>
 
+        <!--Pest Control-->
         <label>Pest Control Frequency (days per week)</label>
-        <InputNumber @bind-Value="pestFreq"></InputNumber>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <label class="switch">
+                <input type="checkbox" @bind="IsPestEnabled">
+                <span class="slider round"></span>
+            </label>
+            <div class="@(IsPestEnabled ? "" : "disabled-section")">
+                <InputNumber @bind-Value="pestFreq" disabled="@(IsPestEnabled ? null : "disabled")"></InputNumber>
+            </div>
+        </div>
 
 
         <!-- Submit button to save the plant details -->
@@ -295,6 +336,12 @@ else if (showPrefilledForm)
     private int   pruneFreq;
     private int   pestFreq;
 
+    // Activate variables
+    private bool isWaterEnabled { get; set; } = true;
+    private bool isWeedEnabled { get; set; } = true;
+    private bool isPruneEnabled { get; set; } = true;
+    private bool isPestEnabled { get; set; } = true;
+
     // Plant model
     Plants plant { get; set; } = new Plants { PLANT_NAME = string.Empty };
 
@@ -329,6 +376,95 @@ else if (showPrefilledForm)
             plant.IMAGE_DATA = memoryStream.ToArray();
         }
     }
+
+    // ******************************************************************************
+    // Handle zero value toggle fields
+    // ******************************************************************************
+
+    private bool IsWaterEnabled
+    {
+        get => isWaterEnabled;
+        set
+        {
+            isWaterEnabled = value;
+            if (!isWaterEnabled)
+                waterFreq = 0; // Auto-reset when disabled
+        }
+    }
+
+    private int WaterFreq
+    {
+        get => waterFreq;
+        set
+        {
+            waterFreq = value;
+            StateHasChanged(); // Force UI to update and reflect the change
+        }
+    }
+
+    private bool IsWeedEnabled
+    {
+        get => isWeedEnabled;
+        set
+        {
+            isWeedEnabled = value;
+            if (!isWeedEnabled)
+                weedFreq = 0;
+        }
+    }
+
+    private int WeedFreq
+    {
+        get => weedFreq;
+        set
+        {
+            weedFreq = value;
+            StateHasChanged();
+        }
+    }
+
+    private bool IsPruneEnabled
+    {
+        get => isPruneEnabled;
+        set
+        {
+            isPruneEnabled = value;
+            if (!isPruneEnabled)
+                pruneFreq = 0;
+        }
+    }
+
+    private int PruneFreq
+    {
+        get => pruneFreq;
+        set
+        {
+            weedFreq = value;
+            StateHasChanged();
+        }
+    }
+
+    private bool IsPestEnabled
+    {
+        get => isPestEnabled;
+        set
+        {
+            isPestEnabled = value;
+            if (!isPestEnabled)
+                pestFreq = 0;
+        }
+    }
+
+    private int PestFreq
+    {
+        get => pestFreq;
+        set
+        {
+            pestFreq = value;
+            StateHasChanged();
+        }
+    }
+
 
     // ******************************************************************************
     // Handles the submission of custom plants and edited plants
