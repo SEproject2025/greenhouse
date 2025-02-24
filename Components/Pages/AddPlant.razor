@@ -338,51 +338,49 @@ else if (showPrefilledForm)
         // Get the user's unique ID
         plant.USER_ID = await UserServices.GetUserID(user_email);
 
-        // Check if the user selected a pre-filled plant
-        if (selectedPublicPlantId.HasValue) 
+        // Check if the plant is an edit (already exists)
+        if (PLANT_ID.HasValue && PLANT_ID > 0)
         {
-            // Retrieve the original plant from the database
-            var originalPlant = await PlantService.GetPlantByID(selectedPublicPlantId.Value);
-            if (originalPlant != null)
+            var existingPlant = await PlantService.GetPlantByID(PLANT_ID.Value);
+            if (existingPlant != null)
             {
-                // Create a new plant based on the original, but assign it to the current user
-                plant = new Plants
-                    {
-                        PLANT_NAME = originalPlant.PLANT_NAME,
-                        IMAGE_DATA = originalPlant.IMAGE_DATA,
-                        USER_ID = await UserServices.GetUserID(user_email), 
-                        IS_PRIVATE = "Y" 
-                    };
+                // Update the existing plant's name & image with the new value & image
+                existingPlant.PLANT_NAME = plant.PLANT_NAME;
+                existingPlant.IMAGE_DATA = plant.IMAGE_DATA;
 
-                // Save the new plant to the database
-                var newPlant = await PlantService.AddPlants(plant);
+                // Update plant in database
+                await PlantService.UpdatePlant(existingPlant);
 
-                if (newPlant != null)
+                // Retrieve existing tasks
+                var existingTasks = await PlantService.GetTasksForPlant(existingPlant.PLANT_ID);
+
+                // Iterate through all existing tasks linked to the plant
+                foreach (var task in existingTasks)
                 {
-                    // Retrieve the original plant's tasks
-                    var originalTasks = await PlantService.GetTasksForPlant(originalPlant.PLANT_ID);
-                    foreach (var task in originalTasks)
+                    // Update the task's frequency based on the user-input values
+                    switch (task.TASK_NAME)
                     {
-                        // Create a new task linked to the newly created plant
-                        var newTask = new PlantTask
-                            {
-                                PLANT_ID = newPlant.PLANT_ID, // Assign the new plant's ID
-                                TASK_NAME = task.TASK_NAME,
-                                FREQ = task.FREQ,
-                                DAYS_UNTIL = task.DAYS_UNTIL,
-                                IS_COMPLETED = false, // Reset task status
-                                DONE_DATE = null,
-                                OVERDUE = 0
-                            };
-                        // Save the cloned task in the database
-                        await PlantService.AddTask(newTask);
+                        case "Watering":
+                            task.FREQ = waterFreq;
+                            break;
+                        case "Weeding":
+                            task.FREQ = weedFreq;
+                            break;
+                        case "Pruning":
+                            task.FREQ = pruneFreq;
+                            break;
+                        case "Pest Control":
+                            task.FREQ = pestFreq;
+                            break;
                     }
+                    // Save the updated task back to the database
+                    await PlantService.UpdateTask(task);
                 }
             }
         }
         else
         {
-            // Create a custom plant with user-defined details
+            // Create a new plant
             var addedPlant = await PlantService.AddPlants(plant);
 
             if (addedPlant != null)
@@ -390,19 +388,16 @@ else if (showPrefilledForm)
                 // Define tasks based on user input for frequency
                 var taskList = new List<PlantTask>
                 {
-                    new PlantTask { PLANT_ID = addedPlant.PLANT_ID, TASK_NAME = "Watering", FREQ = waterFreq },
-                    new PlantTask { PLANT_ID = addedPlant.PLANT_ID, TASK_NAME = "Weeding", FREQ = weedFreq },
-                    new PlantTask { PLANT_ID = addedPlant.PLANT_ID, TASK_NAME = "Pruning", FREQ = pruneFreq },
-                    new PlantTask { PLANT_ID = addedPlant.PLANT_ID, TASK_NAME = "Pest Control", FREQ = pestFreq }
+                new PlantTask { PLANT_ID = addedPlant.PLANT_ID, TASK_NAME = "Watering", FREQ = waterFreq },
+                new PlantTask { PLANT_ID = addedPlant.PLANT_ID, TASK_NAME = "Weeding", FREQ = weedFreq },
+                new PlantTask { PLANT_ID = addedPlant.PLANT_ID, TASK_NAME = "Pruning", FREQ = pruneFreq },
+                new PlantTask { PLANT_ID = addedPlant.PLANT_ID, TASK_NAME = "Pest Control", FREQ = pestFreq }
                 };
 
                 foreach (var task in taskList)
                 {
                     // Only save tasks that have a valid frequency
-                    if (task.FREQ > 0) 
-                    {
-                        await PlantService.AddTask(task);
-                    }
+                    await PlantService.AddTask(task);
                 }
             }
         }
@@ -456,32 +451,6 @@ else if (showPrefilledForm)
                             };
                         // Save the cloned task in the database
                         await PlantService.AddTask(newTask);
-                    }
-                }
-            }
-        }
-        else
-        {
-            // Create a custom plant with user-defined details
-            var addedPlant = await PlantService.AddPlants(plant);
-
-            if (addedPlant != null)
-            {
-                // Define tasks based on user input for frequency
-                var taskList = new List<PlantTask>
-                {
-                    new PlantTask { PLANT_ID = addedPlant.PLANT_ID, TASK_NAME = "Watering", FREQ = waterFreq },
-                    new PlantTask { PLANT_ID = addedPlant.PLANT_ID, TASK_NAME = "Weeding", FREQ = weedFreq },
-                    new PlantTask { PLANT_ID = addedPlant.PLANT_ID, TASK_NAME = "Pruning", FREQ = pruneFreq },
-                    new PlantTask { PLANT_ID = addedPlant.PLANT_ID, TASK_NAME = "Pest Control", FREQ = pestFreq }
-                };
-
-                foreach (var task in taskList)
-                {
-                    // Only save tasks that have a valid frequency
-                    if (task.FREQ > 0)
-                    {
-                        await PlantService.AddTask(task);
                     }
                 }
             }
