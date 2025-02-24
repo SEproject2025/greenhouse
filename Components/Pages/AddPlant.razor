@@ -216,7 +216,8 @@
 <!-- Display the form for creating a custom plant -->
 @if (showCustomForm)
 {
-    <EditForm Model="plant" OnSubmit="HandleSubmit" FormName="editPlant">
+    // Pressing 'Submit' here goes specifically to the CustomHandleSubmit method
+    <EditForm Model="plant" OnSubmit="CustomHandleSubmit" FormName="editPlant">
 
         <!-- Input field for plant name -->
         <label>Plant Name</label>
@@ -253,6 +254,7 @@
 // Display the form for selecting a prefilled plant 
 else if (showPrefilledForm) 
 {
+    // Pressing 'Submit' here goes specifically to the PrefilledHandleSubmit method
     <EditForm Model="plant" OnSubmit="PrefillHandleSubmit" FormName="editPlant">
 
         <!-- Dropdown to select an existing public plant -->
@@ -329,11 +331,9 @@ else if (showPrefilledForm)
     }
 
     // ******************************************************************************
-    // Handles the submission of a new plant, either as a pre-filled copy of an existing plant
-    // or as a custom user-created plant. If a pre-filled plant is selected, it clones the
-    // existing plant and its associated tasks. Otherwise, it creates a new custom plant.
+    // Handles the submission of custom plants and edited plants
     // ******************************************************************************
-    async Task HandleSubmit()
+    async Task CustomHandleSubmit()
     {
         // Get the user's unique ID
         plant.USER_ID = await UserServices.GetUserID(user_email);
@@ -407,7 +407,9 @@ else if (showPrefilledForm)
         NavigationManager.NavigateTo("/Garden", forceLoad: true);
     }
 
-    //**********************************************************************************************/
+    // ******************************************************************************
+    // Handles the submission of a pre-filled plant only
+    // ******************************************************************************
     async Task PrefillHandleSubmit()
     {
         // Get the user's unique ID
