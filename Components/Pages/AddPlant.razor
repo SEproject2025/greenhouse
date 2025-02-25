@@ -8,6 +8,7 @@
 @using Microsoft.AspNetCore.Authorization
 @using System.Security.Claims
 @using greenhouse.Data
+@using greenhouse.Components.Shared
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
 @using greenhouse.Entities;
@@ -228,13 +229,17 @@
         <label>Plant Name</label>
         <InputText @bind-Value="plant.PLANT_NAME"></InputText>
 
-        <!-- Input field for image upload -->
-        <label>Upload Image</label>
-        <InputFile OnChange="HandleFileSelected" />
-
         <!-- Dropdown list for avalible plants -->
         <label>Select a Plant</label>
-        <PlantDropdown />
+        <PlantDropdown OnPlantSelected="SelectPlant" />
+
+        @if (selectedPlant != null && selectedPlant.IMAGE_DATA != null)
+        {
+            <div>
+                <label>Selected Image:</label>
+                <img src="@selectedPlant.ImageUrl" alt="@selectedPlant.Name" width="100" />
+            </div>
+        }
       
         <h4>Task Frequencies</h4>
 
@@ -366,14 +371,27 @@ else if (showPrefilledForm)
     // ******************************************************************************
     // Handle image upload
     // ******************************************************************************
-    private async Task HandleFileSelected(InputFileChangeEventArgs e)
+    private Plantimage? selectedPlant;
+    private async Task SelectPlant(Plantimage plant)
     {
-        selectedFile = e.File;
-        if (selectedFile != null)
+        selectedPlant = plant;
+
+        if (!string.IsNullOrEmpty(plant.ImageUrl))
         {
-            using var memoryStream = new MemoryStream();
-            await selectedFile.OpenReadStream().CopyToAsync(memoryStream);
-            plant.IMAGE_DATA = memoryStream.ToArray();
+            // Get the file path relative to the wwwroot folder
+            string filePath = Path.Combine("wwwroot", plant.ImageUrl);
+
+            try
+            {
+                // Read the image as a byte array
+                selectedPlant.IMAGE_DATA = await File.ReadAllBytesAsync(filePath);
+            }
+            catch (Exception ex)
+            {
+                // Handle errors if file not found
+                Console.WriteLine($"Error reading image file: {ex.Message}");
+                selectedPlant.IMAGE_DATA = null;
+            }
         }
     }
 

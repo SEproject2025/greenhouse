@@ -1,9 +1,15 @@
-﻿@code {
-    public class Plantimage
+﻿
+<select @onchange="HandlePlantSelection">
+    <option value="">-- Select a Plant --</option>
+    @foreach (var plant in plants)
     {
-        public string Name { get; set; } = string.Empty;
-        public string ImageUrl { get; set; } = string.Empty;
+        <option value="@plant.ImageUrl">@plant.Name</option>
     }
+</select>
+
+
+@code {
+    [Parameter] public EventCallback<Plantimage> OnPlantSelected { get; set; }
 
     private List<Plantimage> plants = new()
     {
@@ -29,7 +35,7 @@
         new Plantimage { Name = "Zucchini",    ImageUrl = "images/Zucchini.webp" }
     };
 
-    private Plantimage? selectedPlant;
+    public Plantimage? selectedPlant;
 
     private bool isDropdownOpen = false;
 
@@ -43,86 +49,16 @@
     {
         isDropdownOpen = !isDropdownOpen;
     }
-}
 
-<!-- Dropdown Menu -->
-<div class="dropdown">
-    <button class="dropdown-button" @onclick="ToggleDropdown">
-        @if (selectedPlant != null)
-        {
-            <img src="@selectedPlant.ImageUrl" alt="@selectedPlant.Name" width="30" />
-            <span>@selectedPlant.Name</span>
-        }
-        else
-        {
-            <span>-- Select a Plant --</span>
-        }
-    </button>
-
-    @if (isDropdownOpen)
+    private async Task HandlePlantSelection(ChangeEventArgs e)
     {
-        <div class="dropdown-content">
-            @foreach (var plant in plants)
-            {
-                <div class="dropdown-item" @onclick="() => SelectPlant(plant)">
-                    <img src="@plant.ImageUrl" alt="@plant.Name" width="30" />
-                    <span>@plant.Name</span>
-                </div>
-            }
-        </div>
-    }
-</div>
+        var selectedUrl = e.Value?.ToString();
+        var selectedPlant = plants.FirstOrDefault(p => p.ImageUrl == selectedUrl);
 
-<style>
-    .dropdown {
-        position: relative;
-        display: inline-block;
+        if (selectedPlant != null)
+        {
+            // Notify the parent component about the selected plant
+            await OnPlantSelected.InvokeAsync(selectedPlant);
+        }
     }
-
-    .dropdown-button {
-        background-color: #4CAF50;
-        color: white;
-        padding: 10px 15px;
-        font-size: 16px;
-        border: none;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .dropdown-button img {
-        border-radius: 50%;
-    }
-
-    .dropdown-content {
-        display: block;
-        position: absolute;
-        background-color: white;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-        z-index: 1;
-        min-width: 160px;
-        max-height: 200px;
-        overflow-y: auto;
-        border-radius: 5px;
-        margin-top: 5px;
-    }
-
-    .dropdown-item {
-        display: flex;
-        align-items: center;
-        padding: 10px;
-        cursor: pointer;
-        gap: 10px;
-    }
-
-    .dropdown-item:hover {
-        background-color: #f1f1f1;
-    }
-
-    .dropdown-item img {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-    }
-</style>
+}
