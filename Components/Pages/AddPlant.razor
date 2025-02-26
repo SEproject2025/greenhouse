@@ -262,11 +262,11 @@
         <label>Weeding Frequency (days per week)</label>
         <div style="display: flex; align-items: center; gap: 10px;">
             <label class="switch">
-                <input type="checkbox" @bind="IsPruneEnabled">
+                <input type="checkbox" @bind="IsWeedEnabled">
                 <span class="slider round"></span>
             </label>
-            <div class="@(IsPruneEnabled ? "" : "disabled-section")">
-                <InputNumber @bind-Value="pruneFreq" disabled="@(IsPruneEnabled ? null : "disabled")"></InputNumber>
+            <div class="@(IsWeedEnabled ? "" : "disabled-section")">
+                <InputNumber @bind-Value="weedFreq" disabled="@(IsWeedEnabled ? null : "disabled")"></InputNumber>
             </div>
         </div>
 
