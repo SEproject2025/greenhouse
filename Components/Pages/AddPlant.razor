@@ -237,9 +237,11 @@
         {
             <div>
                 <label>Selected Image:</label>
-                <img src="@selectedPlant.ImageUrl" alt="@selectedPlant.Name" width="100" />
+                <img src="data:image/webp;base64,@Convert.ToBase64String(selectedPlant.IMAGE_DATA)"
+                     alt="@selectedPlant.Name" width="100" />
             </div>
         }
+
       
         <h4>Task Frequencies</h4>
 
@@ -378,22 +380,30 @@ else if (showPrefilledForm)
 
         if (!string.IsNullOrEmpty(plant.ImageUrl))
         {
-            // Get the file path relative to the wwwroot folder
-            string filePath = Path.Combine("wwwroot", plant.ImageUrl);
+            // Ensure the correct file path
+            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", plant.ImageUrl);
 
             try
             {
-                // Read the image as a byte array
-                selectedPlant.IMAGE_DATA = await File.ReadAllBytesAsync(filePath);
+                if (File.Exists(filePath))
+                {
+                    // Read the image as a byte array and store it in IMAGE_DATA
+                    selectedPlant.IMAGE_DATA = await File.ReadAllBytesAsync(filePath);
+                }
+                else
+                {
+                    Console.WriteLine($"Error: File not found at {filePath}");
+                    selectedPlant.IMAGE_DATA = null;
+                }
             }
             catch (Exception ex)
             {
-                // Handle errors if file not found
                 Console.WriteLine($"Error reading image file: {ex.Message}");
                 selectedPlant.IMAGE_DATA = null;
             }
         }
     }
+
 
     // ******************************************************************************
     // Handle zero value toggle fields
@@ -491,6 +501,12 @@ else if (showPrefilledForm)
     {
         // Get the user's unique ID
         plant.USER_ID = await UserServices.GetUserID(user_email);
+
+        // Ensure plant.IMAGE_DATA is assigned before saving
+        if (selectedPlant != null && selectedPlant.IMAGE_DATA != null)
+        {
+            plant.IMAGE_DATA = selectedPlant.IMAGE_DATA;
+        }
 
         // Check if the plant is an edit (already exists)
         if (PLANT_ID.HasValue && PLANT_ID > 0)
