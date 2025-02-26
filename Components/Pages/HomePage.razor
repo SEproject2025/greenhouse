@@ -1,8 +1,151 @@
 ﻿@page "/HomePage"
+@rendermode InteractiveServer
+@attribute [StreamRendering(true)]
+@inject IPlantService PlantService
+@inject IUserServices UserServices
 @inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
-<h3>HomePage</h3>
+@using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims
+@using Shared  <!-- Import Shared Components -->
+<!--**********************************************************************-->
+<!--                             CSS STYLING                              -->
+<!--**********************************************************************-->
+<style>
+    /* Main title styling */
+    .title {
+        font-size: 36px;
+        text-align: center;
+        color: #2C6E49;
+        margin-top: 20px;
+    }
 
+    /* Subtitle styling */
+    .subtitle {
+        text-align: center;
+        color: #4F7942;
+        margin-bottom: 30px;
+    }
+
+    /* General container for layout */
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+    }
+
+    /* Plant Insights Section */
+    .plant-insights {
+        width: 80%;
+        max-width: 700px;
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    /* Grid layout for plant images */
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 25px;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    /* Individual plant card */
+    .plant-card {
+        background: white;
+        padding: 15px;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        width: 130px;
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .plant-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .plant-card img {
+        width: 90px;
+        height: 90px;
+        border-radius: 10px;
+        object-fit: cover;
+        margin-bottom: 10px;
+    }
+
+    .plant-name {
+        font-size: 14px;
+        font-weight: bold;
+        color: #2C6E49;
+    }
+</style>
+
+<!--**********************************************************************-->
+<!--                             HTML SECTION                             -->
+<!--**********************************************************************-->
+<h2 class="title">Welcome to Your Plant Manager</h2>
+<p class="subtitle">Keep track of your plants and care schedule easily.</p>
+
+<div class="container">
+    <!-- Calendar Section -->
+    <Calendar />
+
+    <!-- Plant Insights Section -->
+    <div class="plant-insights">
+        <h3>Your Plants</h3>
+        <div class="card-container">
+            @if (userPlants == null || userPlants.Count == 0)
+            {
+                <p>You haven't added any plants yet.</p>
+            }
+            else
+            {
+                @foreach (var plant in userPlants)
+                {
+                    <div class="plant-card" @onclick="GoToGarden">
+                        @if (plant.IMAGE_DATA != null && plant.IMAGE_DATA.Length > 0)
+                        {
+                            <img src="data:image/png;base64,@Convert.ToBase64String(plant.IMAGE_DATA)" alt="@plant.PLANT_NAME" />
+                        }
+                        <div class="plant-name">@plant.PLANT_NAME</div>
+                    </div>
+                }
+
+            }
+        </div>
+    </div>
+</div>
+
+<!--**********************************************************************-->
+<!--                             CODE SECTION                             -->
+<!--**********************************************************************-->
 @code {
+    private List<Plants> userPlants = new();
+    private string? userEmail;
+    private string? userId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity?.IsAuthenticated == true)
+        {
+            userEmail = user.Identity.Name;
+            userId = await UserServices.GetUserID(userEmail);
+            userPlants = await PlantService.GetUserPlants(userId);
+        }
+    }
+
+    private void GoToGarden()
+    {
+        NavigationManager.NavigateTo("/Garden");
+    }
+
 
 }
