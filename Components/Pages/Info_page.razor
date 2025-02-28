@@ -1,33 +1,30 @@
-﻿<h3>Info_page</h3>
+﻿@page "/Info"
+@attribute [StreamRendering(true)]
+@inject IPlantService PlantService
+@inject NavigationManager NavigationManager
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Botanical Guide</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
 
-        body {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
+    body {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+    }
 
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #f9f9f9;
-            padding: 1rem 2rem;
-            border-bottom: 1px solid #ddd;
-        }
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #f9f9f9;
+        padding: 1rem 2rem;
+        border-bottom: 1px solid #ddd;
+    }
 
         header .logo {
             font-size: 1.5rem;
@@ -39,24 +36,24 @@
             gap: 1.5rem;
         }
 
-        header nav a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-        }
+            header nav a {
+                text-decoration: none;
+                color: #333;
+                font-weight: 500;
+            }
 
-        main {
-            display: flex;
-            flex: 1;
-        }
+    main {
+        display: flex;
+        flex: 1;
+    }
 
-        .sidebar {
-            width: 25%;
-            background-color: #f5f5f5;
-            padding: 1rem;
-            border-right: 1px solid #ddd;
-            overflow-y: auto;
-        }
+    .sidebar {
+        width: 25%;
+        background-color: #f5f5f5;
+        padding: 1rem;
+        border-right: 1px solid #ddd;
+        overflow-y: auto;
+    }
 
         .sidebar .plant {
             display: flex;
@@ -69,23 +66,23 @@
             cursor: pointer;
         }
 
-        .sidebar .plant.active {
-            border-color: black;
-            background-color: #000;
-            color: white;
-        }
+            .sidebar .plant.active {
+                border-color: black;
+                background-color: #000;
+                color: white;
+            }
 
-        .sidebar .plant img {
-            width: 40px;
-            height: 40px;
-            margin-right: 1rem;
-        }
+            .sidebar .plant img {
+                width: 40px;
+                height: 40px;
+                margin-right: 1rem;
+            }
 
-        .content {
-            flex: 1;
-            padding: 2rem;
-            overflow-y: auto;
-        }
+    .content {
+        flex: 1;
+        padding: 2rem;
+        overflow-y: auto;
+    }
 
         .content h1 {
             margin-bottom: 1rem;
@@ -95,24 +92,37 @@
             margin-bottom: 2rem;
         }
 
-        .content .details div {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
+            .content .details div {
+                display: flex;
+                align-items: center;
+                margin-bottom: 1rem;
+            }
 
-        .content .details div img {
-            width: 20px;
-            height: 20px;
-            margin-right: 0.5rem;
-        }
+                .content .details div img {
+                    width: 20px;
+                    height: 20px;
+                    margin-right: 0.5rem;
+                }
 
         .content .description {
             font-size: 0.95rem;
             line-height: 1.6;
             color: #555;
         }
-    </style>
+</style>
+
+
+
+
+<h3>Info_page</h3>
+
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Botanical Guide</title>
+    
 </head>
 <body>
     <header>
@@ -193,7 +203,6 @@
         </section>
     </main>
 </body>
-</html>
 
 
 @code {
