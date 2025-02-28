@@ -1,236 +1,229 @@
-﻿    @page "/Garden"
-    @rendermode InteractiveServer
-    @inject NavigationManager NavigationManager
-    @attribute [StreamRendering(true)]
-    @inject IPlantService PlantService
-    @inject IUserServices UserServices
-    @inject IJSRuntime JSRuntime
+﻿@page "/Garden"
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
+@attribute [StreamRendering(true)]
+@inject IPlantService PlantService
+@inject IUserServices UserServices
+@inject IJSRuntime JSRuntime
 
-    @using Microsoft.AspNetCore.Authorization
-    @using System.Security.Claims
-    @inject AuthenticationStateProvider AuthenticationStateProvider
+@using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
-    <!--***********************************************************************
-    *	                             CSS/STYLING SECTION                      *
-    ************************************************************************-->
-    <style type="text/css">
-        /* Styling for the green box                                         */
-        /*********************************************************************/
-        .main {
-            margin: 50px auto;
-            width: 700px; 
-            padding-top: 10px;
-            padding-bottom: 10px;
-            background-color: #725D4C;
-            border-radius: 20px;
-            box-shadow: 10px 10px 8px #888888;
-        }
+<!--***********************************************************************
+*	                             CSS/STYLING SECTION                      *
+************************************************************************-->
+<style type="text/css">
 
-        /* Inner Container for the grid                                       */
-        .main .inner {
-            display: flex;
-            flex-wrap: wrap;         /* Allows items to wrap to the next line */
-            justify-content: center; /* Centers items horizontally            */
-            gap: 20px;               /* Space between tiles                   */
-            padding: 10px;
-        }
-
-      /* Delete button as a shovel icon in the top-left corner of the tile    */
-        .delete-button {
-            position: absolute;
-            top: 10px;
-            right: 10px; /* Changed from left to right                        */
-            width: 30px;
-            height: 30px;
-            background: url('/images/shovel-icon.png') no-repeat center center;
-            background-size: contain;
-            border: none;
-            cursor: pointer;
-            outline: none;
-        }
-
-        .delete-button:hover {
-            opacity: 0.8;
-        }
-        /*********************************************************************/
-        /* Random Styles for page                                            */
-        /*********************************************************************/
-        .title {
-            font-size: 36px;
-            color: #2C6E49;
-            text-align: center;
-            margin-bottom: 20px;
-            font-family: 'Georgia', serif;
-        }
-
-        button.btn {
-            background-color: #6BBF59;
-            color: #FFFFFF;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 25px;
-            font-size: 16px;
-            margin: 10px 5px;
-            cursor: pointer;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s ease;
-        }
-
-        button.btn:hover {
-            background-color: #5AA74E;
-        }
-
-        /*********************************************************************/
-        /* Container for all tiles                                           */
-        /*********************************************************************/
-        .tiles-container {
-            display: flex;
-            flex-wrap: wrap;         /* Allows tiles to wrap onto new rows    */
-            justify-content: center; /* Centers tiles on the page             */
-            gap: 50px;               /* Space between tiles                   */
-            padding: 30px;           /* Optional padding around the container */
-        }
-
-        /* Styling for individual tiles                                       */
-        .tile {
-            height: 250px;
-            width: 300px;
-            background-color: #d2d9d5;
-            border: 2px solid black;
-            display: inline-block;
-            position: relative;
-            border-radius: 15px;
-            padding: 40px 10px 10px; /* Added top padding */
-            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2), -5px -5px 15px rgba(255, 255, 255, 0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .tile:hover {
-            transform: scale(1.05);
-            box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.3), -8px -8px 20px rgba(255, 255, 255, 0.2);
-        }
-
-        /* Styling for the plant name - targets spans inside the tiles       */
-        /*********************************************************************/
-        .tile span {
-         /*   position: absolute;
-            top: 15%;
-            left: 200px;
-            color: black;
-            font-size: 18px;
-            font-family: Arial, sans-serif; */
-            position: absolute; /* Keep it at the top */
-            top: 10px; /* Adjust to be near the top */
-            left: 15px; /* Adjust left padding */
-            color: black;
-            font-size: 18px;
-            font-family: Arial, sans-serif;
-            font-weight: bold; /* Make it stand out */
-        }
-
-        /* Styling for formatting checkbox - targets checkbox input          */
-        /*********************************************************************/
-        .tile input[type="checkbox"] {
-        /*   position: absolute;
-            top: 60%;  
-            left: 25px; */
-        }
-
-        /* Styling for the checkbox label - targets labels                   */
-        /*********************************************************************/
-        .tile label {
-            position: static; /* absolute; */
-            display: block;
-            margin-top: 5px;
-            top: 58%;        
-            left: 40px;       
-            color: black;
-            font-family: Arial, sans-serif;
-            font-size: 14px;
-        }
-
-        .task-container {
-           display: flex;
-           align-items: center; /* Aligns checkbox and label vertically */
-           gap: 8px; /* Adds space between checkbox and text */
-           margin-top: 5px; /* Ensures space between task items */
-        }
-
-        .task-container input[type="checkbox"]{
-           margin-left: 2px; /* Move checkbox to the right */
-        }
+    /* Styling for the green box                                         */
+    /*********************************************************************/
+    .main {
+        margin: 50px auto;
+        width: 700px; 
+        padding-top: 10px;
+        padding-bottom: 10px;
+        background-color: #725D4C;
+        border-radius: 20px;
+        box-shadow: 10px 10px 8px #888888;
     }
-    </style>
 
-    <!--***********************************************************************
-    *	                             HTML SECTION                             *
-    ************************************************************************-->
+    /* Inner Container for the grid                                       */
+    .main .inner {
+        display: flex;
+        flex-wrap: wrap;         /* Allows items to wrap to the next line */
+        justify-content: center; /* Centers items horizontally            */
+        gap: 20px;               /* Space between tiles                   */
+        padding: 10px;
+    }
 
-    <h3 class="title">My Garden</h3>
+    /* Delete button as a shovel icon in the top-left corner of the tile    */
+    .delete-button {
+        position: absolute;
+        top: 10px;
+        right: 10px; /* Changed from left to right                        */
+        width: 30px;
+        height: 30px;
+        background: url('/images/shovel-icon.png') no-repeat center center;
+        background-size: contain;
+        border: none;
+        cursor: pointer;
+        outline: none;
+    }
 
-    <p>before</p>
-    <p>@all_tasks.Count</p>
-    <dl>
-    @foreach(var t in all_tasks)
+    .delete-button:hover {
+        opacity: 0.8;
+    }
+    /*********************************************************************/
+    /* Random Styles for page                                            */
+    /*********************************************************************/
+    .title {
+        font-size: 36px;
+        color: #2C6E49;
+        text-align: center;
+        margin-bottom: 20px;
+        font-family: 'Georgia', serif;
+    }
+
+    button.btn {
+        background-color: #6BBF59;
+        color: #FFFFFF;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 25px;
+        font-size: 16px;
+        margin: 10px 5px;
+        cursor: pointer;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease;
+    }
+
+    button.btn:hover {
+        background-color: #5AA74E;
+    }
+
+    /*********************************************************************/
+    /* Container for all tiles                                           */
+    /*********************************************************************/
+    .tiles-container {
+        display: flex;
+        flex-wrap: wrap;         /* Allows tiles to wrap onto new rows    */
+        justify-content: center; /* Centers tiles on the page             */
+        gap: 50px;               /* Space between tiles                   */
+        padding: 30px;           /* Optional padding around the container */
+    }
+
+    /* Styling for individual tiles                                       */
+    .tile {
+        height: 250px;
+        width: 300px;
+        background-color: #d2d9d5;
+        border: 2px solid black;
+        display: inline-block;
+        position: relative;
+        border-radius: 15px;
+        padding: 40px 10px 10px; /* Added top padding */
+        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2), -5px -5px 15px rgba(255, 255, 255, 0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .tile:hover {
+        transform: scale(1.05);
+        box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.3), -8px -8px 20px rgba(255, 255, 255, 0.2);
+    }
+
+    /* Styling for the plant name - targets spans inside the tiles       */
+    /*********************************************************************/
+    .tile span {
+        position: absolute; /* Keep it at the top */
+        top: 10px; /* Adjust to be near the top */
+        left: 15px; /* Adjust left padding */
+        color: black;
+        font-size: 18px;
+        font-family: Arial, sans-serif;
+        font-weight: bold; /* Make it stand out */
+    }
+
+    /* Styling for formatting checkbox - targets checkbox input          */
+    /*********************************************************************/
+    .tile input[type="checkbox"] {
+        /* Not sure why ChatGPT had me put this here but I'm afraid to remove it */
+    }
+
+    /* Styling for the checkbox label - targets labels                   */
+    /*********************************************************************/
+    .tile label {
+        position: static; /* absolute; */
+        display: block;
+        margin-top: 5px;
+        top: 58%;        
+        left: 40px;       
+        color: black;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+    }
+
+    .task-container {
+       display: flex;
+       align-items: center; /* Aligns checkbox and label vertically */
+       gap: 8px; /* Adds space between checkbox and text */
+       margin-top: 5px; /* Ensures space between task items */
+    }
+
+    .task-container input[type="checkbox"]{
+       margin-left: 2px; /* Move checkbox to the right */
+    }
+}
+</style>
+
+<!--***********************************************************************
+*	                             HTML SECTION                             *
+************************************************************************-->
+
+<h3 class="title">My Garden</h3>
+ 
+<p>@all_tasks.Count</p>
+<dl>
+@foreach(var t in all_tasks) {
+    <dt>@t.TASK_ID, @t.PLANT_ID, @t.TASK_NAME, @t.FREQ, @t.IS_COMPLETED</dt> }
+</dl>
+
+<AddPlantButton/>
+
+<!-- Main content block for displaing the tile grid -->
+<div class="tiles-container">
+    @if (plant == null || !plant.Any())
     {
-        <dt>@t.TASK_ID, @t.PLANT_ID, @t.TASK_NAME, @t.FREQ</dt>
-    
-    }
-    </dl>
-    <p>after</p>
-
-    <AddPlantButton/>
-
-    <!-- Main content block for displaing the tile grid -->
-    <div class="tiles-container">
-        @if (plant == null || !plant.Any())
+        @if (plant == null)
         {
-            @if (plant == null)
-            {
-                <p>Loading . . . </p>
-            }
-            else
-            {
-                <p>You have no plants</p>
-            }
-
+            <p>Loading . . . </p>
         }
         else
         {
-            @foreach (var p in plant)
+            <p>You have no plants</p>
+        }
+
+    }
+    else
+    {
+        @foreach (var p in plant)
+        {
+
+            @if (p.IS_PRIVATE == "Y")
             {
-
-                @if (p.IS_PRIVATE == "Y")
-                {
-                    <div class="tile">
-                        <!-- Shovel delete button in the top-right corner -->
-                        <button @onclick="() => DeletePlant(p.PLANT_ID)" class="delete-button"></button>
+                <div class="tile">
+                    <!-- Shovel delete button in the top-right corner -->
+                    <button @onclick="() => DeletePlant(p.PLANT_ID)" class="delete-button"></button>
 
 
-                        <span>@p.PLANT_NAME</span>
+                    <span>@p.PLANT_NAME</span>
 
-                        @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
+                    @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
+                    {
+                        <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)" 
+                           alt="@p.PLANT_NAME" 
+                        style="width: 75px; height: 80px; border-radius: 10px; margin-top: 0px;" />
+                    }
+
+                    @foreach (var t in all_tasks)
+                    {
+                        @if (p.PLANT_ID == t.PLANT_ID)
                         {
-                            <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)" 
-                            alt="@p.PLANT_NAME" 
-                            style="width: 75px; height: 80px; border-radius: 10px; margin-top: 0px;" />
-                        }
-
-                            @foreach (var t in all_tasks)
-                            {
-                                @if (p.PLANT_ID == t.PLANT_ID)
-                                {
                             <div class="task-container">
-                                        <input type="checkbox" id="@t.TASK_NAME-@p.PLANT_ID" name="@t.TASK_NAME-@p.PLANT_ID"> 
-                                        <label for="@t.TASK_NAME-@p.PLANT_ID">@t.TASK_NAME</label>
-                                        </div>
-                                }
-                            }
+                                <input type="checkbox" 
+                                   id="@t.TASK_NAME-@p.PLANT_ID" 
+                                   name="@t.TASK_NAME-@p.PLANT_ID" 
+                                   checked='@t.IS_COMPLETED'
+                                   @onchange="(e) => CheckboxChecked(e, t)" /> 
+                                <label for="@t.TASK_NAME-@p.PLANT_ID">@t.TASK_NAME</label>
+                            </div>
+                        }
+                    }
 
 
 
 
-                        @*
+
+                    @*
                         @if (PlantFrequencies.ContainsKey(p.PLANT_ID))
                         {
                             foreach (var field in PlantFrequencies[p.PLANT_ID])
@@ -243,83 +236,82 @@
                             }
                         } 
                          *@
-                    </div>
-                }
+                </div>
             }
         }
-    </div>
+    }
+</div>
 
-    <!-- Display the current day -->
-    <button @onclick="GoToNextDay" class="btn btn-primary">Next Day &gt;&gt;</button>
-    <p>Current Day: @CurrentDay.ToString("MMMM dd, yyy")</p>
+<!-- Display the current day -->
+<button @onclick="GoToNextDay" class="btn btn-primary">Next Day &gt;&gt;</button>
+<p>Current Day: @CurrentDay.ToString("MMMM dd, yyy")</p>
 
 
-    <!--***********************************************************************
-    *	                             CODE SECTION                             *
-    ************************************************************************-->
-    @code {
+<!--***********************************************************************
+*	                             CODE SECTION                             *
+************************************************************************-->
+@code {
 
-        // The list of plants the user will be able to see in their garden
-        List<Plants>? plant = null;
+    // The list of plants the user will be able to see in their garden
+    List<Plants>? plant = null;
 
-        // The list of currently active tasks
-        List<PlantTask> all_tasks = new List<PlantTask>();
+    // The list of currently active tasks
+    List<PlantTask> all_tasks = new List<PlantTask>();
 
-        // Tracks the current simulated day
-        private DateTime CurrentDay { get; set; } = DateTime.Now.Date;
-        private Dictionary<int, Dictionary<string, int>> PlantFrequencies { get; set; } = new();
+    // Tracks the current simulated day
+    private DateTime CurrentDay { get; set; } = DateTime.Now.Date;
+    private Dictionary<int, Dictionary<string, int>> PlantFrequencies { get; set; } = new();
 
-        // Used to obtain the current user's email and UUID
-        private AuthenticationState? authState;
-        private ClaimsPrincipal?     user;
+    // Used to obtain the current user's email and UUID
+    private AuthenticationState? authState;
+    private ClaimsPrincipal?     user;
 
-        // The current user's information used to uniquely identify them
-        private string? user_email;
-        private string  uuid;
+    // The current user's information used to uniquely identify them
+    private string? user_email;
+    private string  uuid;
 
-        private class IndividualPlantTask
+    /*************************************************/
+    /* ------------INITIALIZATION METHOD------------ */
+    /* Creates the list of the current user's plants */
+    /********************************************** **/
+    protected override async Task OnInitializedAsync()
+    {
+        // Gets the current user's UUID 
+        authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        user = authState.User;
+        user_email = user.Identity.Name;
+        uuid = await UserServices.GetUserID(user_email);
+
+        // Gets the current user's plants and tasks
+        plant = await PlantService.GetUserPlants(uuid);
+        all_tasks = await PlantService.GetAllUserTasks(uuid);        
+    }
+
+    /* Delete the specified plant from the MySql database */
+    async Task DeletePlant(int PLANT_ID)
+    {
+        bool confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete this plant?");
+        if (confirmed)
         {
-            public DateOnly Date { get; set; }
-            public int TemperatureC { get; set; }
-            public string? Summary { get; set; }
-            public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-        }
-
-
-        /*************************************************/
-        /* ------------INITIALIZATION METHOD------------ */
-        /* Creates the list of the current user's plants */
-        /********************************************** **/
-        protected override async Task OnInitializedAsync()
-        {
-            // Gets the current user's UUID 
-            authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-            user = authState.User;
-            user_email = user.Identity.Name;
-            uuid = await UserServices.GetUserID(user_email);
-
-            // Gets the current user's plants and tasks
+            await PlantService.DeletePlant(PLANT_ID);
             plant = await PlantService.GetUserPlants(uuid);
-            all_tasks = await PlantService.GetAllUserTasks(uuid);        
-        }
-
-        /* Delete the specified plant from the MySql database */
-        async Task DeletePlant(int PLANT_ID)
-        {
-            bool confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete this plant?");
-            if (confirmed)
-            {
-                await PlantService.DeletePlant(PLANT_ID);
-                plant = await PlantService.GetUserPlants(uuid);
-                all_tasks = await PlantService.GetAllUserTasks(uuid);
-                StateHasChanged();
-            }
-        }
-
-        /* Advances the internal day tracker by 1 */
-        private void GoToNextDay()
-        {
-            CurrentDay = CurrentDay.AddDays(1);
+            all_tasks = await PlantService.GetAllUserTasks(uuid);
             StateHasChanged();
         }
     }
+
+
+    /* Advances the internal day tracker by 1 */
+    private void GoToNextDay()
+    {
+        CurrentDay = CurrentDay.AddDays(1);
+        StateHasChanged();
+    }
+
+    /* Alters the local copy of the data and the database to reflect the user's action */
+    async Task CheckboxChecked(ChangeEventArgs e, PlantTask t)
+    {
+        t.IS_COMPLETED = (bool)e.Value;
+        Console.WriteLine($"Task {t.TASK_NAME} for plant {t.PLANT_ID} is now {(t.IS_COMPLETED ? "completed" : "incomplete")}.");
+	}
+}   
