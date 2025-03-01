@@ -11,16 +11,20 @@
 @using Shared  <!-- Import Shared Components -->
 
 <style>
-    /* Light green background for the entire page */
+    /* Importing Merriweather from Google Fonts for a crisp serif aesthetic */
+    @@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap');
+
+    /* Apply the serif font globally */
     body {
         background-color: #CFE8A9; /* Soft pastel green */
         min-height: 100vh;
         margin: 0;
+        font-family: 'Merriweather', serif;
     }
 
-    /* Main title styling */
+    /* Main title styling - increased font size */
     .title {
-        font-size: 36px;
+        font-size: 48px; /* Increased font size */
         text-align: center;
         color: #2C6E49;
         margin-top: 20px;
@@ -148,7 +152,7 @@
         <h1 class="title">Welcome to Evera</h1>
         <p class="subtitle">Keep track of your plants and care schedule easily.</p>
         <div class="plant-insights">
-            <h3>Your Plants</h3>
+            <h2>Your Plants</h2>
             <div class="card-container">
                 @if (userPlants == null || userPlants.Count == 0)
                 {
