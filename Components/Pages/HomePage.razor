@@ -9,9 +9,7 @@
 @using Microsoft.AspNetCore.Authorization
 @using System.Security.Claims
 @using Shared  <!-- Import Shared Components -->
-<!--**********************************************************************-->
-<!--                             CSS STYLING                              -->
-<!--**********************************************************************-->
+
 <style>
     /* Light green background for the entire page */
     body {
@@ -19,7 +17,6 @@
         min-height: 100vh;
         margin: 0;
     }
-
 
     /* Main title styling */
     .title {
@@ -36,27 +33,44 @@
         margin-bottom: 30px;
     }
 
-    /* General container for layout */
-    .container {
+    /* Main layout container with two columns */
+    .main-layout {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 30px;
+        width: 100%;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    /* Left panel styling: Welcome and Plant Insights */
+    .left-panel {
+        flex: 2;
         display: flex;
         flex-direction: column;
-        align-items: center;
+        gap: 20px;
+    }
+
+    /* Right panel styling: Weather and Calendar */
+    .right-panel {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
         gap: 30px;
     }
 
     /* Plant Insights Section */
     .plant-insights {
-        width: 80%;
-        max-width: 700px;
+        width: 100%;
         text-align: center;
-        margin-top: 20px;
     }
 
     /* Grid layout for plant images */
     .card-container {
         display: flex;
         flex-wrap: wrap;
-        gap: 40px; /* Added more space between plants */
+        gap: 40px; /* Space between plants */
         justify-content: center;
         padding: 20px;
     }
@@ -75,7 +89,6 @@
         transform: perspective(600px) translateY(5px);
     }
 
-        /* Hover Effect - Plants Float */
         .plant-card:hover {
             transform: perspective(600px) translateY(-5px) scale(1.1);
             box-shadow: 0 15px 25px rgba(0, 0, 0, 0.4);
@@ -109,19 +122,9 @@
         font-weight: bold;
         color: #2C6E49;
     }
-    /* Flex container for calendar & weather widget */
-    .calendar-weather-container {
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        gap: 30px; /* Space between widgets */
-        width: 80%;
-        max-width: 900px;
-    }
 
-    /* Calendar Styling */
-    .calendar-container {
-        flex: 1;
+    /* Weather Widget Styling */
+    .weather-container {
         background: white;
         padding: 20px;
         border-radius: 15px;
@@ -129,9 +132,8 @@
         text-align: center;
     }
 
-    /* Weather Widget Styling */
-    .weather-container {
-        flex: 1;
+    /* Calendar Styling */
+    .calendar-container {
         background: white;
         padding: 20px;
         border-radius: 15px;
@@ -140,21 +142,38 @@
     }
 </style>
 
-<!--**********************************************************************-->
-<!--                             HTML SECTION                             -->
-<!--**********************************************************************-->
-<h2 class="title">Welcome to Your Plant Manager</h2>
-<p class="subtitle">Keep track of your plants and care schedule easily.</p>
-
-<div class="container">
-    <!-- Calendar & Weather Section -->
-    <div class="calendar-weather-container">
-        <!-- Calendar Section -->
-        <div class="calendar-container">
-            <Calendar />
+<div class="main-layout">
+    <!-- Left Panel: Welcome message & Plant Insights -->
+    <div class="left-panel">
+        <h1 class="title">Welcome to Evera</h1>
+        <p class="subtitle">Keep track of your plants and care schedule easily.</p>
+        <div class="plant-insights">
+            <h3>Your Plants</h3>
+            <div class="card-container">
+                @if (userPlants == null || userPlants.Count == 0)
+                {
+                    <p>You haven't added any plants yet.</p>
+                }
+                else
+                {
+                    @foreach (var plant in userPlants)
+                    {
+                        <div class="plant-card" @onclick="GoToGarden">
+                            <div class="floating-shadow"></div>
+                            @if (plant.IMAGE_DATA != null && plant.IMAGE_DATA.Length > 0)
+                            {
+                                <img src="data:image/png;base64,@Convert.ToBase64String(plant.IMAGE_DATA)" alt="@plant.PLANT_NAME" />
+                            }
+                            <div class="plant-name">@plant.PLANT_NAME</div>
+                        </div>
+                    }
+                }
+            </div>
         </div>
+    </div>
 
-        <!-- Weather Widget Section -->
+    <!-- Right Panel: Weather Widget on Top, Calendar Below -->
+    <div class="right-panel">
         <div class="weather-container">
             <h3>Weather Forecast</h3>
             <div class="tomorrow"
@@ -175,35 +194,12 @@
                 </a>
             </div>
         </div>
-    </div>
-
-    <!-- Plant Insights Section -->
-    <div class="plant-insights">
-        <h3>Your Plants</h3>
-        <div class="card-container">
-            @if (userPlants == null || userPlants.Count == 0)
-            {
-                <p>You haven't added any plants yet.</p>
-            }
-            else
-            {
-                @foreach (var plant in userPlants)
-                {
-                    <div class="plant-card" @onclick="GoToGarden">
-                        <div class="floating-shadow"></div>
-                        @if (plant.IMAGE_DATA != null && plant.IMAGE_DATA.Length > 0)
-                        {
-                            <img src="data:image/png;base64,@Convert.ToBase64String(plant.IMAGE_DATA)" alt="@plant.PLANT_NAME" />
-                        }
-                        <div class="plant-name">@plant.PLANT_NAME</div>
-                    </div>
-                }
-            }
+        <div class="calendar-container">
+            <Calendar />
         </div>
     </div>
 </div>
 
-<!-- Weather Widget Script -->
 <script>
     (function (d, s, id) {
         if (d.getElementById(id)) {
@@ -220,9 +216,6 @@
     })(document, 'script', 'tomorrow-sdk');
 </script>
 
-<!--**********************************************************************-->
-<!--                             CODE SECTION                             -->
-<!--**********************************************************************-->
 @code {
     private List<Plants> userPlants = new();
     private string? userEmail;
