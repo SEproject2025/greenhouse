@@ -85,28 +85,6 @@ namespace greenhouse.Services
             return user_tasks;
 
         }
-        /*
-        // ******************************************************************************
-        // Retrieves frequency-related fields for a specific plant by its ID
-        // ******************************************************************************
-        public async Task<Dictionary<string, int>> GetFrequencyFields(int plantId)
-        {
-            var plant = await _context.Plant.FindAsync(plantId);    // Find the plant by its ID
-            var frequencyFields = new Dictionary<string, int>();    // Dictionary to store field names & frequencies
-
-            if (plant == null)
-            {
-                return new Dictionary<string, int>();
-            }
-
-            if (plant.WATER_FREQ > 0)
-            {
-                frequencyFields.Add("Water", plant.WATER_FREQ);
-            }
-
-            return frequencyFields;
-        }
-        */
 
         // ******************************************************************************
         // Gets a plant from the database by ID
@@ -155,6 +133,22 @@ namespace greenhouse.Services
             _context.PlantTasks.Add(task);                  // Adds the new task record to the database context     
             await _context.SaveChangesAsync();              // Saves changes asynchronously to persist the new task
             return true;                                    // Returns true to indicate successful insertion
-        }  
+        }
+
+
+        // ******************************************************************************
+        // Updates a task in the PlantTask table5n  
+        // ******************************************************************************
+        public async Task<bool> UpdateTask(PlantTask task)
+        {
+            var dbTask = await _context.PlantTasks.FindAsync(task.TASK_ID);
+            if (dbTask != null)
+            {
+                _context.Entry(dbTask).CurrentValues.SetValues(task);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
     }
 }

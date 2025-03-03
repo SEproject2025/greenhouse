@@ -22,12 +22,6 @@ namespace greenhouse.Services
         // Gets all tasks for every plant a user is growing
         Task<List<PlantTask>> GetAllUserTasks(string uuid);
 
-        /*
-        // Retrieves frequency-related fields for a specific plant by its ID
-        Task<Dictionary<String, int>> 
-                           GetFrequencyFields(int plantID);
-        */
-
         // Gets a plant from the database by ID
         Task<Plants>       GetPlantByID(int PLANT_ID);
 
@@ -39,6 +33,10 @@ namespace greenhouse.Services
 
         // Adds a new task to the PlantTasks table
         Task<bool> AddTask(PlantTask task);
+
+        // Updates a task in the PlantTask table
+        Task<bool> UpdateTask(PlantTask task);
+
 
     }
 }
