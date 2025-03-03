@@ -214,6 +214,7 @@
                         style="width: 75px; height: 80px; border-radius: 10px; margin-top: 0px;" />
                     }
 
+                    <!-- Determines when the checkboxes are visible on the plant tiles -->
                     @foreach (var t in user_tasks)
                     {
                         @if (p.PLANT_ID == t.PLANT_ID && (t.DAYS_UNTIL == 0 || (t.DONE_DATE == CurrentDay || t.DONE_DATE == null)))
@@ -320,6 +321,8 @@
     private void GoToNextDay()
     {
         CurrentDay = CurrentDay.AddDays(1);
+
+        // Handles checkbox logic for when it goes to the next day
         foreach(var t in user_tasks)
         {
             if (t.IS_COMPLETED == true)
@@ -337,6 +340,8 @@
             PlantService.UpdateTask(t); 
 
         }
+
+        // Handles whether the tile is in the green state or not 
         foreach (var p in plant)
         {
             @if(AllTasksFinished(p.PLANT_ID))
@@ -361,9 +366,10 @@
         {
             t.OVERDUE = 0;
         }
-        t.DONE_DATE = CurrentDay; 
+        t.DONE_DATE = CurrentDay;
         await PlantService.UpdateTask(t);
 
+        // Handles whether the tile is in the green state or not 
         foreach (var p in plant)
         {
             @if (AllTasksFinished(p.PLANT_ID))
@@ -379,6 +385,7 @@
        // Console.WriteLine($"Task {t.TASK_NAME} for plant {t.PLANT_ID} is now {(t.IS_COMPLETED ? "completed" : "incomplete")}.");
     }
 
+    // Checks if all tasks for a given plant id are completed at a given time 
     private bool AllTasksFinished(int plant_id)
     {
         counter = 0;
