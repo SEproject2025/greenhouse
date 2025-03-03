@@ -1,4 +1,4 @@
-﻿@page "/add-plants"
+@page "/add-plants"
 @page "/add-plants/{PLANT_ID:int}"
 @inject IPlantService PlantService
 @inject IUserServices UserServices
@@ -8,6 +8,7 @@
 @using Microsoft.AspNetCore.Authorization
 @using System.Security.Claims
 @using greenhouse.Data
+@using greenhouse.Components.Shared
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
 @using greenhouse.Entities;
@@ -196,9 +197,14 @@
         border-radius: 34px;
     }
 
-        .slider.round:before {
-            border-radius: 50%;
-        }
+    .slider.round:before {
+        border-radius: 50%;
+    }
+
+    .disabled-section {
+        pointer-events: none;
+        opacity: 0.5;
+    }
 </style>
 
 <!--***********************************************************************
@@ -216,34 +222,77 @@
 <!-- Display the form for creating a custom plant -->
 @if (showCustomForm)
 {
-    <EditForm Model="plant" OnSubmit="HandleSubmit" FormName="editPlant">
+    // Pressing 'Submit' here goes specifically to the CustomHandleSubmit method
+    <EditForm Model="plant" OnSubmit="CustomHandleSubmit" FormName="editPlant">
 
         <!-- Input field for plant name -->
         <label>Plant Name</label>
         <InputText @bind-Value="plant.PLANT_NAME"></InputText>
 
-        <!-- Input field for image upload -->
-        <label>Upload Image</label>
-        <InputFile OnChange="HandleFileSelected" />
-
         <!-- Dropdown list for avalible plants -->
-        <label>Select a Plant</label>
-        <PlantDropdown />
+        <label>Select a Plant Image</label>
+        <PlantDropdown OnPlantSelected="SelectPlant" />
+
+        @if (selectedPlant != null && selectedPlant.IMAGE_DATA != null)
+        {
+            <div>
+                <label>Selected Image:</label>
+                <img src="data:image/webp;base64,@Convert.ToBase64String(selectedPlant.IMAGE_DATA)"
+                     alt="@selectedPlant.Name" width="100" />
+            </div>
+        }
+
       
         <h4>Task Frequencies</h4>
 
         <!-- Input fields for task frequencies (days per week) -->
+        <!--Watering-->
         <label>Watering Frequency (days per week)</label>
-        <InputNumber @bind-Value="waterFreq"></InputNumber>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <label class="switch">
+                <input type="checkbox" @bind="IsWaterEnabled">
+                <span class="slider round"></span>
+            </label>
+            <div class="@(IsWaterEnabled ? "" : "disabled-section")">
+                <InputNumber @bind-Value="waterFreq" disabled="@(IsWaterEnabled ? null : "disabled")"></InputNumber>
+            </div>
+        </div>
 
+        <!--Weeding-->
         <label>Weeding Frequency (days per week)</label>
-        <InputNumber @bind-Value="weedFreq"></InputNumber>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <label class="switch">
+                <input type="checkbox" @bind="IsWeedEnabled">
+                <span class="slider round"></span>
+            </label>
+            <div class="@(IsWeedEnabled ? "" : "disabled-section")">
+                <InputNumber @bind-Value="weedFreq" disabled="@(IsWeedEnabled ? null : "disabled")"></InputNumber>
+            </div>
+        </div>
 
+        <!--Pruning-->
         <label>Pruning Frequency (days per week)</label>
-        <InputNumber @bind-Value="pruneFreq"></InputNumber>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <label class="switch">
+                <input type="checkbox" @bind="IsPruneEnabled">
+                <span class="slider round"></span>
+            </label>
+            <div class="@(IsPruneEnabled ? "" : "disabled-section")">
+                <InputNumber @bind-Value="pruneFreq" disabled="@(IsPruneEnabled ? null : "disabled")"></InputNumber>
+            </div>
+        </div>
 
+        <!--Pest Control-->
         <label>Pest Control Frequency (days per week)</label>
-        <InputNumber @bind-Value="pestFreq"></InputNumber>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <label class="switch">
+                <input type="checkbox" @bind="IsPestEnabled">
+                <span class="slider round"></span>
+            </label>
+            <div class="@(IsPestEnabled ? "" : "disabled-section")">
+                <InputNumber @bind-Value="pestFreq" disabled="@(IsPestEnabled ? null : "disabled")"></InputNumber>
+            </div>
+        </div>
 
 
         <!-- Submit button to save the plant details -->
@@ -253,7 +302,8 @@
 // Display the form for selecting a prefilled plant 
 else if (showPrefilledForm) 
 {
-    <EditForm Model="plant" OnSubmit="HandleSubmit" FormName="editPlant">
+    // Pressing 'Submit' here goes specifically to the PrefilledHandleSubmit method
+    <EditForm Model="plant" OnSubmit="PrefillHandleSubmit" FormName="editPlant">
 
         <!-- Dropdown to select an existing public plant -->
         <label>Select a Public Plant</label>
@@ -293,6 +343,12 @@ else if (showPrefilledForm)
     private int   pruneFreq;
     private int   pestFreq;
 
+    // Activate variables
+    private bool isWaterEnabled { get; set; } = true;
+    private bool isWeedEnabled { get; set; } = true;
+    private bool isPruneEnabled { get; set; } = true;
+    private bool isPestEnabled { get; set; } = true;
+
     // Plant model
     Plants plant { get; set; } = new Plants { PLANT_NAME = string.Empty };
 
@@ -317,29 +373,220 @@ else if (showPrefilledForm)
     // ******************************************************************************
     // Handle image upload
     // ******************************************************************************
-    private async Task HandleFileSelected(InputFileChangeEventArgs e)
+    private Plantimage? selectedPlant;
+    private async Task SelectPlant(Plantimage plant)
     {
-        selectedFile = e.File;
-        if (selectedFile != null)
+        selectedPlant = plant;
+
+        if (!string.IsNullOrEmpty(plant.ImageUrl))
         {
-            using var memoryStream = new MemoryStream();
-            await selectedFile.OpenReadStream().CopyToAsync(memoryStream);
-            plant.IMAGE_DATA = memoryStream.ToArray();
+            // Ensure the correct file path
+            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", plant.ImageUrl);
+
+            try
+            {
+                if (File.Exists(filePath))
+                {
+                    // Read the image as a byte array and store it in IMAGE_DATA
+                    selectedPlant.IMAGE_DATA = await File.ReadAllBytesAsync(filePath);
+                }
+                else
+                {
+                    Console.WriteLine($"Error: File not found at {filePath}");
+                    selectedPlant.IMAGE_DATA = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error reading image file: {ex.Message}");
+                selectedPlant.IMAGE_DATA = null;
+            }
         }
     }
 
+
     // ******************************************************************************
-    // Handles the submission of a new plant, either as a pre-filled copy of an existing plant
-    // or as a custom user-created plant. If a pre-filled plant is selected, it clones the
-    // existing plant and its associated tasks. Otherwise, it creates a new custom plant.
+    // Handle zero value toggle fields
     // ******************************************************************************
-    async Task HandleSubmit()
+
+    private bool IsWaterEnabled
+    {
+        get => isWaterEnabled;
+        set
+        {
+            isWaterEnabled = value;
+            if (!isWaterEnabled)
+                waterFreq = 0; // Auto-reset when disabled
+        }
+    }
+
+    private int WaterFreq
+    {
+        get => waterFreq;
+        set
+        {
+            waterFreq = value;
+            StateHasChanged(); // Force UI to update and reflect the change
+        }
+    }
+
+    private bool IsWeedEnabled
+    {
+        get => isWeedEnabled;
+        set
+        {
+            isWeedEnabled = value;
+            if (!isWeedEnabled)
+                weedFreq = 0;
+        }
+    }
+
+    private int WeedFreq
+    {
+        get => weedFreq;
+        set
+        {
+            weedFreq = value;
+            StateHasChanged();
+        }
+    }
+
+    private bool IsPruneEnabled
+    {
+        get => isPruneEnabled;
+        set
+        {
+            isPruneEnabled = value;
+            if (!isPruneEnabled)
+                pruneFreq = 0;
+        }
+    }
+
+    private int PruneFreq
+    {
+        get => pruneFreq;
+        set
+        {
+            pruneFreq = value;
+            StateHasChanged();
+        }
+    }
+
+    private bool IsPestEnabled
+    {
+        get => isPestEnabled;
+        set
+        {
+            isPestEnabled = value;
+            if (!isPestEnabled)
+                pestFreq = 0;
+        }
+    }
+
+    private int PestFreq
+    {
+        get => pestFreq;
+        set
+        {
+            pestFreq = value;
+            StateHasChanged();
+        }
+    }
+
+
+    // ******************************************************************************
+    // Handles the submission of custom plants and edited plants
+    // ******************************************************************************
+    async Task CustomHandleSubmit()
+    {
+        // Get the user's unique ID
+        plant.USER_ID = await UserServices.GetUserID(user_email);
+
+        // Ensure plant.IMAGE_DATA is assigned before saving
+        if (selectedPlant != null && selectedPlant.IMAGE_DATA != null)
+        {
+            plant.IMAGE_DATA = selectedPlant.IMAGE_DATA;
+        }
+
+        // Check if the plant is an edit (already exists)
+        if (PLANT_ID.HasValue && PLANT_ID > 0)
+        {
+            var existingPlant = await PlantService.GetPlantByID(PLANT_ID.Value);
+            if (existingPlant != null)
+            {
+                // Update the existing plant's name & image with the new value & image
+                existingPlant.PLANT_NAME = plant.PLANT_NAME;
+                existingPlant.IMAGE_DATA = plant.IMAGE_DATA;
+
+                // Update plant in database
+                await PlantService.UpdatePlant(existingPlant);
+
+                // Retrieve existing tasks
+                var existingTasks = await PlantService.GetTasksForPlant(existingPlant.PLANT_ID);
+
+                // Iterate through all existing tasks linked to the plant
+                foreach (var task in existingTasks)
+                {
+                    // Update the task's frequency based on the user-input values
+                    switch (task.TASK_NAME)
+                    {
+                        case "Watering":
+                            task.FREQ = waterFreq;
+                            break;
+                        case "Weeding":
+                            task.FREQ = weedFreq;
+                            break;
+                        case "Pruning":
+                            task.FREQ = pruneFreq;
+                            break;
+                        case "Pest Control":
+                            task.FREQ = pestFreq;
+                            break;
+                    }
+                    // Save the updated task back to the database
+                    await PlantService.UpdateTask(task);
+                }
+            }
+        }
+        else
+        {
+            // Create a new plant
+            var addedPlant = await PlantService.AddPlants(plant);
+
+            if (addedPlant != null)
+            {
+                // Define tasks based on user input for frequency
+                var taskList = new List<PlantTask>
+                {
+                new PlantTask { PLANT_ID = addedPlant.PLANT_ID, TASK_NAME = "Watering", FREQ = waterFreq },
+                new PlantTask { PLANT_ID = addedPlant.PLANT_ID, TASK_NAME = "Weeding", FREQ = weedFreq },
+                new PlantTask { PLANT_ID = addedPlant.PLANT_ID, TASK_NAME = "Pruning", FREQ = pruneFreq },
+                new PlantTask { PLANT_ID = addedPlant.PLANT_ID, TASK_NAME = "Pest Control", FREQ = pestFreq }
+                };
+
+                foreach (var task in taskList)
+                {
+                    // Only save tasks that have a valid frequency
+                    await PlantService.AddTask(task);
+                }
+            }
+        }
+        // Notify the parent component that the submission is complete
+        await OnSubmit.InvokeAsync();
+        // Navigate back to the garden page and refresh the data
+        NavigationManager.NavigateTo("/Garden", forceLoad: true);
+    }
+
+    // ******************************************************************************
+    // Handles the submission of a pre-filled plant only
+    // ******************************************************************************
+    async Task PrefillHandleSubmit()
     {
         // Get the user's unique ID
         plant.USER_ID = await UserServices.GetUserID(user_email);
 
         // Check if the user selected a pre-filled plant
-        if (selectedPublicPlantId.HasValue) 
+        if (selectedPublicPlantId.HasValue)
         {
             // Retrieve the original plant from the database
             var originalPlant = await PlantService.GetPlantByID(selectedPublicPlantId.Value);
@@ -350,8 +597,8 @@ else if (showPrefilledForm)
                     {
                         PLANT_NAME = originalPlant.PLANT_NAME,
                         IMAGE_DATA = originalPlant.IMAGE_DATA,
-                        USER_ID = await UserServices.GetUserID(user_email), 
-                        IS_PRIVATE = "Y" 
+                        USER_ID = await UserServices.GetUserID(user_email),
+                        IS_PRIVATE = "Y"
                     };
 
                 // Save the new plant to the database
@@ -376,32 +623,6 @@ else if (showPrefilledForm)
                             };
                         // Save the cloned task in the database
                         await PlantService.AddTask(newTask);
-                    }
-                }
-            }
-        }
-        else
-        {
-            // Create a custom plant with user-defined details
-            var addedPlant = await PlantService.AddPlants(plant);
-
-            if (addedPlant != null)
-            {
-                // Define tasks based on user input for frequency
-                var taskList = new List<PlantTask>
-                {
-                    new PlantTask { PLANT_ID = addedPlant.PLANT_ID, TASK_NAME = "Watering", FREQ = waterFreq },
-                    new PlantTask { PLANT_ID = addedPlant.PLANT_ID, TASK_NAME = "Weeding", FREQ = weedFreq },
-                    new PlantTask { PLANT_ID = addedPlant.PLANT_ID, TASK_NAME = "Pruning", FREQ = pruneFreq },
-                    new PlantTask { PLANT_ID = addedPlant.PLANT_ID, TASK_NAME = "Pest Control", FREQ = pestFreq }
-                };
-
-                foreach (var task in taskList)
-                {
-                    // Only save tasks that have a valid frequency
-                    if (task.FREQ > 0) 
-                    {
-                        await PlantService.AddTask(task);
                     }
                 }
             }

@@ -139,7 +139,7 @@ namespace greenhouse.Services
         // ******************************************************************************
         // Updates a task in the PlantTask table  
         // ******************************************************************************
-        public async Task<bool> UpdateTask(PlantTask task)
+        /*public async Task<bool> UpdateTask(PlantTask task)
         {
             var dbTask = await _context.PlantTasks.FindAsync(task.TASK_ID);
             if (dbTask != null)
@@ -148,7 +148,27 @@ namespace greenhouse.Services
                 await _context.SaveChangesAsync();
                 return true;
             }
-            return false;
+            return false;*/
+            
+            
+        // ******************************************************************************
+        // Updates an existing plant's details in the database.
+        // ******************************************************************************
+        public async Task<bool> UpdatePlant(Plants plant)
+        {
+            _context.Plant.Update(plant);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        // ******************************************************************************
+        // Updates an existing plant task's details in the database.
+        // ******************************************************************************
+        public async Task<bool> UpdateTask(PlantTask task)
+        {
+            _context.PlantTasks.Update(task);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }
