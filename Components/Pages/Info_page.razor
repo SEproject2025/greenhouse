@@ -4,207 +4,163 @@
 @inject NavigationManager NavigationManager
 
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: Arial, sans-serif;
-    }
+    .plant-info-container {
+    display: flex;
+    height: 100vh;
+    background: #f5f5f5;
+}
 
-    body {
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
-    }
+/* Sidebar Styles */
+.plant-sidebar {
+    width: 300px;
+    background: #eaeaea;
+    padding: 10px;
+    overflow-y: auto;
+    border-right: 2px solid #ccc;
+}
 
-    header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background-color: #f9f9f9;
-        padding: 1rem 2rem;
-        border-bottom: 1px solid #ddd;
-    }
+/* Custom Scrollbar */
+.plant-sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+.plant-sidebar::-webkit-scrollbar-track {
+    background: #ddd;
+    border-radius: 10px;
+}
+.plant-sidebar::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
 
-        header .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
+/* Sidebar Items */
+.plant-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    background: #fff;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+.plant-item:hover {
+    background: #dcdcdc;
+}
+.plant-item.selected {
+    background: #000;
+    color: #fff;
+}
 
-        header nav {
-            display: flex;
-            gap: 1.5rem;
-        }
+/* Icon in Sidebar */
+.plant-icon {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
 
-            header nav a {
-                text-decoration: none;
-                color: #333;
-                font-weight: 500;
-            }
+/* Main Display Area */
+.plant-details {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
 
-    main {
-        display: flex;
-        flex: 1;
-    }
+/* Image & Title */
+.plant-header {
+    display: flex;
+    align-items: center;
+}
+.plant-image {
+    width: 100px;
+    height: 100px;
+    margin-right: 20px;
+}
 
-    .sidebar {
-        width: 25%;
-        background-color: #f5f5f5;
-        padding: 1rem;
-        border-right: 1px solid #ddd;
-        overflow-y: auto;
-    }
+/* Attributes List */
+.plant-attributes {
+    margin-top: 10px;
+    font-size: 1.1em;
+}
+.attribute {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
 
-        .sidebar .plant {
-            display: flex;
-            align-items: center;
-            background-color: #fff;
-            margin-bottom: 1rem;
-            padding: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-            .sidebar .plant.active {
-                border-color: black;
-                background-color: #000;
-                color: white;
-            }
-
-            .sidebar .plant img {
-                width: 40px;
-                height: 40px;
-                margin-right: 1rem;
-            }
-
-    .content {
-        flex: 1;
-        padding: 2rem;
-        overflow-y: auto;
-    }
-
-        .content h1 {
-            margin-bottom: 1rem;
-        }
-
-        .content .details {
-            margin-bottom: 2rem;
-        }
-
-            .content .details div {
-                display: flex;
-                align-items: center;
-                margin-bottom: 1rem;
-            }
-
-                .content .details div img {
-                    width: 20px;
-                    height: 20px;
-                    margin-right: 0.5rem;
-                }
-
-        .content .description {
-            font-size: 0.95rem;
-            line-height: 1.6;
-            color: #555;
-        }
 </style>
 
 
 
+<div class="plant-info-container">
+    <!-- Sidebar for plant selection -->
+    <div class="plant-sidebar">
+        @foreach (var plant in Plants)
+        {
+            <div class="plant-item @(SelectedPlant == plant ? "selected" : "")" @onclick="() => SelectPlant(plant)">
+                <img src="@plant.Image" alt="@plant.Name" class="plant-icon" />
+                <div>
+                    <strong>@plant.Name</strong><br />
+                    <em>@plant.ScientificName</em>
+                </div>
+            </div>
+        }
+    </div>
 
-<h3>Info_page</h3>
+    <!-- Main plant display section -->
+    <div class="plant-details">
+        @if (SelectedPlant != null)
+        {
+            <div class="plant-header">
+                <img src="@SelectedPlant.Image" alt="@SelectedPlant.Name" class="plant-image" />
+                <h1>@SelectedPlant.Name</h1>
+                <h2><em>@SelectedPlant.ScientificName</em></h2>
+            </div>
 
+            <div class="plant-attributes">
+                @foreach (var attribute in SelectedPlant.Attributes)
+                {
+                    <div class="attribute">
+                        <strong>@attribute.Key:</strong> @attribute.Value
+                    </div>
+                }
+            </div>
 
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Botanical Guide</title>
-    
-</head>
-<body>
-    <header>
-        <div class="logo">Blossom Logo</div>
-        <nav>
-            <a href="#">Home</a>
-            <a href="#">My Garden</a>
-            <a href="#">Botanical Guide</a>
-        </nav>
-    </header>
-    <main>
-        <aside class="sidebar">
-            <div class="plant active">
-                <img src="plant-icon.png" alt="Snake Plant">
-                <div>
-                    <div>Snake Plant</div>
-                    <small>Sansevieria</small>
-                </div>
+            <div class="plant-description">
+                @SelectedPlant.Description
             </div>
-            <div class="plant">
-                <img src="plant-icon.png" alt="Spider Plant">
-                <div>
-                    <div>Spider Plant</div>
-                    <small>Chlorophytum comosum</small>
-                </div>
-            </div>
-            <div class="plant">
-                <img src="plant-icon.png" alt="Monstera">
-                <div>
-                    <div>Monstera</div>
-                    <small>Monstera deliciosa</small>
-                </div>
-            </div>
-            <div class="plant">
-                <img src="plant-icon.png" alt="Aloe Vera">
-                <div>
-                    <div>Aloe Vera</div>
-                    <small>Aloe barbadensis miller</small>
-                </div>
-            </div>
-        </aside>
-        <section class="content">
-            <h1>Snake Plant</h1>
-            <h2>Sansevieria</h2>
-            <div class="details">
-                <div>
-                    <img src="icon-care.png" alt="Care">
-                    <span>Care Level: Low-maintenance</span>
-                </div>
-                <div>
-                    <img src="icon-environment.png" alt="Environment">
-                    <span>Environment: Indoor</span>
-                </div>
-                <div>
-                    <img src="icon-light.png" alt="Light">
-                    <span>Light: Low to bright indirect light; very adaptable</span>
-                </div>
-                <div>
-                    <img src="icon-water.png" alt="Water">
-                    <span>Water: Sparingly, allow soil to dry out completely between waterings</span>
-                </div>
-                <div>
-                    <img src="icon-temperature.png" alt="Temperature">
-                    <span>Temperature: Average indoor temperatures; tolerates a wide range</span>
-                </div>
-                <div>
-                    <img src="icon-growth.png" alt="Growth">
-                    <span>Growth Rate: Slow to moderate</span>
-                </div>
-                <div>
-                    <img src="icon-benefits.png" alt="Benefits">
-                    <span>Benefits: Known for purifying air by removing toxins</span>
-                </div>
-            </div>
-            <div class="description">
-                <p>Snake plants are well-known for their resilience and adaptability...</p>
-            </div>
-        </section>
-    </main>
-</body>
-
+        }
+    </div>
+</div>
 
 @code {
+    private List<Plant> Plants = new()
+    {
+        new Plant { Name = "Snake Plant", ScientificName = "Sansevieria", Image = "snake-plant.png",
+                    Description = "Snake plants are well-known for their resilience...",
+                    Attributes = new Dictionary<string, string>
+                    {
+                        {"Care Level", "Low-maintenance"},
+                        {"Environment", "Indoor"},
+                        {"Light", "Low to bright indirect light; very adaptable."},
+                        {"Water", "Water sparingly. Allow soil to dry out completely between waterings."},
+                        {"Temperature", "Average indoor temperatures; tolerates a wide range."},
+                        {"Growth Rate", "Slow to moderate"},
+                        {"Benefits", "Known for purifying air by removing toxins."}
+                    }
+        },
+        new Plant { Name = "Spider Plant", ScientificName = "Chlorophytum comosum", Image = "spider-plant.png", Description = "Spider plants are..." },
+        new Plant { Name = "Monstera", ScientificName = "Monstera deliciosa", Image = "monstera.png", Description = "Monstera plants are..." },
+        new Plant { Name = "Aloe Vera", ScientificName = "Aloe barbadensis miller", Image = "aloe-vera.png", Description = "Aloe Vera is known for..." }
+    };
 
+    private Plant SelectedPlant;
+
+    protected override void OnInitialized()
+    {
+        SelectedPlant = Plants.FirstOrDefault();
+    }
+
+    private void SelectPlant(Plant plant)
+    {
+        SelectedPlant = plant;
+    }
 }
