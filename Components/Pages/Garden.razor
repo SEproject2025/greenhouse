@@ -160,7 +160,7 @@
 ************************************************************************-->
 
 <h3 class="title">My Garden</h3>
-
+<!--
 <dl>
 @foreach(var t in user_tasks) 
     {
@@ -175,7 +175,7 @@
         <dt>OVERDUE: @t.OVERDUE</dt>
         <p>--------------------</p>
     }
-</dl>
+</dl> -->
 
 <AddPlantButton/>
 
@@ -231,24 +231,6 @@
                             </div>
                         }
                     }
-
-
-
-
-
-                    @*
-                        @if (PlantFrequencies.ContainsKey(p.PLANT_ID))
-                        {
-                            foreach (var field in PlantFrequencies[p.PLANT_ID])
-                            {
-                                if (field.Key == "Water" && GetWateringDays(field.Value).Contains(CurrentDay.DayOfWeek))
-                                {
-                                    <input type="checkbox" id="watering-@p.PLANT_ID" name="watering-@p.PLANT_ID">
-                                    <label for="watering-@p.PLANT_ID">@field.Key</label>
-                                }
-                            }
-                        } 
-                         *@
                 </div>
             }
         }
@@ -258,7 +240,7 @@
 <!-- Display the current day -->
 <button @onclick="GoToNextDay" class="btn btn-primary">Next Day &gt;&gt;</button>
 <p>Current Day:  @CurrentDay.ToString("MMMM dd, yyy")</p>
-<p>Current Day2: @CurrentDay</p>
+<!-- <p>Current Day2: @CurrentDay</p> -->
 
 
 <!--***********************************************************************
