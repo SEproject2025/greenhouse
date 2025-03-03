@@ -137,7 +137,7 @@ namespace greenhouse.Services
 
 
         // ******************************************************************************
-        // Updates a task in the PlantTask table5n  
+        // Updates a task in the PlantTask table  
         // ******************************************************************************
         public async Task<bool> UpdateTask(PlantTask task)
         {

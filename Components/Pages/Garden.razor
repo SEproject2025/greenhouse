@@ -161,10 +161,20 @@
 
 <h3 class="title">My Garden</h3>
 
-<p>@user_tasks.Count</p>
 <dl>
-@foreach(var t in user_tasks) {
-        <dt>@t.TASK_ID, @t.PLANT_ID, @t.TASK_NAME, @t.FREQ, @t.IS_COMPLETED</dt> }
+@foreach(var t in user_tasks) 
+{
+        <dt>@(t.DAYS_UNTIL == 0 || (t.DONE_DATE == CurrentDay || t.DONE_DATE == null))</dt>
+   <dt>Task_ID: @t.TASK_ID</dt>
+   <dt>Plant_ID: @t.PLANT_ID</dt>
+   <dt>TASK_NAME: @t.TASK_NAME</dt>
+   <dt>FREQ: @t.FREQ</dt>
+   <dt>DAY_UNTIL: @t.DAYS_UNTIL</dt>
+   <dt>IS_COMPLETED: @t.IS_COMPLETED</dt>
+   <dt>DONE_DATE: @t.DONE_DATE</dt>
+   <dt>OVERDUE: @t.OVERDUE</dt>
+   <p>--------------------</p>
+}
 </dl>
 
 <AddPlantButton/>
@@ -206,7 +216,7 @@
 
                     @foreach (var t in user_tasks)
                     {
-                        @if (p.PLANT_ID == t.PLANT_ID && (t.DAYS_UNTIL == 0))
+                        @if (p.PLANT_ID == t.PLANT_ID && (t.DAYS_UNTIL == 0 || (t.DONE_DATE == CurrentDay || t.DONE_DATE == null)))
                         {
                             <div class="task-container">
                                 <input type="checkbox" 
@@ -246,7 +256,8 @@
 
 <!-- Display the current day -->
 <button @onclick="GoToNextDay" class="btn btn-primary">Next Day &gt;&gt;</button>
-<p>Current Day: @CurrentDay.ToString("MMMM dd, yyy")</p>
+<p>Current Day:  @CurrentDay.ToString("MMMM dd, yyy")</p>
+<p>Current Day2: @CurrentDay</p>
 
 
 <!--***********************************************************************
@@ -321,6 +332,7 @@
             {
                 t.OVERDUE++;
             }
+            PlantService.UpdateTask(t); 
 
         }
         StateHasChanged();
@@ -335,6 +347,7 @@
         {
             t.OVERDUE = 0;
         }
+        t.DONE_DATE = CurrentDay; 
         await PlantService.UpdateTask(t);
         Console.WriteLine($"Task {t.TASK_NAME} for plant {t.PLANT_ID} is now {(t.IS_COMPLETED ? "completed" : "incomplete")}.");
     }
