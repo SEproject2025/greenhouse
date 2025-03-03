@@ -163,18 +163,18 @@
 
 <dl>
 @foreach(var t in user_tasks) 
-{
+    {
         <dt>@(t.DAYS_UNTIL == 0 || (t.DONE_DATE == CurrentDay || t.DONE_DATE == null))</dt>
-   <dt>Task_ID: @t.TASK_ID</dt>
-   <dt>Plant_ID: @t.PLANT_ID</dt>
-   <dt>TASK_NAME: @t.TASK_NAME</dt>
-   <dt>FREQ: @t.FREQ</dt>
-   <dt>DAY_UNTIL: @t.DAYS_UNTIL</dt>
-   <dt>IS_COMPLETED: @t.IS_COMPLETED</dt>
-   <dt>DONE_DATE: @t.DONE_DATE</dt>
-   <dt>OVERDUE: @t.OVERDUE</dt>
-   <p>--------------------</p>
-}
+        <dt>Task_ID: @t.TASK_ID</dt>
+        <dt>Plant_ID: @t.PLANT_ID</dt>
+        <dt>TASK_NAME: @t.TASK_NAME</dt>
+        <dt>FREQ: @t.FREQ</dt>
+        <dt>DAY_UNTIL: @t.DAYS_UNTIL</dt>
+        <dt>IS_COMPLETED: @t.IS_COMPLETED</dt>
+        <dt>DONE_DATE: @t.DONE_DATE</dt>
+        <dt>OVERDUE: @t.OVERDUE</dt>
+        <p>--------------------</p>
+    }
 </dl>
 
 <AddPlantButton/>
@@ -283,6 +283,8 @@
     private string? user_email;
     private string  uuid;
 
+    private int counter;
+
     /*************************************************/
     /* ------------INITIALIZATION METHOD------------ */
     /* Creates the list of the current user's plants */
@@ -335,6 +337,18 @@
             PlantService.UpdateTask(t); 
 
         }
+        foreach (var p in plant)
+        {
+            @if(AllTasksFinished(p.PLANT_ID))
+            {
+
+                // fadetogreen is true
+            }
+            else
+            {
+                // fade to green is false
+            }
+        }
         StateHasChanged();
     }
 
@@ -349,6 +363,32 @@
         }
         t.DONE_DATE = CurrentDay; 
         await PlantService.UpdateTask(t);
-        Console.WriteLine($"Task {t.TASK_NAME} for plant {t.PLANT_ID} is now {(t.IS_COMPLETED ? "completed" : "incomplete")}.");
+
+        foreach (var p in plant)
+        {
+            @if (AllTasksFinished(p.PLANT_ID))
+            {
+
+                // fadetogreen is true
+            }
+            else
+            {
+                // fade to green is false
+            }
+        }
+       // Console.WriteLine($"Task {t.TASK_NAME} for plant {t.PLANT_ID} is now {(t.IS_COMPLETED ? "completed" : "incomplete")}.");
+    }
+
+    private bool AllTasksFinished(int plant_id)
+    {
+        counter = 0;
+        @foreach(var t in user_tasks)
+        {
+            @if(plant_id == t.PLANT_ID && t.IS_COMPLETED == true)
+            {
+                counter++;
+            }
+        }
+        return (counter == 4);
     }
 }   
