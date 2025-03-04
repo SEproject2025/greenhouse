@@ -13,6 +13,7 @@
 *	                             CSS/STYLING SECTION                      *
 ************************************************************************-->
 <style type="text/css">
+
     /* Styling for the green box                                         */
     .main {
         margin: 50px auto;
@@ -24,15 +25,17 @@
         box-shadow: 10px 10px 8px #888888;
     }
 
-        /* Inner Container for the grid                                       */
-        .main .inner {
-            display: flex;
-            flex-wrap: wrap; /* Allows items to wrap to the next line */
-            justify-content: center; /* Centers items horizontally            */
-            gap: 20px; /* Space between tiles                   */
-            padding: 10px;
-        }
 
+    /* Inner Container for the grid                                       */
+    .main .inner {
+        display: flex;
+        flex-wrap: wrap;         /* Allows items to wrap to the next line */
+        justify-content: center; /* Centers items horizontally            */
+        gap: 20px;               /* Space between tiles                   */
+        padding: 10px;
+    }
+
+    /* Delete button as a shovel icon in the top-left corner of the tile    */
     .delete-button {
         position: absolute;
         top: 10px;
@@ -119,7 +122,7 @@
         display: inline-block;
         position: relative;
         border-radius: 15px;
-        padding: 10px;
+        padding: 40px 10px 10px; /* Added top padding */
         box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2), -5px -5px 15px rgba(255, 255, 255, 0.1);
         transition: transform 0.2s, box-shadow 0.2s;
     }
@@ -129,42 +132,79 @@
             box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.3), -8px -8px 20px rgba(255, 255, 255, 0.2);
         }
 
+        /* Styling for the plant name - targets spans inside the tiles       */
+        /*********************************************************************/
         .tile span {
-            position: absolute;
-            top: 15%;
-            left: 200px;
+            position: absolute; /* Keep it at the top */
+            top: 10px; /* Adjust to be near the top */
+            left: 15px; /* Adjust left padding */
             color: black;
             font-size: 18px;
             font-family: Arial, sans-serif;
+            font-weight: bold; /* Make it stand out */
         }
 
+        /* Styling for formatting checkbox - targets checkbox input          */
+        /*********************************************************************/
         .tile input[type="checkbox"] {
-            position: absolute;
-            top: 60%;
-            left: 25px;
+            /* Not sure why ChatGPT had me put this here but I'm afraid to remove it */
         }
 
+        /* Styling for the checkbox label - targets labels                   */
+        /*********************************************************************/
         .tile label {
-            position: absolute;
-            top: 58%;
-            left: 40px;
+            position: static; /* absolute; */
+            display: block;
+            margin-top: 5px;
+            top: 58%;        
+            left: 40px;       
             color: black;
             font-family: Arial, sans-serif;
             font-size: 14px;
         }
+  
+        .task-container {
+           display: flex;
+           align-items: center; /* Aligns checkbox and label vertically */
+           gap: 8px; /* Adds space between checkbox and text */
+           margin-top: 5px; /* Ensures space between task items */
+        }
 
+        .task-container input[type="checkbox"]{
+           margin-left: 2px; /* Move checkbox to the right */
+        }
+  
         /* Hides the content of the tile when it's green */
         .tile.green-fade span,
         .tile.green-fade input[type="checkbox"],
         .tile.green-fade label {
             display: none;
         }
+
+    
+  }
 </style>
 
 <!--***********************************************************************
 *	                             HTML SECTION                             *
 ************************************************************************-->
 <h3 class="title">My Garden</h3>
+<!--
+<dl>
+@foreach(var t in user_tasks) 
+    {
+        <dt>@(t.DAYS_UNTIL == 0 || (t.DONE_DATE == CurrentDay || t.DONE_DATE == null))</dt>
+        <dt>Task_ID: @t.TASK_ID</dt>
+        <dt>Plant_ID: @t.PLANT_ID</dt>
+        <dt>TASK_NAME: @t.TASK_NAME</dt>
+        <dt>FREQ: @t.FREQ</dt>
+        <dt>DAY_UNTIL: @t.DAYS_UNTIL</dt>
+        <dt>IS_COMPLETED: @t.IS_COMPLETED</dt>
+        <dt>DONE_DATE: @t.DONE_DATE</dt>
+        <dt>OVERDUE: @t.OVERDUE</dt>
+        <p>--------------------</p>
+    }
+</dl> -->
 
 <AddPlantButton />
 
@@ -200,6 +240,24 @@
                         }
                     }
 
+                    <!-- Determines when the checkboxes are visible on the plant tiles -->
+                    @foreach (var t in user_tasks)
+                    {
+                        @if (p.PLANT_ID == t.PLANT_ID && (t.DAYS_UNTIL == 0 || (t.DONE_DATE == CurrentDay || t.DONE_DATE == null)))
+                        {
+                            <div class="task-container">
+                                <input type="checkbox" 
+                                id="@t.TASK_NAME-@p.PLANT_ID" 
+                                name="@t.TASK_NAME-@p.PLANT_ID" 
+                                checked='@t.IS_COMPLETED'
+                                @onchange="(e) => CheckboxChecked(e, t)"
+                                disabled="@(t.IS_COMPLETED ? "disabled" : null)" />
+
+                                <label for="@t.TASK_NAME-@p.PLANT_ID">@t.TASK_NAME</label>
+                            </div>
+                        }
+                    }
+                  
                     <!-- Image of the plant (only visible when green) -->
                     @if (fadeToGreen)
                     {
@@ -214,18 +272,28 @@
 
 <!-- Button to advance the day -->
 <button @onclick="GoToNextDay" class="btn btn-primary">Next Day &gt;&gt;</button>
+
 <!-- Display the current day -->
 <p>Current Day: @CurrentDay.ToString("MMMM dd, yyy")</p>
+<!-- <p>Current Day2: @CurrentDay</p> -->
 
 @code {
     List<Plants>? plant = null;
+
+    // The list of currently active tasks
+    List<PlantTask>user_tasks = new List<PlantTask>();
+
+    // Tracks the current simulated day
     private DateTime CurrentDay { get; set; } = DateTime.Now.Date;
     private bool fadeToGreen = false;  // Track the green fade state
 
     private AuthenticationState? authState;
     private ClaimsPrincipal? user;
     private string? user_email;
-    private string uuid;
+
+    private string  uuid;
+
+    private int counter;
 
     protected override async Task OnInitializedAsync()
     {
@@ -234,7 +302,10 @@
         user_email = user.Identity.Name;
         uuid = await UserServices.GetUserID(user_email);
 
+
+        // Gets the current user's plants and tasks
         plant = await PlantService.GetUserPlants(uuid);
+        user_tasks = await PlantService.GetAllUserTasks(uuid);        
     }
 
     async Task DeletePlant(int PLANT_ID)
@@ -244,14 +315,92 @@
         {
             await PlantService.DeletePlant(PLANT_ID);
             plant = await PlantService.GetUserPlants(uuid);
+            user_tasks = await PlantService.GetAllUserTasks(uuid);
             StateHasChanged();
         }
     }
 
+    /* Advances the internal day tracker by 1 */
     private void GoToNextDay()
     {
         fadeToGreen = !fadeToGreen;  // Toggle the green fade state every time
         CurrentDay = CurrentDay.AddDays(1);
+
+        // Handles checkbox logic for when it goes to the next day
+        foreach(var t in user_tasks)
+        {
+            if (t.IS_COMPLETED == true)
+            {
+                t.DAYS_UNTIL--;
+                if (t.DAYS_UNTIL == 0)
+                {
+                    t.IS_COMPLETED = false;
+                }
+            }
+            else
+            {
+                t.OVERDUE++;
+            }
+            PlantService.UpdateTask(t); 
+
+        }
+
+        // Handles whether the tile is in the green state or not 
+        foreach (var p in plant)
+        {
+            @if(AllTasksFinished(p.PLANT_ID))
+            {
+
+                // fadetogreen is true
+            }
+            else
+            {
+                // fade to green is false
+            }
+        }
         StateHasChanged();
     }
 }
+
+    /* Alters the local copy of the data and the database to reflect the user's action */
+    async Task CheckboxChecked(ChangeEventArgs e, PlantTask t)
+    {
+        t.IS_COMPLETED = (bool)e.Value;
+        t.DAYS_UNTIL = t.FREQ;
+        if (t.OVERDUE != 0)
+        {
+            t.OVERDUE = 0;
+        }
+        t.DONE_DATE = CurrentDay;
+        await PlantService.UpdateTask(t);
+
+        // Handles whether the tile is in the green state or not 
+        foreach (var p in plant)
+        {
+            @if (AllTasksFinished(p.PLANT_ID))
+            {
+
+                // fadetogreen is true
+            }
+            else
+            {
+                // fade to green is false
+            }
+        }
+       // Console.WriteLine($"Task {t.TASK_NAME} for plant {t.PLANT_ID} is now {(t.IS_COMPLETED ? "completed" : "incomplete")}.");
+    }
+
+    // Checks if all tasks for a given plant id are completed at a given time 
+    private bool AllTasksFinished(int plant_id)
+    {
+        counter = 0;
+        @foreach(var t in user_tasks)
+        {
+            @if(plant_id == t.PLANT_ID && t.IS_COMPLETED == true)
+            {
+                counter++;
+            }
+        }
+        return (counter == 4);
+    }
+}   

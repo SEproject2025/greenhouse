@@ -1,0 +1,64 @@
+﻿
+<select @onchange="HandlePlantSelection">
+    <option value="">-- Select a Plant --</option>
+    @foreach (var plant in plants)
+    {
+        <option value="@plant.ImageUrl">@plant.Name</option>
+    }
+</select>
+
+
+@code {
+    [Parameter] public EventCallback<Plantimage> OnPlantSelected { get; set; }
+
+    private List<Plantimage> plants = new()
+    {
+        new Plantimage { Name = "Beets",       ImageUrl = "images/Beats.webp" },
+        new Plantimage { Name = "Broccoli",    ImageUrl = "images/Broccoli.webp" },
+        new Plantimage { Name = "Cabbage",     ImageUrl = "images/Cabbage.webp" },
+        new Plantimage { Name = "Carrot",      ImageUrl = "images/Carrot.webp" },
+        new Plantimage { Name = "Cauliflower", ImageUrl = "images/Cauliflower.webp" },
+        new Plantimage { Name = "Cucumbers",   ImageUrl = "images/Cucumbers.webp" },
+        new Plantimage { Name = "Eggplant",    ImageUrl = "images/Eggplant.webp" },
+        new Plantimage { Name = "Green Beans", ImageUrl = "images/GreenBeans.webp" },
+        new Plantimage { Name = "Lettuce",     ImageUrl = "images/Lettuce.webp" },
+        new Plantimage { Name = "Onions",      ImageUrl = "images/Onions.webp" },
+        new Plantimage { Name = "Peas",        ImageUrl = "images/Peas.webp" },
+        new Plantimage { Name = "Peppers",     ImageUrl = "images/Peppers.webp" },
+        new Plantimage { Name = "Potatoes",    ImageUrl = "images/Potatoes.webp" },
+        new Plantimage { Name = "Pumpkins",    ImageUrl = "images/Pumpkins.webp" },
+        new Plantimage { Name = "Radishes",    ImageUrl = "images/Radishes.webp" },
+        new Plantimage { Name = "Squash",      ImageUrl = "images/Squash.webp" },
+        new Plantimage { Name = "Sunflower",   ImageUrl = "images/Sunflower.webp" },
+        new Plantimage { Name = "Tomato",      ImageUrl = "images/Tomato.webp" },
+        new Plantimage { Name = "Watermelon",  ImageUrl = "images/Watermelon.webp" },
+        new Plantimage { Name = "Zucchini",    ImageUrl = "images/Zucchini.webp" }
+    };
+
+    public Plantimage? selectedPlant;
+
+    private bool isDropdownOpen = false;
+
+    private void SelectPlant(Plantimage plant)
+    {
+        selectedPlant = plant;
+        isDropdownOpen = false;
+    }
+
+    private void ToggleDropdown()
+    {
+        isDropdownOpen = !isDropdownOpen;
+    }
+
+    private async Task HandlePlantSelection(ChangeEventArgs e)
+    {
+        var selectedUrl = e.Value?.ToString();
+        var selectedPlant = plants.FirstOrDefault(p => p.ImageUrl == selectedUrl);
+
+        if (selectedPlant != null)
+        {
+            // Notify the parent component about the selected plant
+            await OnPlantSelected.InvokeAsync(selectedPlant);
+        }
+    }
+}
