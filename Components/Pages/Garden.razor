@@ -66,19 +66,21 @@
         .tile.green-fade img {
             opacity: 0; /* Slight transparency for the image */
             position: absolute; /* Position the image absolutely inside the tile */
-            top: 6.5%; /* Adjust top position as needed */
-            left: 10%; /* Adjust left position as needed */
-            width: 73%; /* Resize the image to fit inside the tile */
+            top: 13.7%; /* Adjust top position as needed */
+            left: 19%; /* Adjust left position as needed */
+            width: 60%; /* Resize the image to fit inside the tile */
             height: auto;
             object-fit: contain; /* Ensure the image maintains aspect ratio */
             z-index: 2; /* Ensure the image is above the background */
-            border-radius: 15px; /* Round the corners of the image */
+            border-radius: 50%; /* Round the corners of the image */
+            border: 5px solid #4B8B3B; /* Black border around the image */
             transition: opacity 4s ease-out; /* Smooth fade-in transition */
         }
 
         /* When the tile has the green-fade class applied */
         .tile.green-fade img {
-            opacity: 0.6; /* Final opacity when faded */
+            opacity: 0.9; /* Final opacity when faded */
+            border: 5px solid #4B8B3B; /* Black border around the image */
         }
 
     .title {
@@ -227,10 +229,10 @@
             @if (p.IS_PRIVATE == "Y")
             {
                 <div class="tile @(fadeToGreen ? "green-fade" : "")">
-                    <button @onclick="() => DeletePlant(p.PLANT_ID)" class="delete-button"></button>
 
                     @if (!fadeToGreen)
                     {
+                        <button @onclick="() => DeletePlant(p.PLANT_ID)" class="delete-button"></button>
                         <span>@p.PLANT_NAME</span>
                         @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
                         {
@@ -246,18 +248,18 @@
                         @if (p.PLANT_ID == t.PLANT_ID && (t.DAYS_UNTIL == 0 || (t.DONE_DATE == CurrentDay || t.DONE_DATE == null)))
                         {
                             <div class="task-container">
-                                <input type="checkbox" 
-                                id="@t.TASK_NAME-@p.PLANT_ID" 
-                                name="@t.TASK_NAME-@p.PLANT_ID" 
-                                checked='@t.IS_COMPLETED'
-                                @onchange="(e) => CheckboxChecked(e, t)"
-                                disabled="@(t.IS_COMPLETED ? "disabled" : null)" />
+                                <input type="checkbox"
+                                       id="@t.TASK_NAME-@p.PLANT_ID"
+                                       name="@t.TASK_NAME-@p.PLANT_ID"
+                                       checked='@t.IS_COMPLETED'
+                                       @onchange="(e) => CheckboxChecked(e, t)"
+                                       disabled="@(t.IS_COMPLETED ? "disabled" : null)" />
 
                                 <label for="@t.TASK_NAME-@p.PLANT_ID">@t.TASK_NAME</label>
                             </div>
                         }
                     }
-                  
+
                     <!-- Image of the plant (only visible when green) -->
                     @if (fadeToGreen)
                     {
