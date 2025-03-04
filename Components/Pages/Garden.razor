@@ -323,7 +323,7 @@
     /* Advances the internal day tracker by 1 */
     private void GoToNextDay()
     {
-        fadeToGreen = !fadeToGreen;  // Toggle the green fade state every time
+        //fadeToGreen = !fadeToGreen;  // Toggle the green fade state every time
         CurrentDay = CurrentDay.AddDays(1);
 
         // Handles checkbox logic for when it goes to the next day
@@ -349,18 +349,17 @@
         foreach (var p in plant)
         {
             @if(AllTasksFinished(p.PLANT_ID))
-            {
-
-                // fadetogreen is true
-            }
-            else
-            {
-                // fade to green is false
-            }
+                {
+                    fadeToGreen = true;
+                }
+                else
+                {
+                    fadeToGreen = false;
+                }
         }
         StateHasChanged();
     }
-}
+
 
     /* Alters the local copy of the data and the database to reflect the user's action */
     async Task CheckboxChecked(ChangeEventArgs e, PlantTask t)
@@ -378,14 +377,13 @@
         foreach (var p in plant)
         {
             @if (AllTasksFinished(p.PLANT_ID))
-            {
-
-                // fadetogreen is true
-            }
-            else
-            {
-                // fade to green is false
-            }
+                {
+                    fadeToGreen = true;
+                }
+                else
+                {
+                    fadeToGreen = false;
+                }
         }
        // Console.WriteLine($"Task {t.TASK_NAME} for plant {t.PLANT_ID} is now {(t.IS_COMPLETED ? "completed" : "incomplete")}.");
     }
