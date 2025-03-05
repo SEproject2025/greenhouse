@@ -4,16 +4,18 @@
 <!--                             CALENDAR CSS                             -->
 <!--**********************************************************************-->
 <style>
+    <!-- the outer square -->
     .calendar-container {
         background: white;
-        padding: 20px;
-        border-radius: 10px;
+        padding: 10px;    <!-- Outer square-->
+        border-radius: 15px; <!-- rounded edges -->
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        width: 90%;
-        max-width: 700px;
+        width: 100%;
+        /*max-width: 700px;*/
         text-align: center;
     }
 
+    <!-- The title -->
     .calendar-header {
         display: flex;
         justify-content: space-between;
@@ -21,42 +23,44 @@
         margin-bottom: 15px;
     }
 
-        .calendar-header h3 {
-            color: #2C6E49;
-            font-size: 20px;
-        }
+    <!-- The title text -->
+    .calendar-header h3 {
+        color: #2C6E49;
+        font-size: 20px;
+    }
 
     .calendar-nav {
         display: flex;
         gap: 10px;
     }
 
-        .calendar-nav button {
-            background-color: #6BBF59;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+    .calendar-nav button {
+        background-color: #6BBF59;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
 
-            .calendar-nav button:hover {
-                background-color: #5AA74E;
-            }
+    .calendar-nav button:hover {
+        background-color: #5AA74E;
+    }
 
     .calendar-grid {
         display: grid;
         grid-template-columns: repeat(7, 1fr);
-        gap: 5px;
+        gap: 3px;
     }
 
+    <!-- The day tiles themselves -->
     .calendar-day {
         background: #F8FFF8;
-        padding: 15px;
+        padding: 8px;
         border-radius: 10px;
         text-align: center;
-        font-size: 16px;
+        font-size: 10px;
         font-weight: bold;
         color: #4F7942;
         box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
@@ -71,6 +75,7 @@
     .day-names {
         display: grid;
         grid-template-columns: repeat(7, 1fr);
+        gap: 10px;  /* Spacing between day names */
         font-weight: bold;
         text-align: center;
         margin-bottom: 10px;
