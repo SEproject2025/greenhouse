@@ -77,8 +77,9 @@ namespace greenhouse.Services
             foreach (var p in user_plants)
             {
                 var plant_id = p.PLANT_ID;
-                indi_p_tasks = await _context.PlantTasks.Where(task => task.PLANT_ID == plant_id)
-                                                      .ToListAsync();
+                indi_p_tasks = await _context.PlantTasks
+                    .Where(task => task.PLANT_ID == plant_id && task.FREQ != 0)
+                    .ToListAsync();
                 user_tasks.AddRange(indi_p_tasks);
             }
 
