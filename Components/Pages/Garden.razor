@@ -330,6 +330,12 @@
         //fadeToGreen = !fadeToGreen;  // Toggle the green fade state every time
         CurrentDay = CurrentDay.AddDays(1);
 
+        // Reset the green fade effect for all plants
+        foreach (var key in plantGreenStates.Keys.ToList())
+        {
+            plantGreenStates[key] = false;    
+        }
+
         // Handles checkbox logic for when it goes to the next day
         foreach(var t in user_tasks)
         {
@@ -349,14 +355,15 @@
 
         }
 
-        // Handles whether the tile is in the green state or not 
-        foreach (var p in plant)
-        {
-           plantGreenStates[p.PLANT_ID] = AllTasksFinished(p.PLANT_ID);
-        }
-        StateHasChanged();
     }
 
+    private void UpdatePlantFade()
+    {
+        foreach (var p in plant)
+        {
+            plantGreenStates[p.PLANT_ID] = AllTasksFinished(p.PLANT_ID);
+        }
+    }
 
     /* Alters the local copy of the data and the database to reflect the user's action */
     async Task CheckboxChecked(ChangeEventArgs e, PlantTask t)
@@ -370,8 +377,8 @@
         t.DONE_DATE = CurrentDay;
         await PlantService.UpdateTask(t);
 
-        // Update only the specific plant’s green state
-        plantGreenStates[t.PLANT_ID] = AllTasksFinished(t.PLANT_ID);
+        // Update the fade state of plants after a task is checked
+        UpdatePlantFade();
         StateHasChanged();
     }
 
