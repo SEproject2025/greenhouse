@@ -228,9 +228,9 @@
         {
             @if (p.IS_PRIVATE == "Y")
             {
-                <div class="tile @(fadeToGreen ? "green-fade" : "")">
+                <div class="tile @(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID] ? "green-fade" : "")">
 
-                    @if (!fadeToGreen)
+                    @if (!(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID]))
                     {
                         <button @onclick="() => DeletePlant(p.PLANT_ID)" class="delete-button"></button>
                         <span>@p.PLANT_NAME</span>
@@ -261,7 +261,7 @@
                     }
 
                     <!-- Image of the plant (only visible when green) -->
-                    @if (fadeToGreen)
+                    @if (plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID])
                     {
                         <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)"
                              alt="@p.PLANT_NAME" />
@@ -287,7 +287,9 @@
 
     // Tracks the current simulated day
     private DateTime CurrentDay { get; set; } = DateTime.Now.Date;
-    private bool fadeToGreen = false;  // Track the green fade state
+    //private bool fadeToGreen = false;  
+    // Dictionary to track which plants should fade to green
+    private Dictionary<int, bool> plantGreenStates = new();
 
     private AuthenticationState? authState;
     private ClaimsPrincipal? user;
@@ -350,14 +352,7 @@
         // Handles whether the tile is in the green state or not 
         foreach (var p in plant)
         {
-            @if(AllTasksFinished(p.PLANT_ID))
-                {
-                    fadeToGreen = true;
-                }
-                else
-                {
-                    fadeToGreen = false;
-                }
+           plantGreenStates[p.PLANT_ID] = AllTasksFinished(p.PLANT_ID);
         }
         StateHasChanged();
     }
@@ -375,19 +370,9 @@
         t.DONE_DATE = CurrentDay;
         await PlantService.UpdateTask(t);
 
-        // Handles whether the tile is in the green state or not 
-        foreach (var p in plant)
-        {
-            @if (AllTasksFinished(p.PLANT_ID))
-                {
-                    fadeToGreen = true;
-                }
-                else
-                {
-                    fadeToGreen = false;
-                }
-        }
-       // Console.WriteLine($"Task {t.TASK_NAME} for plant {t.PLANT_ID} is now {(t.IS_COMPLETED ? "completed" : "incomplete")}.");
+        // Update only the specific plant’s green state
+        plantGreenStates[t.PLANT_ID] = AllTasksFinished(t.PLANT_ID);
+        StateHasChanged();
     }
 
     // Checks if all tasks for a given plant id are completed at a given time 
