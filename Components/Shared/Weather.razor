@@ -1,66 +1,49 @@
 ﻿@page "/weather"
 @attribute [StreamRendering]
 
+@inject IJSRuntime JSRuntime
+
 <PageTitle>Weather</PageTitle>
 
-<h1>Weather</h1>
+<!--***********************************************************************
+*	                             CSS/STYLING SECTION                      *
+************************************************************************-->
 
-<p>This component demonstrates showing data.</p>
 
-@if (forecasts == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <div class="weather-container">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Temp. (C)</th>
-                    <th>Temp. (F)</th>
-                    <th>Summary</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var forecast in forecasts)
-                {
-                    <tr>
-                        <td>@forecast.Date.ToShortDateString()</td>
-                        <td>@forecast.TemperatureC</td>
-                        <td>@forecast.TemperatureF</td>
-                        <td>@forecast.Summary</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+<!--***********************************************************************
+*	                               HTML SECTION                           *
+************************************************************************-->
+<div class="weather-container">
+    <h3>Weather Forecast</h3>
+    <div class="tomorrow"
+         data-location-id="124045"
+         data-language="EN"
+         data-unit-system="IMPERIAL"
+         data-skin="light"
+         data-widget-type="aqiPollen"
+         style="padding-bottom: 22px; position: relative;">
+        <a href="https://www.tomorrow.io/weather-api/"
+           rel="nofollow noopener noreferrer"
+           target="_blank"
+           style="position: absolute; bottom: 0; transform: translateX(-50%); left: 50%;">
+            <img alt="Powered by the Tomorrow.io Weather API"
+                 src="https://weather-website-client.tomorrow.io/img/powered-by.svg"
+                 width="250"
+                 height="18" />
+        </a>
     </div>
-}
+</div>
 
+<!--***********************************************************************
+*	                               CODE SECTION                           *
+************************************************************************-->
 @code {
-    private WeatherForecast[]? forecasts;
-
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        // Simulate asynchronous loading to demonstrate streaming rendering
-        await Task.Delay(500);
-
-        var startDate = DateOnly.FromDateTime(DateTime.Now);
-        var summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
-        forecasts = Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = startDate.AddDays(index),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = summaries[Random.Shared.Next(summaries.Length)]
-            }).ToArray();
-    }
-
-    private class WeatherForecast
-    {
-        public DateOnly Date { get; set; }
-        public int TemperatureC { get; set; }
-        public string? Summary { get; set; }
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("renderTomorrowWidget");
+        }
     }
 }
+

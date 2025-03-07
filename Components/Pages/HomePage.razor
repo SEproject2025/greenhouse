@@ -10,6 +10,9 @@
 @using System.Security.Claims
 @using Shared  <!-- Import Shared Components -->
 
+<!--***********************************************************************
+*	                             CSS/STYLING SECTION                      *
+************************************************************************-->
 <style>
     /* Importing Merriweather from Google Fonts for a crisp serif aesthetic */
     @@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap');
@@ -129,16 +132,7 @@
         font-size: 14px;
         font-weight: bold;
         color: #2C6E49;
-    }
-
-    /* Weather Widget Styling */
-    .weather-container {
-        background: white;
-        padding: 20px;
-        border-radius: 15px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        text-align: center;
-    }
+    }    
 
     /* Calendar Styling */
     .calendar-container {
@@ -148,8 +142,33 @@
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         text-align: center;
     }
+
+    .weather-container {
+        background: white;
+        border-radius: 15px;
+        width: 300px;
+        text-align: center;
+        
+        /*
+        
+        padding: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        
+        width: 307px;
+        
+        height: 250px; 
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; */
+    }
+
 </style>
 
+<!--***********************************************************************
+*	                             HTML SECTION                             *
+************************************************************************-->
 <div class="main-layout">
     <!-- Left Panel: Welcome message & Plant Insights -->
     <div class="left-panel">
@@ -187,30 +206,20 @@
         </div>
 
         <div class="weather-container">
-            <h3>Weather Forecast</h3>
-            <div class="tomorrow"
-                 data-location-id="124045"
-                 data-language="EN"
-                 data-unit-system="IMPERIAL"
-                 data-skin="light"
-                 data-widget-type="aqiMini"
-                 style="padding-bottom: 22px; position: relative;">
-                <a href="https://www.tomorrow.io/weather-api/"
-                   rel="nofollow noopener noreferrer"
-                   target="_blank"
-                   style="position: absolute; bottom: 0; transform: translateX(-50%); left: 50%;">
-                    <img alt="Powered by the Tomorrow.io Weather API"
-                         src="https://weather-website-client.tomorrow.io/img/powered-by.svg"
-                         width="250"
-                         height="18" />
-                </a>
-            </div>
+            <Weather />
         </div>
     </div>
 </div>
 
+<!-- Weather Widget Script -->
 <script>
-    (function (d, s, id) {
+    window.renderTomorrowWidget = () => {
+        if (window.__TOMORROW__) {
+            window.__TOMORROW__.renderWidget();
+        }
+    };
+
+    (function(d, s, id) {
         if (d.getElementById(id)) {
             if (window.__TOMORROW__) {
                 window.__TOMORROW__.renderWidget();
@@ -225,6 +234,9 @@
     })(document, 'script', 'tomorrow-sdk');
 </script>
 
+<!--***********************************************************************
+*	                             CODE SECTION                             *
+************************************************************************-->
 @code {
     private List<Plants> userPlants = new();
     private string? userEmail;
@@ -248,3 +260,6 @@
         NavigationManager.NavigateTo("/Garden");
     }
 }
+
+
+
