@@ -19,6 +19,15 @@
 
 <h1>Register</h1>
 
+@if (p_show)
+{
+    <div>Password Visible</div>
+}
+else
+{
+    <div>Password Hidden</div>
+}
+
 <div class="row">
     <div class="col-md-4">
         <StatusMessage Message="@Message" />
@@ -28,35 +37,84 @@
             <hr />
             <ValidationSummary class="text-danger" role="alert" />
             <div class="form-floating mb-3">
-                <InputText @bind-Value="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                <InputText 
+                type=""
+                @bind-Value="Input.Email"
+                class="form-control" 
+                autocomplete="username"
+                aria-required="true" 
+                placeholder="name@example.com" />
                 <label for="email">Email</label>
                 <ValidationMessage For="() => Input.Email" class="text-danger" />
             </div>
             <div class="form-floating mb-3">
-                <InputText type="password" @bind-Value="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label for="password">Password</label>
-                <ValidationMessage For="() => Input.Password" class="text-danger" />
+                @if (p_show)
+                {
+                    <InputText type="text"
+                    @bind-Value="Input.Password"
+                    class="form-control"
+                    autocomplete="new-password"
+                    aria-required="true"
+                    placeholder="password" />
+                    <label for="password">Password</label>
+                    <ValidationMessage For="() => Input.Password" class="text-danger" />
+                }
+                else
+                {
+                    <InputText 
+                    type="password"
+                    @bind-Value="Input.Password"
+                    class="form-control"
+                    autocomplete="new-password"
+                    aria-required="true"
+                    placeholder="password" />
+                    <label for="password">Password</label>
+                    <ValidationMessage For="() => Input.Password" class="text-danger" />
+                }
+
             </div>
             <div class="form-floating mb-3">
-                <InputText type="password" @bind-Value="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label for="confirm-password">Confirm Password</label>
-                <ValidationMessage For="() => Input.ConfirmPassword" class="text-danger" />
+                @if(p_show)
+                {
+                    <InputText 
+                    type=""
+                    @bind-Value="Input.ConfirmPassword"
+                    class="form-control"
+                    autocomplete="new-password"
+                    aria-required="true"
+                    placeholder="password" />
+                    <label for="confirm-password">Confirm Password</label>
+                    <ValidationMessage For="() => Input.ConfirmPassword" class="text-danger" />
+                }
+                else
+                {
+                    <InputText 
+                    type="password"
+                    @bind-Value="Input.ConfirmPassword"
+                    class="form-control"
+                    autocomplete="new-password"
+                    aria-required="true"
+                    placeholder="password" />
+                    <label for="confirm-password">Confirm Password</label>
+                    <ValidationMessage For="() => Input.ConfirmPassword" class="text-danger" />
+                }
             </div>
             <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
         </EditForm>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
-        <!-- **** Commenting this out because we don't need this right now ****
-        <section>
-            <h3>Use another service to register.</h3>
-            <hr />
-            <ExternalLoginPicker />
-        </section>
-        -->
-    </div>
+    </div>   
 </div>
 
+<button type="button" @onclick="Toggle">Toggle Password Visibility</button>
+<div><input type="checkbox" @bind="p_show"/>hello</div>
+<p>@p_show</p>
+
+<button type="button" @onclick="Increment"></button>
+<p>@num</p>
+
 @code {
+    public bool p_show = true;
+    public int num = 0;
+
     private IEnumerable<IdentityError>? identityErrors;
 
     [SupplyParameterFromForm]
@@ -66,6 +124,11 @@
     private string? ReturnUrl { get; set; }
 
     private string? Message => identityErrors is null ? null : $"Error: {string.Join(", ", identityErrors.Select(error => error.Description))}";
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine("hello from on_init_async");
+    }
 
     public async Task RegisterUser(EditContext editContext)
     {
@@ -94,7 +157,7 @@
         await EmailSender.SendConfirmationLinkAsync(user, Input.Email, HtmlEncoder.Default.Encode(callbackUrl));
 
         if (UserManager.Options.SignIn.RequireConfirmedAccount)
-        {
+            {
             RedirectManager.RedirectTo(
                 "Account/RegisterConfirmation",
                 new() { ["email"] = Input.Email, ["returnUrl"] = ReturnUrl });
@@ -144,4 +207,17 @@
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; } = "";
     }
+
+    public void Toggle()
+    {
+        Console.WriteLine("hello from toggle");
+        p_show = !p_show;   
+        StateHasChanged();
+    }
+
+    public void Increment()
+    {
+        num++;
+    }
+
 }
