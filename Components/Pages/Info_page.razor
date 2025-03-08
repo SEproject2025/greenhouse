@@ -45,7 +45,7 @@
     border-radius: 5px;
 }
 .plant-item:hover {
-    background: #dcdcdc;
+    background: #6BBF59;
 }
 .plant-item.selected {
     background: #000;
@@ -57,6 +57,7 @@
     width: 40px;
     height: 40px;
     margin-right: 10px;
+    border-radius: 8px;
 }
 
 /* Main Display Area */
@@ -72,9 +73,11 @@
     align-items: center;
 }
 .plant-image {
-    width: 100px;
-    height: 100px;
+    width: 370px;
+    height: 370px;
     margin-right: 20px;
+    border-radius: 50%;
+        box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
 }
 
 /* Attributes List */
@@ -136,7 +139,7 @@
 @code {
     private List<Plant> Plants = new()
     {
-        new Plant { Name = "Beat", ScientificName = "Beta vulgaris", Image = "images/Beats.webp",
+        new Plant { Name = "Beet", ScientificName = "Beta vulgaris", Image = "images/Beats.webp",
                     Description = "Beets are a root vegetable known for their deep red or purple color, though they also come in golden and striped varieties. They have an earthy, slightly sweet taste and are often eaten raw, roasted, pickled, or used in soups like borscht. The greens are also edible and packed with nutrients.",
                     Attributes = new Dictionary<string, string>
                     {
@@ -392,5 +395,6 @@
     private void SelectPlant(Plant plant)
     {
         SelectedPlant = plant;
+        StateHasChanged();
     }
 }
