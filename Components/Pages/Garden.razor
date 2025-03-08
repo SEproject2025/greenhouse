@@ -377,7 +377,7 @@
     /* Alters the local copy of the data and the database to reflect the user's action */
     async Task CheckboxChecked(ChangeEventArgs e, PlantTask t)
     {
-        t.IS_COMPLETED = (bool)e.Value;
+        t.IS_COMPLETED = true;
         t.DAYS_UNTIL = t.FREQ;
         if (t.OVERDUE != 0)
         {
