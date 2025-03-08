@@ -3,6 +3,8 @@
 @inject IPlantService PlantService
 @inject NavigationManager NavigationManager
 
+@using greenhouse.Entities;
+
 <style>
     .plant-info-container {
     display: flex;
@@ -12,7 +14,7 @@
 
 /* Sidebar Styles */
 .plant-sidebar {
-    width: 300px;
+    width: 500px;
     background: #eaeaea;
     padding: 10px;
     overflow-y: auto;
@@ -116,10 +118,10 @@
             </div>
 
             <div class="plant-attributes">
-                @foreach (var attribute in SelectedPlant.Attributes)
+                @foreach (var attr in SelectedPlant.Attributes)
                 {
                     <div class="attribute">
-                        <strong>@attribute.Key:</strong> @attribute.Value
+                        <strong>@attr.Key:</strong> @attr.Value
                     </div>
                 }
             </div>
@@ -134,22 +136,250 @@
 @code {
     private List<Plant> Plants = new()
     {
-        new Plant { Name = "Snake Plant", ScientificName = "Sansevieria", Image = "snake-plant.png",
-                    Description = "Snake plants are well-known for their resilience...",
+        new Plant { Name = "Beat", ScientificName = "Beta vulgaris", Image = "images/Beats.webp",
+                    Description = "Beets are a root vegetable known for their deep red or purple color, though they also come in golden and striped varieties. They have an earthy, slightly sweet taste and are often eaten raw, roasted, pickled, or used in soups like borscht. The greens are also edible and packed with nutrients.",
                     Attributes = new Dictionary<string, string>
                     {
-                        {"Care Level", "Low-maintenance"},
-                        {"Environment", "Indoor"},
-                        {"Light", "Low to bright indirect light; very adaptable."},
-                        {"Water", "Water sparingly. Allow soil to dry out completely between waterings."},
-                        {"Temperature", "Average indoor temperatures; tolerates a wide range."},
-                        {"Growth Rate", "Slow to moderate"},
-                        {"Benefits", "Known for purifying air by removing toxins."}
+                        {"Care Level",  "Low-maintenance"},
+                        {"Environment", "Cool-season"},
+                        {"Light",       "Full sun to partial shade"},
+                        {"Water",       "Moderate, keep soil moist"},
+                        {"Temperature", "50-75°F (10-24°C)"},
+                        {"Growth Rate", "Moderate"},
+                        {"Benefits",    "High in fiber, antioxidants, and nitrates that support heart health"}
                     }
         },
-        new Plant { Name = "Spider Plant", ScientificName = "Chlorophytum comosum", Image = "spider-plant.png", Description = "Spider plants are..." },
-        new Plant { Name = "Monstera", ScientificName = "Monstera deliciosa", Image = "monstera.png", Description = "Monstera plants are..." },
-        new Plant { Name = "Aloe Vera", ScientificName = "Aloe barbadensis miller", Image = "aloe-vera.png", Description = "Aloe Vera is known for..." }
+        new Plant { Name = "Broccoli",   ScientificName = "Brassica oleracea",               Image = "images/Broccoli.webp",    Description = "A nutrient-rich vegetable belonging to the cabbage family. It has tightly packed green florets atop a thick stalk and is known for its high fiber, vitamin C, and antioxidant content.",
+                    Attributes = new Dictionary<string, string>
+                    {
+                        {"Care Level",  "Medium-maintenance"},
+                        {"Environment", "Cool-season"},
+                        {"Light",       "Full sun"},
+                        {"Water",       "Moderate, keep soil moist"},
+                        {"Temperature", "55-75°F (13-24°C)"},
+                        {"Growth Rate", "Moderate"},
+                        {"Benefits",    "High in fiber, vitamins C and K, antioxidants"}
+                    }},
+        new Plant { Name = "Cabbage",    ScientificName = "Brassica oleracea var. capitata", Image = "images/Cabbage.webp",     Description = "A leafy green, red, or white biennial plant grown as an annual vegetable crop. It has a dense, layered head and is used in salads, soups, and fermented dishes like sauerkraut.",
+                    Attributes = new Dictionary<string, string>
+                    {
+                        {"Care Level",  "Medium-maintenance"},
+                        {"Environment", "Cool-season"},
+                        {"Light",       "Full sun"},
+                        {"Water",       "Moderate, consistent moisture"},
+                        {"Temperature", "45-75°F (7-24°C)"},
+                        {"Growth Rate", "Moderate"},
+                        {"Benefits",    "Rich in vitamin C, supports digestion"}
+                    }},
+        new Plant { Name = "Cantaloupe", ScientificName = "Cucumis melo",                    Image = "images/Cantaloupe.webp",  Description = "A sweet, orange-fleshed melon with a netted rind. It is hydrating, packed with vitamins A and C, and commonly eaten fresh or in fruit salads.",
+                    Attributes = new Dictionary<string, string>
+                    {
+                        {"Care Level",  "High-maintenance"},
+                        {"Environment", "Warm-season"},
+                        {"Light",       "Full sun"},
+                        {"Water",       "High, consistent moisture"},
+                        {"Temperature", "70-90°F (21-32°C)"},
+                        {"Growth Rate", "Fast"},
+                        {"Benefits",    "Hydrating, high in vitamin A"}
+                    }},
+        new Plant { Name = "Carrot",     ScientificName = "Daucus carota",                   Image = "images/Carrot.webp",      Description = "A crunchy, root vegetable typically orange but available in various colors. Rich in beta-carotene, it supports eye health and is enjoyed raw, cooked, or juiced.",
+                    Attributes = new Dictionary<string, string>
+                    {
+                        {"Care Level",  "Low-maintenance"},
+                        {"Environment", "Cool-season"},
+                        {"Light",       "Full sun to partial shade"},
+                        {"Water",       "Moderate"},
+                        {"Temperature", "55-75°F (13-24°C)"},
+                        {"Growth Rate", "Slow"},
+                        {"Benefits",    "Supports eye health, high in beta-carotene"}
+                    }},
+        new Plant { Name = "Cauliflower",ScientificName = "Brassica oleracea",               Image = "images/Cauliflower.webp", Description = "A cruciferous vegetable with a white, dense head composed of undeveloped flower buds. It is low in calories and can be eaten raw, roasted, steamed, or mashed as a substitute for potatoes or rice.",
+                    Attributes = new Dictionary<string, string>
+                    {
+                        {"Care Level",  "High-maintenance"},
+                        {"Environment", "Cool-season"},
+                        {"Light",       "Full sun"},
+                        {"Water",       "Moderate"},
+                        {"Temperature", "50-75°F (10-24°C)"},
+                        {"Growth Rate", "Slow"},
+                        {"Benefits",    "Low in calories, rich in fiber"}
+                    }},
+        new Plant { Name = "Corn",       ScientificName = "Zea mays",                        Image = "images/Corn.webp",        Description = "A cereal grain with kernels on a cob, commonly eaten as a vegetable. It is used in a variety of dishes, including corn on the cob, popcorn, and tortillas.",
+                    Attributes = new Dictionary<string, string>
+                    {
+                        {"Care Level",  "High-maintenance"},
+                        {"Environment", "Warm-season"},
+                        {"Light",       "Full sun"},
+                        {"Water",       "High"},
+                        {"Temperature", "60-95°F (16-35°C)"},
+                        {"Growth Rate", "Fast"},
+                        {"Benefits",    "Provides energy, good source of fiber"}
+                    }},
+        new Plant { Name = "Cucumber",   ScientificName = "Cucumis sativus",                 Image = "images/Cucumbers.webp",    Description = "A cool, refreshing green fruit with high water content. It is often used in salads, sandwiches, or pickled to make pickles.",
+                    Attributes = new Dictionary<string, string>
+                    {
+                        {"Care Level",  "Medium-maintenance"},
+                        {"Environment", "Warm-season"},
+                        {"Light",       "Full sun"},
+                        {"Water",       "High"},
+                        {"Temperature", "70-90°F (21-32°C)"},
+                        {"Growth Rate", "Fast"},
+                        {"Benefits",    "Hydrating, supports digestion"}
+                    }},
+        new Plant { Name = "Eggplant",   ScientificName = "Solanum melongena",               Image = "images/Eggplant.webp",    Description = "A deep purple, glossy vegetable with a spongy texture. It is commonly used in dishes like eggplant parmesan, ratatouille, and baba ganoush.",
+                    Attributes = new Dictionary<string, string>
+                    {
+                        {"Care Level",  "Medium-maintenance"},
+                        {"Environment", "Warm-season"},
+                        {"Light",       "Full sun"},
+                        {"Water",       "Moderate"},
+                        {"Temperature", "70-85°F (21-29°C)"},
+                        {"Growth Rate", "Moderate"},
+                        {"Benefits",    "High in antioxidants, supports brain health"}
+                    }},
+        new Plant { Name = "Green Beans",ScientificName = "Phaseolus vulgaris",              Image = "images/GreenBeans.webp",  Description = "Also known as snap beans or string beans, these are long, slender green pods with small seeds inside. They are eaten fresh, steamed, or sautéed.",
+                    Attributes = new Dictionary<string, string>
+                    {
+                        {"Care Level",  "Low-maintenance"},
+                        {"Environment", "Warm-season"},
+                        {"Light",       "Full sun"},
+                        {"Water",       "Moderate"},
+                        {"Temperature", "65-85°F (18-29°C)"},
+                        {"Growth Rate", "Fast"},
+                        {"Benefits",    "Good source of protein, fiber"}
+                    }},
+        new Plant { Name = "Lettuce",    ScientificName = "Lactuca sativa",                  Image = "images/Lettuce.webp",     Description = "A leafy green vegetable commonly used in salads and sandwiches. It comes in various varieties, such as romaine, iceberg, and butterhead.",
+                    Attributes = new Dictionary<string, string>
+                    {
+                        {"Care Level",  "Low-maintenance"},
+                        {"Environment", "Cool-season"},
+                        {"Light",       "Partial shade to full sun"},
+                        {"Water",       "Moderate"},
+                        {"Temperature", "Moderate"},
+                        {"Growth Rate", "Fast"},
+                        {"Benefits",    "Hydrating, supports digestion"}
+                    }},
+        new Plant { Name = "Onions",     ScientificName = "Allium cepa",                     Image = "images/Onions.webp",      Description = "A bulb vegetable with a pungent flavor, available in white, yellow, and red varieties. They are used in cooking to add depth to savory dishes.",
+                    Attributes = new Dictionary<string, string>
+                    {
+                        {"Care Level",  "Medium-maintenance"},
+                        {"Environment", "Cool or warm-season"},
+                        {"Light",       "Full sun"},
+                        {"Water",       "Moderate"},
+                        {"Temperature", "50-85°F (10-29°C)"},
+                        {"Growth Rate", "Slow"},
+                        {"Benefits",    "Supports immune health, anti-inflammatory"}
+                    }},
+        new Plant { Name = "Peas",       ScientificName = "Pisum sativum",                   Image = "images/Peas.webp",        Description = "Small, round, green legumes that grow in pods. They are eaten fresh, frozen, or dried and are rich in protein and fiber.",
+                    Attributes = new Dictionary<string, string>
+                    {
+                        {"Care Level",  "Low-maintenance"},
+                        {"Environment", "Cool-season"},
+                        {"Light",       "Full sun to partial shade"},
+                        {"Water",       "Moderate"},
+                        {"Temperature", "50-75°F (10-24°C)"},
+                        {"Growth Rate", "Fast"},
+                        {"Benefits",    "High in protein, supports heart health"}
+                    }},
+        new Plant { Name = "Peppers",    ScientificName = "Capsicum annuum",                 Image = "images/Peppers.webp",     Description = "A diverse group of fruits ranging from sweet bell peppers to hot chili peppers. They are used in salads, stir-fries, and spicy dishes.",
+                    Attributes = new Dictionary<string, string>
+                    {
+                        {"Care Level",  "Medium-maintenance"},
+                        {"Environment", "Warm-season"},
+                        {"Light",       "Full sun"},
+                        {"Water",       "Moderate"},
+                        {"Temperature", "70-85°F (21-29°C)"},
+                        {"Growth Rate", "Moderate"},
+                        {"Benefits",    "High in vitamin C, boosts metabolism"}
+                    }},
+        new Plant { Name = "Potatoes",   ScientificName = "Solanum tuberosum",               Image = "images/Potatoes.webp",    Description = "A starchy tuber widely consumed worldwide. Potatoes can be baked, mashed, fried, or boiled.",
+                    Attributes = new Dictionary<string, string>
+                    {
+                        {"Care Level",  "Medium-maintenance"},
+                        {"Environment", "Cool-season"},
+                        {"Light",       "Full sun"},
+                        {"Water",       "Moderate"},
+                        {"Temperature", "50-75°F (10-24°C)"},
+                        {"Growth Rate", "Moderate"},
+                        {"Benefits",    "High in potassium, provides energy"}
+                    }},
+        new Plant { Name = "Pumpkins",   ScientificName = "Cucurbita pepo",                  Image = "images/Pumpkins.webp",    Description = "A large, orange winter squash known for its sweet flesh and seeds. It is used in pies, soups, and decorations for fall festivals.",
+                    Attributes = new Dictionary<string, string>
+                    {
+                        {"Care Level",  "High-maintenance"},
+                        {"Environment", "Warm-season"},
+                        {"Light",       "Full sun"},
+                        {"Water",       "High"},
+                        {"Temperature", "70-85°F (21-29°C)"},
+                        {"Growth Rate", "Fast"},
+                        {"Benefits",    "Rich in beta-carotene, supports eye health"}
+                    }},
+        new Plant { Name = "Radishes",   ScientificName = "Raphanus sativus",                Image = "images/Radishes.webp",    Description = "Small, crunchy root vegetables with a peppery taste. They are commonly eaten raw in salads or pickled.",
+                    Attributes = new Dictionary<string, string>
+                    {
+                        {"Care Level",  "Low-maintenance"},
+                        {"Environment", "Cool-season"},
+                        {"Light",       "Full sun"},
+                        {"Water",       "Moderate"},
+                        {"Temperature", "50-70°F (10-21°C)"},
+                        {"Growth Rate", "Fast"},
+                        {"Benefits",    "Supports digestion, high in fiber"}
+                    }},
+        new Plant { Name = "Squash",     ScientificName = "Cucurbita pepo",                  Image = "images/Squash.webp",      Description = "A family of vegetables that includes zucchini, butternut squash, and acorn squash. Some varieties are eaten in summer, while others are stored for winter use.",
+                    Attributes = new Dictionary<string, string>
+                    {
+                        {"Care Level",  "Low-maintenance"},
+                        {"Environment", "Warm-season"},
+                        {"Light",       "Full sun"},
+                        {"Water",       "Moderate"},
+                        {"Temperature", "65-85°F (18-29°C)"},
+                        {"Growth Rate", "Fast"},
+                        {"Benefits",    "High in fiber, supports heart health"}
+                    }},
+        new Plant { Name = "Sunflower",  ScientificName = "Helianthus annuus",               Image = "images/Sunflower.webp",   Description = "Grown for its edible seeds and oil, sunflowers have bright yellow blooms that track the sun.",
+                    Attributes = new Dictionary<string, string>
+                    {
+                        {"Care Level",  "Low-maintenance"},
+                        {"Environment", "Warm-season"},
+                        {"Light",       "Full sun"},
+                        {"Water",       "Moderate"},
+                        {"Temperature", "65-90°F (18-32°C)"},
+                        {"Growth Rate", "Fast"},
+                        {"Benefits",    "Edible seeds, attracts pollinators"}
+                    }},
+        new Plant { Name = "Tomato",     ScientificName = "Solanum lycopersicum",            Image = "images/Tomato.webp",      Description = "A juicy, red fruit often mistaken for a vegetable. It is a staple in salads, sauces, and sandwiches.",
+                    Attributes = new Dictionary<string, string>
+                    {
+                        {"Care Level",  "Medium-maintenance"},
+                        {"Environment", "Warm-season"},
+                        {"Light",       "Full sun"},
+                        {"Water",       "Moderate"},
+                        {"Temperature", "70-85°F (21-29°C)"},
+                        {"Growth Rate", "Fast"},
+                        {"Benefits",    "High in lycopene, supports heart health"}
+                    }},
+        new Plant { Name = "Watermelon", ScientificName = "Citrullus lanatus",               Image = "images/Watermelon.webp",  Description = "A large, hydrating fruit with a green rind and sweet, red flesh. It is mostly consumed fresh in summer.",
+                    Attributes = new Dictionary<string, string>
+                    {
+                        {"Care Level",  "High-maintenance"},
+                        {"Environment", "Warm-season"},
+                        {"Light",       "Full sun"},
+                        {"Water",       "High"},
+                        {"Temperature", "75-95°F (24-35°C)"},
+                        {"Growth Rate", "Fast"},
+                        {"Benefits",    "Hydrating, rich in antioxidants"}
+                    }},
+        new Plant { Name = "Zucchini",   ScientificName = "Cucurbita pepo",                  Image = "images/Zucchini.webp",    Description = "A summer squash with a mild flavor, often used in stir-fries, baked goods, and grilled dishes.",
+                    Attributes = new Dictionary<string, string>
+                    {
+                        {"Care Level",  "Medium-maintenance"},
+                        {"Environment", "Warm-season"},
+                        {"Light",       "Full sun"},
+                        {"Water",       "Moderate"},
+                        {"Temperature", "70-85°F (21-29°C)"},
+                        {"Growth Rate", "Fast"},
+                        {"Benefits",    "Low-calorie, rich in vitamins"}
+                    }}
     };
 
     private Plant SelectedPlant;
