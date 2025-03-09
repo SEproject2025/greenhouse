@@ -2,7 +2,7 @@
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
-<button @onclick="ShowModal">Add Plant</button>
+<button @onclick="ShowModal" disabled="@isLoading">Add Plant</button>
 
 <!-- Reference the Modal component -->
 <Modal IsVisible="@isModalVisible" IsVisibleChanged="@OnModalVisibilityChanged" @ref="modalRef">
@@ -12,10 +12,21 @@
 @code {
     private bool isModalVisible = false;
     private Modal? modalRef;
+    private bool isLoading = true; // Flag to track loading state
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Simulating data load (replace with actual loading logic)
+        await Task.Delay(2000);
+        isLoading = false; // Mark loading as complete
+    }
 
     private void ShowModal()
     {
-        isModalVisible = true;
+        if (!isLoading) // Ensure modal doesn't open if still loading
+        {
+            isModalVisible = true;
+        }
     }
 
     private void OnModalVisibilityChanged(bool isVisible)
@@ -23,7 +34,6 @@
         isModalVisible = isVisible;
     }
 
-    // Method that gets called when the submit button is clicked in AddPlant
     public async Task CloseModalOnSubmit()
     {
         if (modalRef is not null)
@@ -32,3 +42,4 @@
         }
     }
 }
+
