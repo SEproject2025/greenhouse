@@ -6,6 +6,7 @@
 @inject IUserServices UserServices
 @inject IJSRuntime JSRuntime
 
+
 @using Microsoft.AspNetCore.Authorization
 @using System.Security.Claims
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -300,14 +301,12 @@
     //private bool fadeToGreen = false;
     // Dictionary to track which plants should fade to green
     private Dictionary<int, bool> plantGreenStates = new();
-
     private AuthenticationState? authState;
     private ClaimsPrincipal? user;
     private string? user_email;
-
     private string uuid;
-
     private int counter;
+    private bool hasInitialized = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -316,8 +315,7 @@
         user_email = user.Identity.Name;
         uuid = await UserServices.GetUserID(user_email);
 
-
-        // Gets the current user's plants and tasks
+        // Load plants and tasks
         plant = await PlantService.GetUserPlants(uuid);
         user_tasks = await PlantService.GetAllUserTasks(uuid);
         UpdatePlantFade();
@@ -336,10 +334,13 @@
     }
 
     /* Advances the internal day tracker by 1 */
-    private void GoToNextDay()
+    private async Task GoToNextDay()
     {
         //fadeToGreen = !fadeToGreen;  // Toggle the green fade state every time
         CurrentDay = CurrentDay.AddDays(1);
+
+        // Save the new date to local storage
+        await JSRuntime.InvokeVoidAsync("localStorage.setItem", "currentDay", CurrentDay.ToString("yyyy-MM-dd"));
 
         // Reset the green fade effect for all plants
         foreach (var key in plantGreenStates.Keys.ToList())
@@ -363,8 +364,8 @@
                 t.OVERDUE++;
             }
             PlantService.UpdateTask(t);
-
         }
+
         // Update the fade state of plants after it goes to the next day
         UpdatePlantFade();
         StateHasChanged();
@@ -372,6 +373,8 @@
 
     private void UpdatePlantFade()
     {
+        if (plant == null) return; // ? Prevents NullReferenceException
+
         foreach (var p in plant)
         {
             plantGreenStates[p.PLANT_ID] = AllTasksFinished(p.PLANT_ID);
@@ -420,6 +423,28 @@
             }
         }
         return counter;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && !hasInitialized)
+        {
+            hasInitialized = true;
+
+            var savedDate = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "currentDay");
+            if (!string.IsNullOrEmpty(savedDate) && DateTime.TryParse(savedDate, out var storedDate))
+            {
+                CurrentDay = storedDate;
+            }
+            else
+            {
+                CurrentDay = DateTime.Now.Date;
+                await JSRuntime.InvokeVoidAsync("localStorage.setItem", "currentDay", CurrentDay.ToString("yyyy-MM-dd"));
+            }
+
+            UpdatePlantFade();
+            StateHasChanged();
+        }
     }
 }
 
