@@ -21,7 +21,7 @@ namespace greenhouse.Services
 		}
 
         // ******************************************************************************
-        // Add a plant to the page and the database
+        // Adds a plant to the page and the database
         // ******************************************************************************
         public async Task<Plants> AddPlants(Plants plants)
         {
@@ -32,7 +32,7 @@ namespace greenhouse.Services
         }
 
         // ******************************************************************************
-        // Delete a plant from the page and the database
+        // Deletes a plant from the page and the database
         // ******************************************************************************
         public async Task<bool> DeletePlant(int PLANT_ID)
 		{
@@ -55,40 +55,40 @@ namespace greenhouse.Services
 		}
 
         // ******************************************************************************
-        // Get all public plants not created by the user
+        // Gets all public plants not created by the user
         // ******************************************************************************
         public async Task<List<Plants>> GetAllPublicPlants()
 		{
-			return await _context.Plant
+            return await _context.Plant
                       .Where(plant => plant.IS_PRIVATE == "N")
-                      .ToListAsync(); ;
+                      .ToListAsync();
 		}
 
-        /*
         // ******************************************************************************
-        // Retrieves frequency-related fields for a specific plant by its ID
+        // Gets all tasks for every plant a user is growing
         // ******************************************************************************
-        public async Task<Dictionary<string, int>> GetFrequencyFields(int plantId)
+        public async Task<List<PlantTask>> GetAllUserTasks(string uuid)
         {
-            var plant = await _context.Plant.FindAsync(plantId);    // Find the plant by its ID
-            var frequencyFields = new Dictionary<string, int>();    // Dictionary to store field names & frequencies
+            var user_plants = await GetUserPlants(uuid);
+            var user_tasks = new List<PlantTask>();
+            var indi_p_tasks = new List<PlantTask>();
+            
 
-            if (plant == null)
+            foreach (var p in user_plants)
             {
-                return new Dictionary<string, int>();
+                var plant_id = p.PLANT_ID;
+                indi_p_tasks = await _context.PlantTasks
+                    .Where(task => task.PLANT_ID == plant_id && task.FREQ != 0)
+                    .ToListAsync();
+                user_tasks.AddRange(indi_p_tasks);
             }
 
-            if (plant.WATER_FREQ > 0)
-            {
-                frequencyFields.Add("Water", plant.WATER_FREQ);
-            }
+            return user_tasks;
 
-            return frequencyFields;
         }
-        */
 
         // ******************************************************************************
-        // Get a plant from the database by ID
+        // Gets a plant from the database by ID
         // ******************************************************************************
         public async Task<Plants> GetPlantByID(int PLANT_ID)
 		{
@@ -96,7 +96,7 @@ namespace greenhouse.Services
 		}
 
         // ******************************************************************************
-        // Get the current user's plants
+        // Gets the current user's plants
         // ******************************************************************************
         public async Task<List<Plants>> GetUserPlants(string user_id)
 		{
@@ -136,6 +136,22 @@ namespace greenhouse.Services
             return true;                                    // Returns true to indicate successful insertion
         }
 
+
+        // ******************************************************************************
+        // Updates a task in the PlantTask table  
+        // ******************************************************************************
+        /*public async Task<bool> UpdateTask(PlantTask task)
+        {
+            var dbTask = await _context.PlantTasks.FindAsync(task.TASK_ID);
+            if (dbTask != null)
+            {
+                _context.Entry(dbTask).CurrentValues.SetValues(task);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;*/
+            
+            
         // ******************************************************************************
         // Updates an existing plant's details in the database.
         // ******************************************************************************
