@@ -15,7 +15,7 @@
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
 
-
+@rendermode InteractiveServer
 
 <PageTitle>Register</PageTitle>
 
@@ -126,13 +126,7 @@
 			} */
 
 		await SignInManager.SignInAsync(user, isPersistent: false);
-		RedirectManager.RedirectTo(ReturnUrl);
-	}
-
-	private void TogglePasswordVisibility()
-	{
-		Console.WriteLine("yolo");
-		p_show = !p_show;
+		NavigationManager.NavigateTo("/Garden");
 	}
 
 	private ApplicationUser CreateUser()
