@@ -4,7 +4,7 @@
 
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">greenhouse</a>
+        <a class="navbar-brand" href="">Evera</a>
     </div>
 </div>
 
@@ -17,22 +17,14 @@
                 <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
             </NavLink>
         </div>
-        <!--
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="auth">
-                <span class="bi bi-lock-nav-menu" aria-hidden="true"></span> Auth Required
-            </NavLink>
-        </div>
-        -->
         <AuthorizeView>
-            <Authorized>
-                <!--Home tab-->
+
+            <Authorized>  
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="HomePage">
+                        <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Home Page
+                    </NavLink>
+                </div>
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="garden">
                         <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Garden

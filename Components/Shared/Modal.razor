@@ -42,18 +42,19 @@
         justify-content: center;
         align-items: center;
         z-index: 1000;
+        padding: 10px; /* Ensures space around the modal on small screens */
     }
-
     .modal-content {
         background: white;
         padding: 20px;
         border-radius: 8px;
         position: relative;
-        width: 50%;       /* Adjust this percentage as needed   */
-        max-width: 400px; /* Ensures it doesn’t get too wide    */
-        min-width: 250px; /* Prevents it from getting too small */
+        width: 50%;
+        max-width: 400px;
+        min-width: 250px;
+        max-height: 90vh; /* Limits modal height to 80% of viewport */
+        overflow-y: auto; /* Enables vertical scrolling if content overflows */
     }
-
     .close-button {
         background: none;
         border: none;
