@@ -15,8 +15,6 @@
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
 
-@rendermode InteractiveServer
-
 <PageTitle>Register</PageTitle>
 
 <h1>Register</h1>
@@ -31,7 +29,6 @@
 			<ValidationSummary class="text-danger" role="alert" />
 			<div class="form-floating mb-3">
 				<InputText
-				type=""
 				@bind-Value="Input.Email"
 				class="form-control"
 				autocomplete="username"
@@ -42,7 +39,7 @@
 			</div>
 			<div class="form-floating mb-3">
 				<InputText
-				type="@(p_show ? "text" : "password")"
+				type="password"
 				@bind-Value="Input.Password"
 				class="form-control"
 				autocomplete="new-password"
@@ -53,7 +50,7 @@
 			</div>
 			<div class="form-floating mb-3">
 				<InputText
-				type="@(p_show ? "text" : "password")"
+				type="password"
 				@bind-Value="Input.ConfirmPassword"
 				class="form-control"
 				autocomplete="new-password"
@@ -76,11 +73,8 @@
 	<li>Must have at least one <b>non-alphanumeric character</b></li>
 </ul>
 <hr style="width:32%" />
-<button @onclick="() => p_show = !p_show" >Load</button>
-<p>Show_Password: @p_show</p>
 
 @code {
-	bool p_show = false;
 
 	private IEnumerable<IdentityError>? identityErrors;
 
@@ -169,5 +163,4 @@
 		[Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
 		public string ConfirmPassword { get; set; } = "";
 	} 
-
 }

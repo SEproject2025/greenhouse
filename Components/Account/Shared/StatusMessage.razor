@@ -19,14 +19,11 @@
 
     protected override void OnInitialized()
     {
-        Console.WriteLine("----------------------------------------------");
-        Console.WriteLine("-The edited function was entered. None of the functionality concerning cookies and RedirectManager occurred.");
-        Console.WriteLine("----------------------------------------------");
-        /* messageFromCookie = HttpContext.Request.Cookies[IdentityRedirectManager.StatusCookieName];
+        messageFromCookie = HttpContext.Request.Cookies[IdentityRedirectManager.StatusCookieName];
 
         if (messageFromCookie is not null)
         {
             HttpContext.Response.Cookies.Delete(IdentityRedirectManager.StatusCookieName);
-        } */
+        } 
     }
 }
