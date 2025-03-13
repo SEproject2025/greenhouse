@@ -1,74 +1,63 @@
 ﻿@implements IDisposable
-
 @inject NavigationManager NavigationManager
 
-<div class="top-row ps-3 navbar navbar-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark w-100">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">greenhouse</a>
+        <a class="navbar-brand" href="/">Greenhouse</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <!-- Left-aligned navbar items -->
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="HomePage">
+                        <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Home Page
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="/" Match="NavLinkMatch.All">
+                        <span class="bi bi-house-door-fill"></span> Home
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="/garden">
+                        <span class="bi bi-plus-square-fill"></span> Garden
+                    </NavLink>
+                </li>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="info">
+                        <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Plant Info
+                    </NavLink>
+                </li>
+            </ul>
+
+            <!-- Right-aligned navbar items -->
+            <ul class="navbar-nav ms-auto">
+                <AuthorizeView>
+                    <Authorized>
+                        <li class="nav-item">
+                            <NavLink class="nav-link" href="/Account/Manage">
+                                <span class="bi bi-person-fill"></span> @context.User.Identity?.Name
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <form action="/Account/Logout" method="post" class="d-inline">
+                                <AntiforgeryToken />
+                                <input type="hidden" name="ReturnUrl" value=" " />
+                                <button type="submit" class="nav-link btn btn-link">
+                                    <span class="bi bi-arrow-bar-left"></span> Logout
+                                </button>
+                            </form>
+                        </li>
+                    </Authorized>
+                </AuthorizeView>
+            </ul>
+        </div>
     </div>
-</div>
+</nav>
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
-
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <!--
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="auth">
-                <span class="bi bi-lock-nav-menu" aria-hidden="true"></span> Auth Required
-            </NavLink>
-        </div>
-        -->
-        <AuthorizeView>
-            <Authorized>                
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="garden">
-                        <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Garden
-                    </NavLink>
-                </div>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="Account/Manage">
-                        <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> @context.User.Identity?.Name
-                    </NavLink>
-                </div>
-                <div class="nav-item px-3">
-                    <form action="Account/Logout" method="post">
-                        <AntiforgeryToken />
-                        <input type="hidden" name="ReturnUrl" value="   " />
-                        <button type="submit" class="nav-link">
-                            <span class="bi bi-arrow-bar-left-nav-menu" aria-hidden="true"></span> Logout
-                        </button>
-                    </form>
-                </div>
-            </Authorized>
-            <NotAuthorized>
-                <!--
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="Account/Register">
-                        <span class="bi bi-person-nav-menu" aria-hidden="true"></span> Register
-                    </NavLink>
-                </div>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="Account/Login">
-                        <span class="bi bi-person-badge-nav-menu" aria-hidden="true"></span> Login
-                    </NavLink>
-                </div>
-                -->
-            </NotAuthorized>
-        </AuthorizeView>
-    </nav>
-</div>
 
 @code {
     private string? currentUrl;
@@ -91,3 +80,81 @@
     }
 }
 
+<style>
+    .navbar {
+        width: 100%; /* Ensure full width */
+        margin: 0;
+        padding: 15px 0; /* Adjust padding for consistent height */
+        position: fixed; /* Keeps navbar fixed at the top */
+        top: 0;
+        left: 0;
+        z-index: 1030; /* Ensures it stays above other elements */
+    }
+
+
+        .navbar-nav .nav-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-nav .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            text-decoration: none;
+        }
+
+    .navbar {
+        background-size: cover;
+        background-position: center;
+        border-bottom: 5px solid #4d2600; /* Dark brown border for depth */
+        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.7); /* Adds deep carving effect */
+    }
+
+    /* Carved Text Effect */
+    .navbar-nav .nav-link,
+    .navbar-brand {
+        font-family: 'Cinzel Decorative', serif; /* A carved-wood style font */
+        font-size: 1.3rem;
+        color: #d4a373; /* Light brown to mimic carving */
+        text-shadow: -2px -2px 0 #4d2600, 2px 2px 0 #ffffff33; /* 3D carved effect */
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+
+        /* Hover Effect: Looks Like Deeper Engraving */
+        .navbar-nav .nav-link:hover {
+            color: #f5deb3; /* Light wood highlight */
+            text-shadow: -3px -3px 0 #3a1d00, 3px 3px 0 #ffffff55; /* Stronger engraving */
+            transform: scale(1.05); /* Slightly pops out */
+            transition: all 0.3s ease-in-out;
+        }
+
+    /* Buttons Styled Like Natural Wood */
+    .navbar-nav .nav-item button {
+        background-color: transparent;
+        border: 2px solid #4d2600;
+        color: #d4a373;
+        font-weight: bold;
+        text-shadow: -2px -2px 0 #4d2600, 2px 2px 0 #ffffff33;
+        padding: 5px 15px;
+        border-radius: 5px;
+        transition: all 0.3s ease-in-out;
+    }
+
+        .navbar-nav .nav-item button:hover {
+            background-color: #8b5a2b;
+            color: #fff;
+            text-shadow: none;
+        }
+
+    /* Adjust Navbar Padding */
+    .navbar {
+        padding: 15px 20px;
+    }
+
+    body {
+        padding-top: 70px; /* Adjust based on navbar height */
+    }
+
+</style>

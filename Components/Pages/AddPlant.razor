@@ -173,13 +173,13 @@
         width: 20px;  /*26*/
         left: 4px;
         bottom: 4px;
-            background-color: #2C6E49; /* dark green stnadard */
+            background-color: #2C6E49; /* dark green stnadard text */
         -webkit-transition: .4s;
         transition: .4s;
     }
 
     input:checked + .slider {
-        background-color: #6BBF59; /* light green standard */
+        background-color: #6BBF59; /* light green standard hover */
     }
 
     input:focus + .slider {
@@ -247,7 +247,7 @@
 
         <!-- Input fields for task frequencies (days per week) -->
         <!--Watering-->
-        <label>Watering Frequency (days per week)</label>
+        <label>Will need watered every ____ days</label>
         <div style="display: flex; align-items: center; gap: 10px;">
             <label class="switch">
                 <input type="checkbox" @bind="IsWaterEnabled">
@@ -264,7 +264,7 @@
         </div>
 
         <!--Weeding-->
-        <label>Weeding Frequency (days per week)</label>
+        <label>Will need weeding every ____ days</label>
         <div style="display: flex; align-items: center; gap: 10px;">
             <label class="switch">
                 <input type="checkbox" @bind="IsWeedEnabled">
@@ -281,7 +281,7 @@
         </div>
 
         <!--Pruning-->
-        <label>Pruning Frequency (days per week)</label>
+        <label>Will need pruning every ____ days</label>
         <div style="display: flex; align-items: center; gap: 10px;">
             <label class="switch">
                 <input type="checkbox" @bind="IsPruneEnabled">
@@ -298,7 +298,7 @@
         </div>
 
         <!--Pest Control-->
-        <label>Pest Control Frequency (days per week)</label>
+        <label>Check for pests every ____ days</label>
         <div style="display: flex; align-items: center; gap: 10px;">
             <label class="switch">
                 <input type="checkbox" @bind="IsPestEnabled">

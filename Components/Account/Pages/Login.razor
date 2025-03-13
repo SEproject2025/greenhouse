@@ -44,7 +44,7 @@
                 <div>
                     <!--
                     <p>
-                        <a href="Account/ForgotPassword">Forgot your password?</a>
+                    <a href="Account/ForgotPassword">Forgot your password?</a>
                     </p>
                     -->
                     <p>
@@ -52,7 +52,7 @@
                     </p>
                     <!--
                     <p>
-                        <a href="Account/ResendEmailConfirmation">Resend email confirmation</a>
+                    <a href="Account/ResendEmailConfirmation">Resend email confirmation</a>
                     </p>
                     -->
                 </div>
@@ -62,9 +62,9 @@
     <div class="col-md-6 col-md-offset-2">
         <!-- **** Commenting this out because we don't need this right now ****
         <section>
-            <h3>Use another service to log in.</h3>
-            <hr />
-            <ExternalLoginPicker />
+        <h3>Use another service to log in.</h3>
+        <hr />
+        <ExternalLoginPicker />
         </section>
         -->
     </div>
@@ -99,7 +99,7 @@
         if (result.Succeeded)
         {
             Logger.LogInformation("User logged in.");
-            RedirectManager.RedirectTo(ReturnUrl);
+            NavigationManager.NavigateTo("/HomePage");
         }
         else if (result.RequiresTwoFactor)
         {
