@@ -292,35 +292,39 @@
 @code {
     List<Plants>? plant = null;
 
-    // The list of currently active tasks
-    List<PlantTask> user_tasks = new List<PlantTask>();
-
-    // Tracks the current simulated day
-    private DateTime CurrentDay { get; set; } = DateTime.Now.Date;
-    //private bool fadeToGreen = false;
-    // Dictionary to track which plants should fade to green
-    private Dictionary<int, bool> plantGreenStates = new();
+    
+    List<PlantTask> user_tasks = new List<PlantTask>();  // The list of currently active tasks
+    private DateTime CurrentDay { get; set; } = DateTime.Now.Date; // Tracks the current simulated day
+    private Dictionary<int, bool> plantGreenStates = new(); // Dictionary to track which plants should fade to green
 
     private AuthenticationState? authState;
     private ClaimsPrincipal? user;
     private string? user_email;
-
-    private string uuid;
-
+    private string? uuid;
     private int counter;
+    private bool hasLoaded = false;
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        user = authState.User;
-        user_email = user.Identity.Name;
-        uuid = await UserServices.GetUserID(user_email);
+        if (firstRender && !hasLoaded) // Ensures it only runs once
+        {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
 
+            if (user.Identity?.IsAuthenticated == true)
+            {
+                user_email = user.Identity.Name;
+                uuid = await UserServices.GetUserID(user_email);
 
-        // Gets the current user's plants and tasks
-        plant = await PlantService.GetUserPlants(uuid);
-        user_tasks = await PlantService.GetAllUserTasks(uuid);
-        UpdatePlantFade();
+                // Fetch user's plants and tasks
+                plant = await PlantService.GetUserPlants(uuid);
+                user_tasks = await PlantService.GetAllUserTasks(uuid);
+                UpdatePlantFade();
+            }
+
+            hasLoaded = true;
+            StateHasChanged(); // Refresh UI after fetching
+        }
     }
 
     async Task DeletePlant(int PLANT_ID)
