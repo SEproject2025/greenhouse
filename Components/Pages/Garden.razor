@@ -117,7 +117,7 @@
     }
 
     .tile {
-        height: 285px;
+        height: 350px;
         width: 300px;
         background-color: #d2d9d5;
         border: 2px solid black;
@@ -205,6 +205,44 @@
         background-color: white; /* Optional: Adds contrast */
     }
 
+    .progress-bar-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px; /* Add spacing between circles */
+        margin-top: 10px; /* Space above tasks */
+    }
+
+    .circular-progress {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        background: conic-gradient(green 0deg, lightgray 0deg);
+    }
+
+    /* Hide Progress Bars When Green Fade is Active */
+    .tile.green-fade .progress-bar-wrapper {
+        display: none;
+    }
+
+    /* Inner Circle */
+    .circular-progress .inner-circle {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
 </style>
 
 
@@ -266,24 +304,39 @@
                         }
                     }
 
-                    <!-- Determines when the checkboxes are visible on the plant tiles -->
-                    @foreach (var t in user_tasks)
-                    {
-                        @if (p.PLANT_ID == t.PLANT_ID && (t.DAYS_UNTIL == 0 || (t.DONE_DATE == CurrentDay || t.DONE_DATE == null)))
+                    <!-- Circular Progress Bar Container - Positioned Above Tasks -->
+                    <!-- Wrap Progress Bars Inside a Container to Prevent Showing on Green-Fade -->
+                    <div class="progress-bar-wrapper">
+                        <div class="progress-bar-container">
+                            @foreach (var t in user_tasks.Where(task => task.PLANT_ID == p.PLANT_ID))
+                            {
+                                <div class="circular-progress" id="progress-@t.TASK_ID"
+                                     data-percentage="@CalculateTaskProgress(t.DAYS_UNTIL, t.FREQ)">
+                                    <div class="inner-circle">@CalculateTaskProgress(t.DAYS_UNTIL, t.FREQ)%</div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <!-- Task List Container - Below Progress Bars -->
+                    <div class="task-list">
+                        @foreach (var t in user_tasks)
                         {
-                            <div class="task-container">
-                                <img src="@GetTaskIcon(t.TASK_NAME)" alt="@t.TASK_NAME icon" class="task-icon" />
-                                <label for="@t.TASK_NAME-@p.PLANT_ID" class="task-label">@t.TASK_NAME</label>
-                                <input type="checkbox"
-                                       id="@t.TASK_NAME-@p.PLANT_ID"
-                                       name="@t.TASK_NAME-@p.PLANT_ID"
-                                       checked='@t.IS_COMPLETED'
-                                       @onchange="(e) => CheckboxChecked(e, t)"
-                                       disabled="@(t.IS_COMPLETED ? "disabled" : null)"
-                                       class="task-checkbox" />
-                            </div>
+                            @if (p.PLANT_ID == t.PLANT_ID && (t.DAYS_UNTIL == 0 || (t.DONE_DATE == CurrentDay || t.DONE_DATE == null)))
+                            {
+                                <div class="task-container">
+                                    <img src="@GetTaskIcon(t.TASK_NAME)" alt="@t.TASK_NAME icon" class="task-icon" />
+                                    <label for="@t.TASK_NAME-@p.PLANT_ID" class="task-label">@t.TASK_NAME</label>
+                                    <input type="checkbox"
+                                           id="@t.TASK_NAME-@p.PLANT_ID"
+                                           name="@t.TASK_NAME-@p.PLANT_ID"
+                                           checked='@t.IS_COMPLETED'
+                                           @onchange="(e) => CheckboxChecked(e, t)"
+                                           disabled="@(t.IS_COMPLETED ? "disabled" : null)"
+                                           class="task-checkbox" />
+                                </div>
+                            }
                         }
-                    }
+                    </div>
 
                     <!-- Image of the plant (only visible when green) -->
                     @if (plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID])
@@ -358,6 +411,7 @@
             hasLoaded = true;
             _ = InvokeAsync(StateHasChanged); // Avoid UI thread blocking
         }
+        await JSRuntime.InvokeVoidAsync("updateProgressCircles");
     }
 
     async Task DeletePlant(int PLANT_ID)
@@ -470,4 +524,34 @@
             _ => "/Icons/Default.png" // Fallback icon in case of unknown task
         };
     }
+
+    int CalculateTaskProgress(int? daysUntil, int? freq)
+    {
+        if (!freq.HasValue || freq.Value == 0) return 0;  // Prevent division by zero
+
+        int freqValue = freq.Value;
+        int daysValue = daysUntil ?? 0;  // Default to 0 if null
+
+        if (daysValue == 0) return 0;
+        if (daysValue <= freqValue / 4) return 25;
+        if (daysValue <= freqValue / 2) return 50;
+        if (daysValue <= (3 * freqValue) / 4) return 75;
+        return 100;
+    }
 }
+
+<script>
+    function updateProgressCircles() {
+        document.querySelectorAll(".circular-progress").forEach((progressBar) => {
+            let value = parseInt(progressBar.getAttribute("data-percentage"));
+
+            // Ensure value is between 0 and 100
+            value = Math.max(0, Math.min(value, 100));
+
+            // Apply the conic-gradient for progress
+            progressBar.style.background = `conic-gradient(green ${value * 3.6}deg, lightgray ${value * 3.6}deg)`;
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", updateProgressCircles);
+</script>
