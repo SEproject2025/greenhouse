@@ -213,6 +213,20 @@
         margin-top: 10px; /* Space above tasks */
     }
 
+    .progress-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .progress-label {
+        font-size: 12px !important; /* Adjust size */
+        margin-top: 38px; /* Less spacing between progress bar and text */
+        color: black;
+        text-align: center;
+        white-space: nowrap; /* Prevents text from wrapping */
+    }
+
     .circular-progress {
         width: 50px;
         height: 50px;
@@ -310,9 +324,12 @@
                         <div class="progress-bar-container">
                             @foreach (var t in user_tasks.Where(task => task.PLANT_ID == p.PLANT_ID))
                             {
-                                <div class="circular-progress" id="progress-@t.TASK_ID"
-                                     data-percentage="@CalculateTaskProgress(t.DAYS_UNTIL, t.FREQ)">
-                                    <div class="inner-circle">@CalculateTaskProgress(t.DAYS_UNTIL, t.FREQ)%</div>
+                                <div class="progress-item">
+                                    <div class="circular-progress" id="progress-@t.TASK_ID"
+                                         data-percentage="@CalculateTaskProgress(t.DAYS_UNTIL, t.FREQ)">
+                                        <div class="inner-circle">@CalculateTaskProgress(t.DAYS_UNTIL, t.FREQ)%</div>
+                                        <span class="progress-label">@GetTaskShortLabel(t.TASK_NAME)</span>
+                                    </div>                                
                                 </div>
                             }
                         </div>
@@ -537,6 +554,18 @@
         if (daysValue <= freqValue / 2) return 50;
         if (daysValue <= (3 * freqValue) / 4) return 75;
         return 100;
+    }
+
+    private string GetTaskShortLabel(string taskName)
+    {
+        return taskName switch
+        {
+            "Watering" => "Water",
+            "Weeding" => "Weeds",
+            "Pruning" => "Prune",
+            "Pest Control" => "Pests",
+            _ => "Task" // Default fallback
+        };
     }
 }
 
