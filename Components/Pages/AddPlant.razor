@@ -254,7 +254,12 @@
                 <span class="slider round"></span>
             </label>
             <div class="@(IsWaterEnabled ? "" : "disabled-section")">
-                <InputNumber @bind-Value="waterFreq" disabled="@(IsWaterEnabled ? null : "disabled")"></InputNumber>
+                <InputNumber 
+                    @bind-Value="waterFreq" 
+                    min="0"
+                    step="1"
+                    disabled="@(IsWaterEnabled ? null : "disabled")">
+                </InputNumber>
             </div>
         </div>
 
@@ -266,7 +271,12 @@
                 <span class="slider round"></span>
             </label>
             <div class="@(IsWeedEnabled ? "" : "disabled-section")">
-                <InputNumber @bind-Value="weedFreq" disabled="@(IsWeedEnabled ? null : "disabled")"></InputNumber>
+                <InputNumber 
+                    @bind-Value="weedFreq" 
+                    min="0"
+                    step="1"
+                    disabled="@(IsWeedEnabled ? null : "disabled")">
+                </InputNumber>
             </div>
         </div>
 
@@ -278,7 +288,12 @@
                 <span class="slider round"></span>
             </label>
             <div class="@(IsPruneEnabled ? "" : "disabled-section")">
-                <InputNumber @bind-Value="pruneFreq" disabled="@(IsPruneEnabled ? null : "disabled")"></InputNumber>
+                <InputNumber 
+                    @bind-Value="pruneFreq"
+                    min="0"
+                    step="1"
+                    disabled="@(IsPruneEnabled ? null : "disabled")">
+                </InputNumber>
             </div>
         </div>
 
@@ -290,7 +305,12 @@
                 <span class="slider round"></span>
             </label>
             <div class="@(IsPestEnabled ? "" : "disabled-section")">
-                <InputNumber @bind-Value="pestFreq" disabled="@(IsPestEnabled ? null : "disabled")"></InputNumber>
+                <InputNumber 
+                    @bind-Value="pestFreq"
+                    min="0"
+                    step="1"
+                    disabled="@(IsPestEnabled ? null : "disabled")">
+                </InputNumber>
             </div>
         </div>
 

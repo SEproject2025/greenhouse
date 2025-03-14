@@ -189,22 +189,6 @@
 *	                             HTML SECTION                             *
 ************************************************************************-->
 <h3 class="title">My Garden</h3>
-<!--
-<dl>
-@foreach(var t in user_tasks)
-    {
-        <dt>@(t.DAYS_UNTIL == 0 || (t.DONE_DATE == CurrentDay || t.DONE_DATE == null))</dt>
-        <dt>Task_ID: @t.TASK_ID</dt>
-        <dt>Plant_ID: @t.PLANT_ID</dt>
-        <dt>TASK_NAME: @t.TASK_NAME</dt>
-        <dt>FREQ: @t.FREQ</dt>
-        <dt>DAY_UNTIL: @t.DAYS_UNTIL</dt>
-        <dt>IS_COMPLETED: @t.IS_COMPLETED</dt>
-        <dt>DONE_DATE: @t.DONE_DATE</dt>
-        <dt>OVERDUE: @t.OVERDUE</dt>
-        <p>--------------------</p>
-    }
-</dl> -->
 
 <AddPlantButton />
 
@@ -286,10 +270,12 @@
 <!-- <p>Current Day2: @CurrentDay</p> -->
 
 
+
 <!--***********************************************************************
 *	                             CODE SECTION                             *
 ************************************************************************-->
 @code {
+
     List<Plants>? plant = null;
 
     // The list of currently active tasks
@@ -422,6 +408,4 @@
         return counter;
     }
 }
-
-
 
