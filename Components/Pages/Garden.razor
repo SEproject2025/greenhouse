@@ -117,7 +117,7 @@
     }
 
     .tile {
-        height: 250px;
+        height: 285px;
         width: 300px;
         background-color: #d2d9d5;
         border: 2px solid black;
@@ -167,14 +167,25 @@
 
     .task-container {
         display: flex;
-        align-items: center; /* Aligns checkbox and label vertically */
-        gap: 8px; /* Adds space between checkbox and text */
-        margin-top: 5px; /* Ensures space between task items */
+        align-items: center; /* Aligns items vertically */
+        justify-content: space-between; /* Pushes the label and checkbox apart */
+        width: 100%; /* Makes sure container spans the full width */
+        padding-right: 10px; /* Adds spacing to keep the checkbox away from the edge */
+        margin-top: 10px; /* Adds vertical space between tasks */
+       /* padding-bottom: 6px; /* Slight extra padding to separate tasks visually */
     }
 
-        .task-container input[type="checkbox"] {
-            margin-left: 2px; /* Move checkbox to the right */
-        }
+    .task-label {
+        font-size: 20px; /* Increase task text size */
+       /* font-weight: bold; */
+    }
+
+    .task-container input[type="checkbox"] {
+        margin-left: auto; /* Moves checkbox to the right */
+        transform: scale(1.2); /* Slightly enlarges checkbox for better visibility */
+        width: 15px;
+        height: 15px;
+    }
 
     /* Hides the content of the tile when it's green */
     .tile.green-fade span,
@@ -182,6 +193,18 @@
     .tile.green-fade label {
         display: none;
     }
+
+    .task-icon {
+        width: 30px; /* Adjust icon size */
+        height: 30px;
+        margin-right: 8px;
+        vertical-align: middle;
+        border: 2px solid black; /* Adds black circular border */
+        border-radius: 60%; /* Makes it a perfect circle */
+        padding: 3px; /* Ensures proper spacing inside the circle */
+        background-color: white; /* Optional: Adds contrast */
+    }
+
 </style>
 
 
@@ -249,14 +272,15 @@
                         @if (p.PLANT_ID == t.PLANT_ID && (t.DAYS_UNTIL == 0 || (t.DONE_DATE == CurrentDay || t.DONE_DATE == null)))
                         {
                             <div class="task-container">
+                                <img src="@GetTaskIcon(t.TASK_NAME)" alt="@t.TASK_NAME icon" class="task-icon" />
+                                <label for="@t.TASK_NAME-@p.PLANT_ID" class="task-label">@t.TASK_NAME</label>
                                 <input type="checkbox"
                                        id="@t.TASK_NAME-@p.PLANT_ID"
                                        name="@t.TASK_NAME-@p.PLANT_ID"
                                        checked='@t.IS_COMPLETED'
                                        @onchange="(e) => CheckboxChecked(e, t)"
-                                       disabled="@(t.IS_COMPLETED ? "disabled" : null)" />
-
-                                <label for="@t.TASK_NAME-@p.PLANT_ID">@t.TASK_NAME</label>
+                                       disabled="@(t.IS_COMPLETED ? "disabled" : null)"
+                                       class="task-checkbox" />
                             </div>
                         }
                     }
@@ -433,5 +457,17 @@
             }
         }
         return counter;
+    }
+
+    private string GetTaskIcon(string taskName)
+    {
+        return taskName switch
+        {
+            "Watering" => "/Icons/Watering.png",
+            "Weeding" => "/Icons/Weeding.png",
+            "Pruning" => "/Icons/Pruning.png",
+            "Pest Control" => "/Icons/PestControl.png",
+            _ => "/Icons/Default.png" // Fallback icon in case of unknown task
+        };
     }
 }
