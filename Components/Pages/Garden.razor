@@ -182,8 +182,8 @@
     .tile.green-fade label {
         display: none;
     }
-    }
 </style>
+
 
 <!--***********************************************************************
 *	                             HTML SECTION                             *
@@ -213,7 +213,10 @@
     {
         @if (plant == null)
         {
-            <p>Loading . . . </p>
+            <div style="text-align: center;">
+                <p> Loading . . .</p>
+                <div class="loader"></div> <!-- Loader animation -->
+            </div>
         }
         else
         {
@@ -292,7 +295,7 @@
 @code {
     List<Plants>? plant = null;
 
-    
+
     List<PlantTask> user_tasks = new List<PlantTask>();  // The list of currently active tasks
     private DateTime CurrentDay { get; set; } = DateTime.Now.Date; // Tracks the current simulated day
     private Dictionary<int, bool> plantGreenStates = new(); // Dictionary to track which plants should fade to green
@@ -317,13 +320,19 @@
                 uuid = await UserServices.GetUserID(user_email);
 
                 // Fetch user's plants and tasks
-                plant = await PlantService.GetUserPlants(uuid);
-                user_tasks = await PlantService.GetAllUserTasks(uuid);
+                var plantTask = PlantService.GetUserPlants(uuid);
+                var tasksTask = PlantService.GetAllUserTasks(uuid);
+
+                await Task.WhenAll(plantTask, tasksTask);
+
+                plant = await plantTask;
+                user_tasks = await tasksTask;
+
                 UpdatePlantFade();
             }
 
             hasLoaded = true;
-            StateHasChanged(); // Refresh UI after fetching
+            _ = InvokeAsync(StateHasChanged); // Avoid UI thread blocking
         }
     }
 
@@ -426,6 +435,3 @@
         return counter;
     }
 }
-
-
-
