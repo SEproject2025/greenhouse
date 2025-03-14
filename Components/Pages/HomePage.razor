@@ -1,0 +1,265 @@
+﻿@page "/HomePage"
+@rendermode InteractiveServer
+@attribute [StreamRendering(true)]
+@inject IPlantService PlantService
+@inject IUserServices UserServices
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+@using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims
+@using Shared  <!-- Import Shared Components -->
+
+<!--***********************************************************************
+*	                             CSS/STYLING SECTION                      *
+************************************************************************-->
+<style>
+    /* Importing Merriweather from Google Fonts for a crisp serif aesthetic */
+    @@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap');
+
+    /* Apply the serif font globally */
+    body {
+        background-color: #CFE8A9; /* Soft pastel green */
+        min-height: 100vh;
+        margin: 0;
+        font-family: 'Merriweather', serif;
+    }
+
+    /* Main title styling - increased font size */
+    .title {
+        font-size: 48px; /* Increased font size */
+        text-align: center;
+        color: #2C6E49;
+        margin-top: 20px;
+    }
+
+    /* Subtitle styling */
+    .subtitle {
+        text-align: center;
+        color: #4F7942;
+        margin-bottom: 30px;
+    }
+
+    /* Main layout container with two columns */
+    .main-layout {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 30px;
+        width: 100%;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    /* Left panel styling: Welcome and Plant Insights */
+    .left-panel {
+        flex: 2;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    /* Right panel styling: Weather and Calendar */
+    .right-panel {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    /* Plant Insights Section */
+    .plant-insights {
+        width: 100%;
+        text-align: center;
+    }
+
+    .plant-insights h2 {
+        color: #2C6E49; 
+    }
+
+    /* Grid layout for plant images */
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 40px; /* Space between plants */
+        justify-content: center;
+        padding: 20px;
+    }
+
+    /* Floating Plant Effect */
+    .plant-card {
+        position: relative;
+        background: white;
+        padding: 15px;
+        border-radius: 15px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        width: 130px;
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        transform: perspective(600px) translateY(5px);
+    }
+
+        .plant-card:hover {
+            transform: perspective(600px) translateY(-5px) scale(1.1);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.4);
+        }
+
+    /* Floating Shadow Effect */
+    .floating-shadow {
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        width: 80px;
+        height: 10px;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 50%;
+        transform: translateX(-50%);
+        filter: blur(5px);
+    }
+
+    /* Plant Image */
+    .plant-card img {
+        width: 100px;
+        height: 100px;
+        border-radius: 10px;
+        object-fit: cover;
+        margin-bottom: 10px;
+    }
+
+    /* Plant Name */
+    .plant-name {
+        font-size: 14px;
+        font-weight: bold;
+        color: #2C6E49;
+    }    
+
+    /* Calendar Styling */
+    .calendar-container {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .weather-container {
+        background: white;
+        border-radius: 15px;
+        width: 300px;
+        text-align: center;
+        
+        /*
+        
+        padding: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        
+        width: 307px;
+        
+        height: 250px; 
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; */
+    }
+
+</style>
+
+<!--***********************************************************************
+*	                             HTML SECTION                             *
+************************************************************************-->
+<div class="main-layout">
+    <!-- Left Panel: Welcome message & Plant Insights -->
+    <div class="left-panel">
+        <h1 class="title">Welcome to Evera</h1>
+        <p class="subtitle">Keep track of your plants and care schedule easily.</p>
+        <div class="plant-insights">
+            <h2>Your Plants</h2>
+            <div class="card-container">
+                @if (userPlants == null || userPlants.Count == 0)
+                {
+                    <p>You haven't added any plants yet.</p>
+                }
+                else
+                {
+                    @foreach (var plant in userPlants)
+                    {
+                        <div class="plant-card" @onclick="GoToGarden">
+                            <div class="floating-shadow"></div>
+                            @if (plant.IMAGE_DATA != null && plant.IMAGE_DATA.Length > 0)
+                            {
+                                <img src="data:image/png;base64,@Convert.ToBase64String(plant.IMAGE_DATA)" alt="@plant.PLANT_NAME" />
+                            }
+                            <div class="plant-name">@plant.PLANT_NAME</div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Panel: Weather Widget on Top, Calendar Below -->
+    <div class="right-panel">
+        <div class="calendar-container">
+            <Calendar />
+        </div>
+
+        <div class="weather-container">
+            <Weather />
+        </div>
+    </div>
+</div>
+
+<!-- Weather Widget Script -->
+<script>
+    window.renderTomorrowWidget = () => {
+        if (window.__TOMORROW__) {
+            window.__TOMORROW__.renderWidget();
+        }
+    };
+
+    (function(d, s, id) {
+        if (d.getElementById(id)) {
+            if (window.__TOMORROW__) {
+                window.__TOMORROW__.renderWidget();
+            }
+            return;
+        }
+        const fjs = d.getElementsByTagName(s)[0];
+        const js = d.createElement(s);
+        js.id = id;
+        js.src = "https://www.tomorrow.io/v1/widget/sdk/sdk.bundle.min.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    })(document, 'script', 'tomorrow-sdk');
+</script>
+
+<!--***********************************************************************
+*	                             CODE SECTION                             *
+************************************************************************-->
+@code {
+    private List<Plants> userPlants = new();
+    private string? userEmail;
+    private string? userId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity?.IsAuthenticated == true)
+        {
+            userEmail = user.Identity.Name;
+            userId = await UserServices.GetUserID(userEmail);
+            userPlants = await PlantService.GetUserPlants(userId);
+        }
+    }
+
+    private void GoToGarden()
+    {
+        NavigationManager.NavigateTo("/Garden");
+    }
+}
+
+
+
