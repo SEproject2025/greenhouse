@@ -1,0 +1,156 @@
+﻿@page "/"
+@attribute [StreamRendering(true)]
+@inject IPlantService PlantService
+@inject NavigationManager NavigationManager
+
+<!--***********************************************************************
+*	                             CSS/STYLING SECTION
+************************************************************************-->
+<style>
+    /* Full screen background */
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(135deg, #e8f5e9, #ffffff);
+    }
+
+    /* Background container */
+    .background {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+    }
+
+    /* Floating card/box */
+    .landing-box {
+        background: rgba(255, 255, 255, 0.85); /* Glass effect */
+        backdrop-filter: blur(10px); /* Subtle blur */
+        border-radius: 20px;
+        padding: 40px 30px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        max-width: 350px;
+        width: 100%;
+    }
+
+    /* Logo */
+    .logo img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 50%;
+        margin-bottom: 20px;
+    }
+
+    /* Heading and tagline */
+    h1 {
+        font-size: 24px;
+        margin-bottom: 10px;
+        color: #2e7d32;
+    }
+
+    p {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 30px;
+    }
+
+    /* Buttons */
+    .button-group {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .btn {
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 25px;
+        font-weight: bold;
+        transition: background 0.3s, color 0.3s;
+    }
+
+        /* Primary (Login) */
+        .btn.primary {
+            background: #2e7d32;
+            color: white;
+        }
+
+            .btn.primary:hover {
+                background: #1b5e20;
+            }
+
+        /* Secondary (Register) */
+        .btn.secondary {
+            border: 2px solid #2e7d32;
+            color: #2e7d32;
+            background: transparent;
+        }
+
+            .btn.secondary:hover {
+                background: #2e7d32;
+                color: white;
+            }</style>
+
+<!--***********************************************************************
+*	                             HTML SECTION
+************************************************************************-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlantApp Landing Page</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="background">
+        <div class="landing-box">
+            <!-- Logo -->
+            <div class="logo">
+                <img src="/path/to/logo.png" alt="PlantApp Logo">
+            </div>
+            <!-- Welcome Text -->
+            <h1>Welcome to PlantApp!</h1>
+            <p>Your personal plant companion</p>
+            <!-- Buttons -->
+            <div class="button-group">
+                <a href="Account/Login" class="btn primary">Login</a>
+                <a href="Account/Register" class="btn secondary">Register</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<!--
+<div class="container">
+    <h1 class="title">Welcome to Evera!</h1>
+    <h3 class="subtitle">add a beautiful subtitle here lalalala</h3>
+
+    <div class="content-box">
+        <p>
+            Start managing your garden with Evera! Track your plants, monitor their watering schedules,
+            and explore care guides tailored for you.
+        </p>
+        <p>Use the Sidebar to explore features like:</p>
+        <ul>
+            <li>Adding your plants blah blah....</li>
+            <li>Plant schedules blah blah ...... </li>
+            <li>Care Tips blah blah .....</li>
+        </ul>
+    </div>
+
+    <div class="action-buttons">
+        <a class="btn" href="Account/Login">Login</a>
+        <a class="btn" href="Account/Register">Register</a>
+    </div>
+</div>
+-->
+<!--***********************************************************************
+*	                             CODE SECTION
+************************************************************************-->
+@code {
+
+}
