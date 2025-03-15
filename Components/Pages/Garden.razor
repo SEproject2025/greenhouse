@@ -117,7 +117,7 @@
     }
 
     .tile {
-        height: 350px;
+        height: 375px;
         width: 300px;
         background-color: #d2d9d5;
         border: 2px solid black;
@@ -256,7 +256,11 @@
         font-size: 12px;
         font-weight: bold;
     }
-
+    .progress-icon {
+    width: 25px;  /* Adjust icon size */
+    height: 25px;
+    object-fit: contain; /* Ensure it fits well inside the circle */
+}
 </style>
 
 
@@ -327,13 +331,15 @@
                                 <div class="progress-item">
                                     <div class="circular-progress" id="progress-@t.TASK_ID"
                                          data-percentage="@CalculateTaskProgress(t.DAYS_UNTIL, t.FREQ)">
-                                        <div class="inner-circle">@CalculateTaskProgress(t.DAYS_UNTIL, t.FREQ)%</div>
-                                        <span class="progress-label">@GetTaskShortLabel(t.TASK_NAME)</span>
+                                        <div class="inner-circle">
+                                            <img src="@GetTaskIcon(t.TASK_NAME)" alt="@t.TASK_NAME icon" class="progress-icon" />
+                                        </div>                       
                                     </div>                                
-                                </div>
+                                </div>                                
                             }
                         </div>
                     </div>
+                    <p> _______________________________ </p>
                     <!-- Task List Container - Below Progress Bars -->
                     <div class="task-list">
                         @foreach (var t in user_tasks)
