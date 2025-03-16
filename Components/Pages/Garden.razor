@@ -35,6 +35,22 @@
             padding: 10px;
         }
 
+    .plant-name {
+        left: 100px !important; /* Moves the name slightly to the right */
+        top: 30px !important; /* Moves the name slightly down */
+        font-size: 18px;
+        font-weight: bold;
+        font-family: Arial, sans-serif;
+        color: black;
+    }
+
+    .plant-image{
+        top: 5px important;
+        width: 75px;
+        height: 80px;
+        border-radius: 10px;
+    }
+
     /* Delete button as a shovel icon in the top-left corner of the tile    */
     .delete-button {
         position: absolute;
@@ -124,7 +140,7 @@
         display: inline-block;
         position: relative;
         border-radius: 15px;
-        padding: 40px 10px 10px; /* Added top padding */
+        padding: 20px 10px 10px; /* Added top padding */
         box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2), -5px -5px 15px rgba(255, 255, 255, 0.1);
         transition: transform 0.2s, box-shadow 0.2s;
     }
@@ -257,10 +273,10 @@
         font-weight: bold;
     }
     .progress-icon {
-    width: 25px;  /* Adjust icon size */
-    height: 25px;
-    object-fit: contain; /* Ensure it fits well inside the circle */
-}
+        width: 25px;  /* Adjust icon size */
+        height: 25px;
+        object-fit: contain; /* Ensure it fits well inside the circle */
+    }
 </style>
 
 
@@ -313,12 +329,12 @@
                     @if (!(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID]))
                     {
                         <button @onclick="() => DeletePlant(p.PLANT_ID)" class="delete-button"></button>
-                        <span>@p.PLANT_NAME</span>
+                        <span class="plant-name">@p.PLANT_NAME</span>
                         @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
                         {
                             <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)"
                                  alt="@p.PLANT_NAME"
-                                 style="width: 75px; height: 80px; border-radius: 10px; margin-top: 0px;" />
+                                 class="plant-image" />
                         }
                     }
 
@@ -484,12 +500,18 @@
         StateHasChanged();
     }
 
+    //private async Task UpdatePlantFade()
     private void UpdatePlantFade()
     {
+        // **Delay for 1 second before flipping tiles**
+        // await Task.Delay(2000);
+
         foreach (var p in plant)
         {
             plantGreenStates[p.PLANT_ID] = AllTasksFinished(p.PLANT_ID);
         }
+
+        // _ = InvokeAsync(StateHasChanged);
     }
 
     /* Alters the local copy of the data and the database to reflect the user's action */
