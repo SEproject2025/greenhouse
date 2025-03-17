@@ -85,6 +85,20 @@
 }
 
 <style>
+    /* Override the random margin on the Logout button */
+    .navbar-nav .nav-item button {
+        margin: 0 !important; /* Remove any applied margin */
+        padding: 10px 15px !important; /* Ensure consistent padding */
+    }
+
+    /* Override the d-inline styles */
+    form.d-inline {
+        padding: 0 !important;
+        background-color: transparent !important;
+        margin: 0 !important;
+        border: none !important;
+    }
+
     .navbar {
         width: 100%; /* Ensure full width */
         margin: 0;
