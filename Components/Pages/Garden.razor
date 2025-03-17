@@ -386,7 +386,7 @@ else
         {
             t.OVERDUE = 0;
         }
-        t.DONE_DATE = CurrentDay;
+        t.DONE_DATE = R_CurrentDay;
         await PlantService.UpdateTask(t);
 
         // Update the fade state of plants after a task is checked
