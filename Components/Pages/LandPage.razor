@@ -7,95 +7,32 @@
 *	                             CSS/STYLING SECTION
 ************************************************************************-->
 <style>
-    <!--
-    /* Full screen background */
-    body, html {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        font-family: 'Arial', sans-serif;
-        background: linear-gradient(135deg, #e8f5e9, #ffffff);
+
+    body{
+        background-color: #CFE8A9;
     }
 
-    /* Background container */
-    .background {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100%;
-    }
-
-    /* Floating card/box */
-    .landing-box {
-        background: rgba(255, 255, 255, 0.85); /* Glass effect */
-        backdrop-filter: blur(10px); /* Subtle blur */
-        border-radius: 20px;
-        padding: 40px 30px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        text-align: center;
-        max-width: 350px;
-        width: 100%;
-    }
-
-    /* Logo */
-    .logo img {
+    /* Logo style */
+    .logo {
+        position: absolute;
+        top: -50px; /* Moves half out */
+        left: 50%;
+        transform: translateX(-50%);
         width: 100px;
         height: 100px;
-        object-fit: cover;
         border-radius: 50%;
-        margin-bottom: 20px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        background: white;
     }
 
-    /* Heading and tagline */
-    h1 {
-        font-size: 24px;
-        margin-bottom: 10px;
-        color: #2e7d32;
-    }
-
-    p {
-        font-size: 14px;
-        color: #555;
-        margin-bottom: 30px;
-    }
-
-    /* Buttons */
-    .button-group {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-    }
-
-    .btn {
-        text-decoration: none;
-        padding: 10px 20px;
-        border-radius: 25px;
-        font-weight: bold;
-        transition: background 0.3s, color 0.3s;
-    }
-
-        /* Primary (Login) */
-        .btn.primary {
-            background: #2e7d32;
-            color: white;
+        /* Logo image inside */
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
         }
-
-            .btn.primary:hover {
-                background: #1b5e20;
-            }
-
-        /* Secondary (Register) */
-        .btn.secondary {
-            border: 2px solid #2e7d32;
-            color: #2e7d32;
-            background: transparent;
-        }
-
-            .btn.secondary:hover {
-                background: #2e7d32;
-                color: white;
-            }
-            -->
 
     .container {
         font-family: 'Arial', sans-serif;
@@ -113,17 +50,23 @@
     .subtitle {
         font-size: 20px;
         margin-bottom: 30px;
-        color: #6BBF59;
+        color: #2C6E49;
     }
 
     .content-box {
         background-color: #f5f5f5;
         border: 1px solid #dcdcdc;
         border-radius: 12px;
-        padding: 20px;
         margin: 20px auto;
-        width: 50%;
         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        position: relative; /* Important for absolute logo positioning */
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(10px);
+        padding: 60px 30px 40px; /* Extra top padding to compensate for logo overlap */
+        text-align: center;
+        max-width: 350px;
+        width: 100%;
+        margin-top: 60px; /* Optional: to give breathing space */
     }
 
     .action-buttons {
@@ -159,19 +102,20 @@
 
 <div class="container">
     <h1 class="title">Welcome to Evera!</h1>
-    <h3 class="subtitle">add a beautiful subtitle here lalalala</h3>
+    <h3 class="subtitle">Your guide to growing healthy plants</h3>
 
     <div class="content-box">
+
+        <div class="logo">
+            <img src="/path/to/logo.png" alt="PlantApp Logo">
+        </div>
+
+
         <p>
             Start managing your garden with Evera! Track your plants, monitor their watering schedules,
             and explore care guides tailored for you.
         </p>
         <p>Use the Sidebar to explore features like:</p>
-        <ul>
-            <li>Adding your plants blah blah....</li>
-            <li>Plant schedules blah blah ...... </li>
-            <li>Care Tips blah blah .....</li>
-        </ul>
     </div>
 
     <div class="action-buttons">
