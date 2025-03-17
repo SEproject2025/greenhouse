@@ -219,23 +219,23 @@
                         @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
                         {
                             <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)"
-                            alt="@p.PLANT_NAME"
-                            style="width: 75px; height: 80px; border-radius: 10px; margin-top: 0px;" />
+                                 alt="@p.PLANT_NAME"
+                                 style="width: 75px; height: 80px; border-radius: 10px; margin-top: 0px;" />
                         }
                     }
 
                     <!-- Determines when the checkboxes are visible on the plant tiles -->
                     @foreach (var t in user_tasks)
                     {
-                        @if (p.PLANT_ID == t.PLANT_ID && (t.DAYS_UNTIL == 0 || (t.DONE_DATE == R_CurrentDay || t.DONE_DATE == null)))
+                        @if (p.PLANT_ID == t.PLANT_ID && (t.DAYS_UNTIL == 0 || (t.DONE_DATE == CurrentDay || t.DONE_DATE == null)))
                         {
                             <div class="task-container">
                                 <input type="checkbox"
-                                id="@t.TASK_NAME-@p.PLANT_ID"
-                                name="@t.TASK_NAME-@p.PLANT_ID"
-                                checked='@t.IS_COMPLETED'
-                                @onchange="(e) => CheckboxChecked(e, t)"
-                                disabled="@(t.IS_COMPLETED ? "disabled" : null)" />
+                                       id="@t.TASK_NAME-@p.PLANT_ID"
+                                       name="@t.TASK_NAME-@p.PLANT_ID"
+                                       checked='@t.IS_COMPLETED'
+                                       @onchange="(e) => CheckboxChecked(e, t)"
+                                       disabled="@(t.IS_COMPLETED ? "disabled" : null)" />
 
                                 <label for="@t.TASK_NAME-@p.PLANT_ID">@t.TASK_NAME</label>
                             </div>
@@ -248,12 +248,12 @@
                         @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
                         {
                             <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)"
-                            alt="@p.PLANT_NAME" />
+                                 alt="@p.PLANT_NAME" />
                         }
                         else
                         {
                             <img src="/images/Default.webp"
-                            alt="Default Plant Image" />
+                                 alt="Default Plant Image" />
                         }
                     }
                 </div>
@@ -266,15 +266,8 @@
 <button @onclick="GoToNextDay" class="btn btn-primary">Next Day &gt;&gt;</button>
 
 <!-- Display the current day -->
-<p>CurrentDay   : @CurrentDay.ToString("MMMM dd, yyy")</p>
-@if (R_CurrentDay == DateTime.MinValue)
-{
-    <p>Loading...</p>
-}
-else
-{
-    <p>@R_CurrentDay.ToString("MMMM dd, yyy")</p>
-}
+<p>Current Day: @CurrentDay.ToString("MMMM dd, yyy")</p>
+<!-- <p>Current Day2: @CurrentDay</p> -->
 
 
 
@@ -289,9 +282,7 @@ else
     List<PlantTask> user_tasks = new List<PlantTask>();
 
     // Tracks the current simulated day
-    private DateTime  CurrentDay { get; set; } = DateTime.Now.Date;
-    private DateTime R_CurrentDay { get; set; }
-
+    private DateTime CurrentDay { get; set; } = DateTime.Now.Date;
     //private bool fadeToGreen = false;
     // Dictionary to track which plants should fade to green
     private Dictionary<int, bool> plantGreenStates = new();
@@ -316,9 +307,6 @@ else
         plant = await PlantService.GetUserPlants(uuid);
         user_tasks = await PlantService.GetAllUserTasks(uuid);
         UpdatePlantFade();
-
-        // Gets the user's relative current day
-        R_CurrentDay = await UserServices.GetRelativeCurrentDay(uuid);
     }
 
     async Task DeletePlant(int PLANT_ID)
@@ -337,8 +325,7 @@ else
     private void GoToNextDay()
     {
         //fadeToGreen = !fadeToGreen;  // Toggle the green fade state every time
-        R_CurrentDay = R_CurrentDay.AddDays(1);
-        UserServices.UpdateUserCurrentDate(uuid, R_CurrentDay);
+        CurrentDay = CurrentDay.AddDays(1);
 
         // Reset the green fade effect for all plants
         foreach (var key in plantGreenStates.Keys.ToList())

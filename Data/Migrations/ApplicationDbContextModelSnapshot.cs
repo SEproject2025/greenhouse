@@ -202,9 +202,6 @@ namespace greenhouse.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<DateTime>("UserCurrentDay")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
