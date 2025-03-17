@@ -1,7 +1,9 @@
 ﻿// This class and its inherited interface are used to directly 
 // interact with the Users table in the MySQL database
 // -----------------------------------------------------------
+using System;
 using greenhouse.Data;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft .EntityFrameworkCore;
 
 namespace greenhouse.Services
@@ -17,15 +19,14 @@ namespace greenhouse.Services
 			_context = context;
 		}
 
-        // Gets the current user's UUID
-        public async Task<string> GetUserID(string email)
+        // Gets the current user's UUID or returns a null-representing value
+        public async Task<string> GetUserID(AuthenticationState authState)
 		{
-			var user_list = await _context.Users
-				.Where(user => user.UserName == email)
-				.ToListAsync();
-			var user = user_list.FirstOrDefault();
+            var user = await _context.Users
+				.Where(u => u.UserName == authState.User.Identity.Name)
+                .FirstOrDefaultAsync();
 
-            return user.Id;
-		}
+            return user?.Id ?? "_NULL_USER_";
+        }
     }
 }
