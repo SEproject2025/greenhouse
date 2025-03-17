@@ -35,7 +35,19 @@ builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
 );
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+builder.Services.AddIdentityCore<ApplicationUser>(options =>
+{
+    // Modify password settings here
+    options.Password.RequireDigit = true; // Require at least one digit
+    options.Password.RequireLowercase = true; // Require at least one lowercase letter
+    options.Password.RequireUppercase = true; // Require at least one uppercase letter
+    options.Password.RequireNonAlphanumeric = true; // Require at least one non-alphanumeric character
+    options.Password.RequiredLength = 8; // Minimum length
+   // options.Password.RequiredUniqueChars = 1; // Minimum unique characters
+
+    // Optionally, you can configure other settings here
+    options.SignIn.RequireConfirmedAccount = false; // Disable email confirmation requirement
+})
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddSignInManager()
     .AddDefaultTokenProviders();

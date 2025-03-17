@@ -284,22 +284,6 @@
 *	                             HTML SECTION                             *
 ************************************************************************-->
 <h3 class="title">My Garden</h3>
-<!--
-<dl>
-@foreach(var t in user_tasks)
-    {
-        <dt>@(t.DAYS_UNTIL == 0 || (t.DONE_DATE == CurrentDay || t.DONE_DATE == null))</dt>
-        <dt>Task_ID: @t.TASK_ID</dt>
-        <dt>Plant_ID: @t.PLANT_ID</dt>
-        <dt>TASK_NAME: @t.TASK_NAME</dt>
-        <dt>FREQ: @t.FREQ</dt>
-        <dt>DAY_UNTIL: @t.DAYS_UNTIL</dt>
-        <dt>IS_COMPLETED: @t.IS_COMPLETED</dt>
-        <dt>DONE_DATE: @t.DONE_DATE</dt>
-        <dt>OVERDUE: @t.OVERDUE</dt>
-        <p>--------------------</p>
-    }
-</dl> -->
 
 <AddPlantButton />
 
@@ -374,7 +358,7 @@
                                            class="task-checkbox" />
                                 </div>
                             }
-                        }
+                       }
                     </div>
 
                     <!-- Image of the plant (only visible when green) -->
@@ -383,12 +367,12 @@
                         @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
                         {
                             <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)"
-                                 alt="@p.PLANT_NAME" />
+                            alt="@p.PLANT_NAME" />
                         }
                         else
                         {
                             <img src="/images/Default.webp"
-                                 alt="Default Plant Image" />
+                            alt="Default Plant Image" />
                         }
                     }
                 </div>
@@ -401,20 +385,33 @@
 <button @onclick="GoToNextDay" class="btn btn-primary">Next Day &gt;&gt;</button>
 
 <!-- Display the current day -->
-<p>Current Day: @CurrentDay.ToString("MMMM dd, yyy")</p>
-<!-- <p>Current Day2: @CurrentDay</p> -->
+<p>CurrentDay   : @CurrentDay.ToString("MMMM dd, yyy")</p>
+@if (R_CurrentDay == DateTime.MinValue)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <p>@R_CurrentDay.ToString("MMMM dd, yyy")</p>
+}
+
 
 
 <!--***********************************************************************
 *	                             CODE SECTION                             *
 ************************************************************************-->
 @code {
+
     List<Plants>? plant = null;
 
 
     List<PlantTask> user_tasks = new List<PlantTask>();  // The list of currently active tasks
-    private DateTime CurrentDay { get; set; } = DateTime.Now.Date; // Tracks the current simulated day
-    private Dictionary<int, bool> plantGreenStates = new(); // Dictionary to track which plants should fade to green
+    // Tracks the current simulated day
+    private DateTime  CurrentDay { get; set; } = DateTime.Now.Date;
+    private DateTime R_CurrentDay { get; set; }
+
+    // Dictionary to track which plants should fade to green
+    private Dictionary<int, bool> plantGreenStates = new();
 
     private AuthenticationState? authState;
     private ClaimsPrincipal? user;
@@ -451,6 +448,9 @@
             _ = InvokeAsync(StateHasChanged); // Avoid UI thread blocking
         }
         await JSRuntime.InvokeVoidAsync("updateProgressCircles");
+
+        // Gets the user's relative current day
+        R_CurrentDay = await UserServices.GetRelativeCurrentDay(uuid);
     }
 
     async Task DeletePlant(int PLANT_ID)
@@ -469,7 +469,8 @@
     private void GoToNextDay()
     {
         //fadeToGreen = !fadeToGreen;  // Toggle the green fade state every time
-        CurrentDay = CurrentDay.AddDays(1);
+        R_CurrentDay = R_CurrentDay.AddDays(1);
+        UserServices.UpdateUserCurrentDate(uuid, R_CurrentDay);
 
         // Reset the green fade effect for all plants
         foreach (var key in plantGreenStates.Keys.ToList())
@@ -523,7 +524,7 @@
         {
             t.OVERDUE = 0;
         }
-        t.DONE_DATE = CurrentDay;
+        t.DONE_DATE = R_CurrentDay;
         await PlantService.UpdateTask(t);
 
         // Update the fade state of plants after a task is checked
@@ -587,6 +588,7 @@
     
 }
 
+/* JavaScript for the circle progress bars */                         
 <script>
     function updateProgressCircles() {
         document.querySelectorAll(".circular-progress").forEach((progressBar) => {
@@ -602,3 +604,4 @@
 
     document.addEventListener("DOMContentLoaded", updateProgressCircles);
 </script>
+
