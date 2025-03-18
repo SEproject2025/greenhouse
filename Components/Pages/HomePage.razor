@@ -239,25 +239,23 @@
 ************************************************************************-->
 @code {
     private List<Plants> userPlants = new();
-    private string? userEmail;
-    private string? userId;
+      
+    private string uuid = null!; 
+                               
     private bool hasLoaded = false;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender && !hasLoaded) // Ensures it runs only once
         {
-            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-            var user = authState.User;
-
-            if (user.Identity?.IsAuthenticated == true)
+            uuid = await UserServices.GetUserID(await AuthenticationStateProvider.GetAuthenticationStateAsync());
+            if (uuid == "_NULL_USER_")
             {
-                userEmail = user.Identity.Name;
-                userId = await UserServices.GetUserID(userEmail);
-                userPlants = await PlantService.GetUserPlants(userId);
+                NavigationManager.NavigateTo("/");
             }
 
             hasLoaded = true;
+            userPlants = await PlantService.GetUserPlants(uuid);
             StateHasChanged(); // Force UI update after fetching plants
         }
     }
