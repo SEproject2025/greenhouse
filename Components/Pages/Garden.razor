@@ -232,7 +232,7 @@
         border-radius: 10px;
         margin-top: 0px;
     }
-  
+
     .task-icon {
         width: 30px; /* Adjust icon size */
         height: 30px;
@@ -342,8 +342,8 @@
                             @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
                             {
                                 <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)"
-                                     alt="@p.PLANT_NAME"
-                                     style="width: 75px; height: 80px; border-radius: 10px; margin-top: 0px;" />
+                                alt="@p.PLANT_NAME"
+                                style="width: 75px; height: 80px; border-radius: 10px; margin-top: 0px;" />
                             }
                             <td style="font-family: 'Gloria Hallelujah', cursive; font-size: 18px; color: #66B266; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1), 0px 0px 5px rgba(75, 139, 59, 0.5); ">
                                 Status:
@@ -352,23 +352,23 @@
                             {
                                 var overdue_counter = plantOverdueCounts[p.PLANT_ID];
                                 @if (overdue_counter == 0)
-                                    {
+                                {
                                     <img src="/plant_health_images/Healthy.png" alt="Additional Image" class="additional-image" />
-                                    }
-                                    else if (overdue_counter > 0 && overdue_counter <= 7)
-                                    {
+                                }
+                                else if (overdue_counter > 0 && overdue_counter <= 7)
+                                {
                                     <img src="/plant_health_images/Ok.png" alt="Additional Image" class="additional-image" />
-                                    }
-                                    else if (overdue_counter > 7 && overdue_counter <= 14)
-                                    {
+                                }
+                                else if (overdue_counter > 7 && overdue_counter <= 14)
+                                {
                                     <img src="/plant_health_images/Unhealthy.png" alt="Additional Image" class="additional-image" />
-                                    }
-                                    else if (overdue_counter > 14)
-                                    {
+                                }
+                                else if (overdue_counter > 14)
+                                {
                                     <img src="/plant_health_images/Dying.png" alt="Additional Image" class="additional-image" />
-                                    }
+                                }
                             }
-                            </div>
+                        </div>
                     }
 
                     <!-- Circular Progress Bar Container - Positioned Above Tasks -->
@@ -379,7 +379,7 @@
                             {
                                 <div class="progress-item">
                                     <div class="circular-progress" id="progress-@t.TASK_ID"
-                                         data-percentage="@CalculateTaskProgress(t.DAYS_UNTIL, t.FREQ)">
+                                    data-percentage="@CalculateTaskProgress(t.DAYS_UNTIL, t.FREQ)">
                                         <div class="inner-circle">
                                             <img src="@GetTaskIcon(t.TASK_NAME)" alt="@t.TASK_NAME icon" class="progress-icon" />
                                         </div>                       
@@ -399,15 +399,15 @@
                                     <img src="@GetTaskIcon(t.TASK_NAME)" alt="@t.TASK_NAME icon" class="task-icon" />
                                     <label for="@t.TASK_NAME-@p.PLANT_ID" class="task-label">@t.TASK_NAME</label>
                                     <input type="checkbox"
-                                           id="@t.TASK_NAME-@p.PLANT_ID"
-                                           name="@t.TASK_NAME-@p.PLANT_ID"
-                                           checked='@t.IS_COMPLETED'
-                                           @onchange="(e) => CheckboxChecked(e, t)"
-                                           disabled="@(t.IS_COMPLETED ? "disabled" : null)"
-                                           class="task-checkbox" />
+                                    id="@t.TASK_NAME-@p.PLANT_ID"
+                                    name="@t.TASK_NAME-@p.PLANT_ID"
+                                    checked='@t.IS_COMPLETED'
+                                    @onchange="(e) => CheckboxChecked(e, t)"
+                                    disabled="@(t.IS_COMPLETED ? "disabled" : null)"
+                                    class="task-checkbox" />
                                 </div>
                             }
-                       }
+                        }
                     </div>
 
                     <!-- Image of the plant (only visible when green) -->
@@ -453,7 +453,7 @@ else
 
 
     List<PlantTask> user_tasks = new List<PlantTask>();  // The list of currently active tasks
-    // Tracks the current simulated day
+                                                         // Tracks the current simulated day
     private DateTime  CurrentDay { get; set; } = DateTime.Now.Date;
     private DateTime R_CurrentDay { get; set; }
 
@@ -465,14 +465,14 @@ else
     private Dictionary<int, int> plantOverdueCounts = new Dictionary<int, int>();
 
     private int tasks_finished_counter;
-      
+
     private int overdue_counter;
-            
+
     private int counter;
-      
+
     private bool hasLoaded = false;
 
-      
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender && !hasLoaded) // Ensures it only runs once
@@ -480,8 +480,12 @@ else
             uuid = await UserServices.GetUserID(await AuthenticationStateProvider.GetAuthenticationStateAsync());
             if(uuid == "_NULL_USER_")
             {
-                NavigationManager.NavigateTo("/");
+                Console.WriteLine("im in the if!");
+                NavigationManager.NavigateTo("/", forceLoad: true);
+
             }
+
+            Console.WriteLine("why are you here?");
 
                 // Fetch user's plants and tasks
                 var plantTask = PlantService.GetUserPlants(uuid);
@@ -495,7 +499,6 @@ else
 
                 UpdatePlantFade();
                 UpdateOverdueCount();
-            }
 
             hasLoaded = true;
             _ = InvokeAsync(StateHasChanged); // Avoid UI thread blocking
