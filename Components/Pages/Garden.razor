@@ -37,8 +37,8 @@
 
     .plant-name {
         left: 100px !important; /* Moves the name slightly to the right */
-        top: 30px !important; /* Moves the name slightly down */
-        font-size: 18px;
+        top: 10px !important; /* Moves the name slightly down */
+        font-size: 20px !important;
         font-weight: bold;
         font-family: Arial, sans-serif;
         color: black;
@@ -97,6 +97,13 @@
         .tile.green-fade img {
             opacity: 0.9; /* Final opacity when faded */
             border: 5px solid #4B8B3B; /* Black border around the image */
+        }
+
+        /* Hides the content of the tile when it's green */
+        .tile.green-fade span,
+        .tile.green-fade input[type="checkbox"],
+        .tile.green-fade label {
+            display: none;
         }
 
     .title {
@@ -203,13 +210,29 @@
         height: 15px;
     }
 
-    /* Hides the content of the tile when it's green */
-    .tile.green-fade span,
-    .tile.green-fade input[type="checkbox"],
-    .tile.green-fade label {
-        display: none;
+    /* Styling for the image container */
+    .image-container {
+        display: flex; /* Use flexbox to arrange images side by side */
+        align-items: center; /* Vertically center the images */
+        gap: 15px; /* Space between the images */
     }
 
+    /* Styling for the plant image */
+    .plant-image {
+        width: 75px;
+        height: 80px;
+        border-radius: 10px;
+        margin-top: 0px;
+    }
+
+    /* Styling for the additional image */
+    .additional-image {
+        width: 75px; /* Set the desired size for the additional image */
+        height: 80px;
+        border-radius: 10px;
+        margin-top: 0px;
+    }
+  
     .task-icon {
         width: 30px; /* Adjust icon size */
         height: 30px;
@@ -314,12 +337,37 @@
                     {
                         <button @onclick="() => DeletePlant(p.PLANT_ID)" class="delete-button"></button>
                         <span class="plant-name">@p.PLANT_NAME</span>
-                        @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
-                        {
-                            <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)"
-                                 alt="@p.PLANT_NAME"
-                                 class="plant-image" />
-                        }
+                        <div class="image-container">
+                            @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
+                            {
+                                <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)"
+                                     alt="@p.PLANT_NAME"
+                                     style="width: 75px; height: 80px; border-radius: 10px; margin-top: 0px;" />
+                            }
+                            <td style="font-family: 'Gloria Hallelujah', cursive; font-size: 18px; color: #66B266; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1), 0px 0px 5px rgba(75, 139, 59, 0.5); ">
+                                Status:
+                            </td>
+                            @if (plantOverdueCounts.ContainsKey(p.PLANT_ID))
+                            {
+                                var overdue_counter = plantOverdueCounts[p.PLANT_ID];
+                                @if (overdue_counter == 0)
+                                    {
+                                    <img src="/plant_health_images/Healthy.png" alt="Additional Image" class="additional-image" />
+                                    }
+                                    else if (overdue_counter > 0 && overdue_counter <= 7)
+                                    {
+                                    <img src="/plant_health_images/Ok.png" alt="Additional Image" class="additional-image" />
+                                    }
+                                    else if (overdue_counter > 7 && overdue_counter <= 14)
+                                    {
+                                    <img src="/plant_health_images/Unhealthy.png" alt="Additional Image" class="additional-image" />
+                                    }
+                                    else if (overdue_counter > 14)
+                                    {
+                                    <img src="/plant_health_images/Dying.png" alt="Additional Image" class="additional-image" />
+                                    }
+                            }
+                            </div>
                     }
 
                     <!-- Circular Progress Bar Container - Positioned Above Tasks -->
@@ -395,7 +443,6 @@ else
 }
 
 
-
 <!--***********************************************************************
 *	                             CODE SECTION                             *
 ************************************************************************-->
@@ -412,13 +459,23 @@ else
     // Dictionary to track which plants should fade to green
     private Dictionary<int, bool> plantGreenStates = new();
 
+    private Dictionary<int, int> plantOverdueCounts = new Dictionary<int, int>();
+
     private AuthenticationState? authState;
     private ClaimsPrincipal? user;
     private string? user_email;
+
+    private int tasks_finished_counter;
+      
+    private int overdue_counter;
+      
     private string? uuid;
+      
     private int counter;
+      
     private bool hasLoaded = false;
 
+      
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender && !hasLoaded) // Ensures it only runs once
@@ -435,12 +492,14 @@ else
                 var plantTask = PlantService.GetUserPlants(uuid);
                 var tasksTask = PlantService.GetAllUserTasks(uuid);
 
+                // Gets the current user's plants and tasks
                 await Task.WhenAll(plantTask, tasksTask);
 
                 plant = await plantTask;
                 user_tasks = await tasksTask;
 
                 UpdatePlantFade();
+                UpdateOverdueCount();
             }
 
             hasLoaded = true;
@@ -497,6 +556,7 @@ else
         }
         // Update the fade state of plants after it goes to the next day
         UpdatePlantFade();
+        UpdateOverdueCount();
         StateHasChanged();
     }
 
@@ -512,6 +572,14 @@ else
         }
 
         // _ = InvokeAsync(StateHasChanged);
+    }
+
+    private void UpdateOverdueCount()
+    {
+        foreach (var p in plant)
+        {
+            plantOverdueCounts[p.PLANT_ID] = GetOverdueForPlant(p.PLANT_ID);
+        }
     }
 
     /* Alters the local copy of the data and the database to reflect the user's action */
@@ -534,28 +602,41 @@ else
     // Checks if all tasks for a given plant id are completed at a given time
     private bool AllTasksFinished(int plant_id)
     {
-        counter = 0;
+        tasks_finished_counter = 0;
         @foreach (var t in user_tasks)
         {
             @if (plant_id == t.PLANT_ID && t.IS_COMPLETED == true)
             {
-                counter++;
+                tasks_finished_counter++;
             }
         }
-        return (counter == NumberOfActiveTasks(plant_id));
+        return (tasks_finished_counter == NumberOfActiveTasks(plant_id));
     }
 
     private int NumberOfActiveTasks(int plant_id)
     {
-        counter = 0;
+        tasks_finished_counter = 0;
         @foreach (var t in user_tasks)
         {
             @if (plant_id == t.PLANT_ID && t.FREQ != 0)
             {
-                counter++;
+                tasks_finished_counter++;
             }
         }
-        return counter;
+        return tasks_finished_counter;
+    }
+
+    private int GetOverdueForPlant(int plant_id)
+    {
+        int overdue_counter = 0;
+        foreach (var t in user_tasks)
+        {
+            if (t.PLANT_ID == plant_id && t.OVERDUE != null)
+            {
+                overdue_counter += (int)t.OVERDUE;
+            }
+        }
+        return overdue_counter;
     }
 
     private string GetTaskIcon(string taskName)
