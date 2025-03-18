@@ -51,6 +51,18 @@
         border-radius: 10px;
     }
 
+    .shovel-container {
+        display: flex;
+        justify-content: center; /* Center it under the button */
+        margin-top: 10px; /* Add spacing between button and icon */
+    }
+
+    .shovel-icon {
+        width: 50px;
+        height: 50px;
+        cursor: grab;
+    }
+
     /* Delete button as a shovel icon in the top-left corner of the tile    */
     .delete-button {
         position: absolute;
@@ -309,6 +321,11 @@
 <h3 class="title">My Garden</h3>
 
 <AddPlantButton />
+
+<!-- Shovel icon placed below the "Add Plant" button -->
+<div class="shovel-container">
+    <img id="shovel-icon" src="/images/shovel-icon.png" draggable="true" class="shovel-icon" ondragstart="drag(event)" />
+</div>
 
 <div class="tiles-container">
     @if (plant == null || !plant.Any())
@@ -659,7 +676,6 @@ else
         if (daysValue <= (3 * freqValue) / 4) return 75;
         return 100;
     }
-
     
 }
 
