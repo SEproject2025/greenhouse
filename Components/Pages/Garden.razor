@@ -344,7 +344,7 @@
                     <div class="task-list">
                         @foreach (var t in user_tasks)
                         {
-                            @if (p.PLANT_ID == t.PLANT_ID && (t.DAYS_UNTIL == 0 || (t.DONE_DATE == CurrentDay || t.DONE_DATE == null)))
+                            @if (p.PLANT_ID == t.PLANT_ID && (t.DAYS_UNTIL == 0 || (t.DONE_DATE == R_CurrentDay || t.DONE_DATE == null)))
                             {
                                 <div class="task-container">
                                     <img src="@GetTaskIcon(t.TASK_NAME)" alt="@t.TASK_NAME icon" class="task-icon" />
