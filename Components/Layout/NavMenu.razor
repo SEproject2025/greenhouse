@@ -41,7 +41,7 @@
             <ul class="navbar-nav ms-auto">
                 <AuthorizeView>
                     <Authorized>
-                        <li class="nav-item">
+                        <li class="nav-item"> <!--removed href="/Account/Manage" from this line-->
                             <NavLink class="nav-link">
                                 <span class="bi bi-person-fill"></span> @context.User.Identity?.Name
                             </NavLink>
