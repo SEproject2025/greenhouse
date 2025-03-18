@@ -49,3 +49,19 @@ h1:focus {
 .darker-border-checkbox.form-check-input {
     border-color: #929292;
 }
+
+/* Loader Animation */
+.loader {
+    width: 120px;
+    height: 20px;
+    border-radius: 20px;
+    background: linear-gradient(#8BC34A 0 0) 0/0% no-repeat #C8E6C9;
+    animation: l2 2s infinite steps(10);
+    margin: 10px auto; /* Centers loader */
+}
+
+@keyframes l2 {
+    100% {
+        background-size: 110%;
+    }
+}

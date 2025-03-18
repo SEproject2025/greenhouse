@@ -10,120 +10,120 @@ namespace greenhouse.Services
 	public class PlantService : IPlantService
 	{
         // The Db Context
-        private readonly ApplicationDbContext _context;
+        private readonly IDbContextFactory<ApplicationDbContext> _dbContextFactory;
 
         // ******************************************************************************
         // Constructor - Fetches the Db context
         // ******************************************************************************
-        public PlantService(ApplicationDbContext context)
-		{
-			_context = context;
-		}
+        public PlantService(IDbContextFactory<ApplicationDbContext> dbContextFactory)
+        {
+            _dbContextFactory = dbContextFactory;
+        }
 
         // ******************************************************************************
         // Adds a plant to the page and the database
         // ******************************************************************************
         public async Task<Plants> AddPlants(Plants plants)
         {
-            _context.Plant.Add(plants);
-			await _context.SaveChangesAsync();
-
-			return plants;
+            using var dbContext = _dbContextFactory.CreateDbContext();
+            dbContext.Plant.Add(plants);
+            await dbContext.SaveChangesAsync();
+            return plants;
         }
 
         // ******************************************************************************
         // Deletes a plant from the page and the database
         // ******************************************************************************
         public async Task<bool> DeletePlant(int PLANT_ID)
-		{
-			var dbPlant = await _context.Plant.FindAsync(PLANT_ID);
-			if (dbPlant != null)
-			{
-				_context.Remove(dbPlant);
-				await _context.SaveChangesAsync();
-				return true;
-			}
-			return false;
-		}
+        {
+            using var dbContext = _dbContextFactory.CreateDbContext();
+            var dbPlant = await dbContext.Plant.FindAsync(PLANT_ID);
+            if (dbPlant != null)
+            {
+                dbContext.Remove(dbPlant);
+                await dbContext.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
 
         // ******************************************************************************
         // Gets all plants currently in database
         // ******************************************************************************
         public async Task<List<Plants>> GetAllPlants()
-		{
-			return await _context.Plant.ToListAsync();
-		}
+        {
+            using var dbContext = _dbContextFactory.CreateDbContext();
+            return await dbContext.Plant.ToListAsync();
+        }
 
         // ******************************************************************************
         // Gets all public plants not created by the user
         // ******************************************************************************
         public async Task<List<Plants>> GetAllPublicPlants()
-		{
-            return await _context.Plant
-                      .Where(plant => plant.IS_PRIVATE == "N")
-                      .ToListAsync();
-		}
+        {
+            using var dbContext = _dbContextFactory.CreateDbContext();
+            return await dbContext.Plant
+                .Where(plant => plant.IS_PRIVATE == "N")
+                .ToListAsync();
+        }
 
         // ******************************************************************************
         // Gets all tasks for every plant a user is growing
         // ******************************************************************************
         public async Task<List<PlantTask>> GetAllUserTasks(string uuid)
         {
-            var user_plants = await GetUserPlants(uuid);
-            var user_tasks = new List<PlantTask>();
-            var indi_p_tasks = new List<PlantTask>();
-            
+            using var dbContext = _dbContextFactory.CreateDbContext();
 
-            foreach (var p in user_plants)
-            {
-                var plant_id = p.PLANT_ID;
-                indi_p_tasks = await _context.PlantTasks
-                    .Where(task => task.PLANT_ID == plant_id && task.FREQ != 0)
-                    .ToListAsync();
-                user_tasks.AddRange(indi_p_tasks);
-            }
-
-            return user_tasks;
-
+            return await dbContext.PlantTasks
+                .Where(task => dbContext.Plant
+                    .Where(plant => plant.USER_ID == uuid)
+                    .Select(plant => plant.PLANT_ID)
+                    .Contains(task.PLANT_ID) && task.FREQ != 0)
+                .ToListAsync();
         }
+
 
         // ******************************************************************************
         // Gets a plant from the database by ID
         // ******************************************************************************
         public async Task<Plants> GetPlantByID(int PLANT_ID)
-		{
-			return await _context.Plant.FindAsync(PLANT_ID);
-		}
+        {
+            using var dbContext = _dbContextFactory.CreateDbContext();
+            return await dbContext.Plant.FindAsync(PLANT_ID);
+        }
 
         // ******************************************************************************
         // Gets the current user's plants
         // ******************************************************************************
         public async Task<List<Plants>> GetUserPlants(string user_id)
-		{
-			return await _context.Plant
+        {
+            using var dbContext = _dbContextFactory.CreateDbContext();
+            return await dbContext.Plant
                       .Where(plant => plant.USER_ID == user_id)
-                      .ToListAsync(); ;
+                      .ToListAsync();
         }
+
 
         // ******************************************************************************
         // Retrieves a list of PlantTask records associated with a specific plant ID.
         // ******************************************************************************
         public async Task<List<PlantTask>> GetTasksForPlant(int PLANT_ID)
         {
-            return await _context.PlantTasks
-                .Where(task => task.PLANT_ID == PLANT_ID)   // Filters tasks based on the provided plant ID
-                .Select(task => new PlantTask               // Selects the relevant fields, ensuring null values default to 0
+            using var dbContext = _dbContextFactory.CreateDbContext();
+            return await dbContext.PlantTasks
+                .Where(task => task.PLANT_ID == PLANT_ID)
+                .Select(task => new PlantTask
                 {
-                    TASK_ID = task.TASK_ID,                 // Assigns the task's unique ID
-                    PLANT_ID = task.PLANT_ID,               // Assigns the associated plant ID
-                    TASK_NAME = task.TASK_NAME,             // Assigns the task name (e.g., Watering, Pruning)
-                    FREQ = task.FREQ ?? 0,                  // Ensures frequency is never null (defaults to 0)
-                    DAYS_UNTIL = task.DAYS_UNTIL ?? 0,      // Ensures days until next task is never null
-                    IS_COMPLETED = task.IS_COMPLETED,       // Tracks if the task has been completed
-                    DONE_DATE = task.DONE_DATE,             // Stores the date the task was completed
-                    OVERDUE = task.OVERDUE ?? 0             // Ensures overdue count is never null (defaults to 0)    
+                    TASK_ID = task.TASK_ID,
+                    PLANT_ID = task.PLANT_ID,
+                    TASK_NAME = task.TASK_NAME,
+                    FREQ = task.FREQ ?? 0,
+                    DAYS_UNTIL = task.DAYS_UNTIL ?? 0,
+                    IS_COMPLETED = task.IS_COMPLETED,
+                    DONE_DATE = task.DONE_DATE,
+                    OVERDUE = task.OVERDUE ?? 0
                 })
-                .ToListAsync();                             // Converts the query results into a list asynchronously
+                .ToListAsync();
         }
 
         // ******************************************************************************
@@ -131,9 +131,10 @@ namespace greenhouse.Services
         // ******************************************************************************
         public async Task<bool> AddTask(PlantTask task)
         {
-            _context.PlantTasks.Add(task);                  // Adds the new task record to the database context     
-            await _context.SaveChangesAsync();              // Saves changes asynchronously to persist the new task
-            return true;                                    // Returns true to indicate successful insertion
+            using var dbContext = _dbContextFactory.CreateDbContext();
+            dbContext.PlantTasks.Add(task);
+            await dbContext.SaveChangesAsync();
+            return true;
         }
 
 
@@ -150,15 +151,16 @@ namespace greenhouse.Services
                 return true;
             }
             return false;*/
-            
-            
+
+
         // ******************************************************************************
         // Updates an existing plant's details in the database.
         // ******************************************************************************
         public async Task<bool> UpdatePlant(Plants plant)
         {
-            _context.Plant.Update(plant);
-            await _context.SaveChangesAsync();
+            using var dbContext = _dbContextFactory.CreateDbContext();
+            dbContext.Plant.Update(plant);
+            await dbContext.SaveChangesAsync();
             return true;
         }
 
@@ -167,8 +169,9 @@ namespace greenhouse.Services
         // ******************************************************************************
         public async Task<bool> UpdateTask(PlantTask task)
         {
-            _context.PlantTasks.Update(task);
-            await _context.SaveChangesAsync();
+            using var dbContext = _dbContextFactory.CreateDbContext();
+            dbContext.PlantTasks.Update(task);
+            await dbContext.SaveChangesAsync();
             return true;
         }
     }

@@ -266,3 +266,5 @@ __pycache__/
 /obj/Debug/net8.0/greenhouse.AssemblyInfo.cs
 /obj/Debug/net8.0/greenhouse.AssemblyInfoInputs.cache
 /.gitignore
+greenhouse.csproj
+Properties/launchSettings.json
