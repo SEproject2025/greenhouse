@@ -480,12 +480,9 @@ else
             uuid = await UserServices.GetUserID(await AuthenticationStateProvider.GetAuthenticationStateAsync());
             if(uuid == "_NULL_USER_")
             {
-                Console.WriteLine("im in the if!");
                 NavigationManager.NavigateTo("/", forceLoad: true);
-
+                return;
             }
-
-            Console.WriteLine("why are you here?");
 
                 // Fetch user's plants and tasks
                 var plantTask = PlantService.GetUserPlants(uuid);
