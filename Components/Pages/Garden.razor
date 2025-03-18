@@ -336,6 +336,7 @@
                     @if (!(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID]))
                     {
                         <button @onclick="() => DeletePlant(p.PLANT_ID)" class="delete-button"></button>
+
                         <span class="plant-name">@p.PLANT_NAME</span>
                         <div class="image-container">
                             @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
@@ -459,18 +460,14 @@ else
     // Dictionary to track which plants should fade to green
     private Dictionary<int, bool> plantGreenStates = new();
 
-    private Dictionary<int, int> plantOverdueCounts = new Dictionary<int, int>();
+    private string uuid = null!;
 
-    private AuthenticationState? authState;
-    private ClaimsPrincipal? user;
-    private string? user_email;
+    private Dictionary<int, int> plantOverdueCounts = new Dictionary<int, int>();
 
     private int tasks_finished_counter;
       
     private int overdue_counter;
-      
-    private string? uuid;
-      
+            
     private int counter;
       
     private bool hasLoaded = false;
@@ -480,13 +477,11 @@ else
     {
         if (firstRender && !hasLoaded) // Ensures it only runs once
         {
-            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-            var user = authState.User;
-
-            if (user.Identity?.IsAuthenticated == true)
+            uuid = await UserServices.GetUserID(await AuthenticationStateProvider.GetAuthenticationStateAsync());
+            if(uuid == "_NULL_USER_")
             {
-                user_email = user.Identity.Name;
-                uuid = await UserServices.GetUserID(user_email);
+                NavigationManager.NavigateTo("/");
+            }
 
                 // Fetch user's plants and tasks
                 var plantTask = PlantService.GetUserPlants(uuid);
