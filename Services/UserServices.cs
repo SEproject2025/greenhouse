@@ -4,6 +4,7 @@
 using System;
 using greenhouse.Data;
 using Microsoft.AspNetCore.Components.Authorization;
+using greenhouse.Entities;
 using Microsoft .EntityFrameworkCore;
 
 namespace greenhouse.Services
@@ -27,6 +28,23 @@ namespace greenhouse.Services
                 .FirstOrDefaultAsync();
 
             return user?.Id ?? "_NULL_USER_";
+		}
+
+        // Gets the current user's relative current day
+        public async Task<DateTime> GetRelativeCurrentDay(string uuid)
+		{
+            var user = await _context.Users.FindAsync(uuid);
+            return user.UserCurrentDay;
+        }
+
+        // Updates the current user's relative current day
+        public async Task<bool> UpdateUserCurrentDate(string uuid, DateTime new_date)
+        {
+            var user = await _context.Users.FindAsync(uuid);
+            user.UserCurrentDay = new_date;
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

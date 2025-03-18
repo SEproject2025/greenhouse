@@ -2,13 +2,45 @@
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
-<button @onclick="ShowModal" disabled="@isLoading">Add Plant</button>
+<!--***********************************************************************
+*	                             CSS/STYLING SECTION                      *
+************************************************************************-->
+<style>
+button.btn {
+        background-color: #6BBF59;
+        color: #FFFFFF;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 25px;
+        font-size: 16px;
+        margin: 10px 5px;
+        cursor: pointer;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease;
+    }
+
+        button.btn:hover {
+            background-color: #5AA74E;
+        }
+</style>
+
+
+<!--***********************************************************************
+*	                             HTML SECTION                             *
+************************************************************************-->
+<button class="btn" @onclick="ShowModal" disabled="@isLoading">Add Plant</button>
+
 
 <!-- Reference the Modal component -->
 <Modal IsVisible="@isModalVisible" IsVisibleChanged="@OnModalVisibilityChanged" @ref="modalRef">
     <AddPlant OnSubmit="@CloseModalOnSubmit" />
 </Modal>
 
+
+
+<!--***********************************************************************
+*	                             CODE SECTION                             *
+************************************************************************-->
 @code {
     private bool isModalVisible = false;
     private Modal? modalRef;
