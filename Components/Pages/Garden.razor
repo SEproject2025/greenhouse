@@ -35,6 +35,22 @@
             padding: 10px;
         }
 
+    .plant-name {
+        left: 100px !important; /* Moves the name slightly to the right */
+        top: 10px !important; /* Moves the name slightly down */
+        font-size: 20px !important;
+        font-weight: bold;
+        font-family: Arial, sans-serif;
+        color: black;
+    }
+
+    .plant-image{
+        top: 5px important;
+        width: 75px;
+        height: 80px;
+        border-radius: 10px;
+    }
+
     /* Delete button as a shovel icon in the top-left corner of the tile    */
     .delete-button {
         position: absolute;
@@ -83,6 +99,13 @@
             border: 5px solid #4B8B3B; /* Black border around the image */
         }
 
+        /* Hides the content of the tile when it's green */
+        .tile.green-fade span,
+        .tile.green-fade input[type="checkbox"],
+        .tile.green-fade label {
+            display: none;
+        }
+
     .title {
         font-size: 36px;
         color: #2C6E49;
@@ -117,14 +140,14 @@
     }
 
     .tile {
-        height: 250px;
+        height: 375px;
         width: 300px;
         background-color: #d2d9d5;
         border: 2px solid black;
         display: inline-block;
         position: relative;
         border-radius: 15px;
-        padding: 40px 10px 10px; /* Added top padding */
+        padding: 20px 10px 10px; /* Added top padding */
         box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2), -5px -5px 15px rgba(255, 255, 255, 0.1);
         transition: transform 0.2s, box-shadow 0.2s;
     }
@@ -167,44 +190,123 @@
 
     .task-container {
         display: flex;
-        align-items: center; /* Aligns checkbox and label vertically */
-        gap: 8px; /* Adds space between checkbox and text */
-        margin-top: 5px; /* Ensures space between task items */
+        align-items: center; /* Aligns items vertically */
+        justify-content: space-between; /* Pushes the label and checkbox apart */
+        width: 100%; /* Makes sure container spans the full width */
+        padding-right: 10px; /* Adds spacing to keep the checkbox away from the edge */
+        margin-top: 10px; /* Adds vertical space between tasks */
+       /* padding-bottom: 6px; /* Slight extra padding to separate tasks visually */
     }
 
-        .task-container input[type="checkbox"] {
-            margin-left: 2px; /* Move checkbox to the right */
-        }
+    .task-label {
+        font-size: 20px; /* Increase task text size */
+       /* font-weight: bold; */
+    }
 
-    /* Hides the content of the tile when it's green */
-    .tile.green-fade span,
-    .tile.green-fade input[type="checkbox"],
-    .tile.green-fade label {
+    .task-container input[type="checkbox"] {
+        margin-left: auto; /* Moves checkbox to the right */
+        transform: scale(1.2); /* Slightly enlarges checkbox for better visibility */
+        width: 15px;
+        height: 15px;
+    }
+
+    /* Styling for the image container */
+    .image-container {
+        display: flex; /* Use flexbox to arrange images side by side */
+        align-items: center; /* Vertically center the images */
+        gap: 15px; /* Space between the images */
+    }
+
+    /* Styling for the plant image */
+    .plant-image {
+        width: 75px;
+        height: 80px;
+        border-radius: 10px;
+        margin-top: 0px;
+    }
+
+    /* Styling for the additional image */
+    .additional-image {
+        width: 75px; /* Set the desired size for the additional image */
+        height: 80px;
+        border-radius: 10px;
+        margin-top: 0px;
+    }
+
+    .task-icon {
+        width: 30px; /* Adjust icon size */
+        height: 30px;
+        margin-right: 8px;
+        vertical-align: middle;
+        border: 2px solid black; /* Adds black circular border */
+        border-radius: 60%; /* Makes it a perfect circle */
+        padding: 3px; /* Ensures proper spacing inside the circle */
+        background-color: white; /* Optional: Adds contrast */
+    }
+
+    .progress-bar-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px; /* Add spacing between circles */
+        margin-top: 10px; /* Space above tasks */
+    }
+
+    .progress-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .progress-label {
+        font-size: 12px !important; /* Adjust size */
+        margin-top: 38px; /* Less spacing between progress bar and text */
+        color: black;
+        text-align: center;
+        white-space: nowrap; /* Prevents text from wrapping */
+    }
+
+    .circular-progress {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        background: conic-gradient(green 0deg, lightgray 0deg);
+    }
+
+    /* Hide Progress Bars When Green Fade is Active */
+    .tile.green-fade .progress-bar-wrapper {
         display: none;
     }
+
+    /* Inner Circle */
+    .circular-progress .inner-circle {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 12px;
+        font-weight: bold;
+    }
+    .progress-icon {
+        width: 25px;  /* Adjust icon size */
+        height: 25px;
+        object-fit: contain; /* Ensure it fits well inside the circle */
     }
 </style>
+
 
 <!--***********************************************************************
 *	                             HTML SECTION                             *
 ************************************************************************-->
 <h3 class="title">My Garden</h3>
-<!--
-<dl>
-@foreach(var t in user_tasks)
-    {
-        <dt>@(t.DAYS_UNTIL == 0 || (t.DONE_DATE == CurrentDay || t.DONE_DATE == null))</dt>
-        <dt>Task_ID: @t.TASK_ID</dt>
-        <dt>Plant_ID: @t.PLANT_ID</dt>
-        <dt>TASK_NAME: @t.TASK_NAME</dt>
-        <dt>FREQ: @t.FREQ</dt>
-        <dt>DAY_UNTIL: @t.DAYS_UNTIL</dt>
-        <dt>IS_COMPLETED: @t.IS_COMPLETED</dt>
-        <dt>DONE_DATE: @t.DONE_DATE</dt>
-        <dt>OVERDUE: @t.OVERDUE</dt>
-        <p>--------------------</p>
-    }
-</dl> -->
 
 <AddPlantButton />
 
@@ -213,7 +315,10 @@
     {
         @if (plant == null)
         {
-            <p>Loading . . . </p>
+            <div style="text-align: center;">
+                <p> Loading . . .</p>
+                <div class="loader"></div> <!-- Loader animation -->
+            </div>
         }
         else
         {
@@ -231,32 +336,79 @@
                     @if (!(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID]))
                     {
                         <button @onclick="() => DeletePlant(p.PLANT_ID)" class="delete-button"></button>
-                        <span>@p.PLANT_NAME</span>
-                        @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
-                        {
-                            <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)"
-                                 alt="@p.PLANT_NAME"
-                                 style="width: 75px; height: 80px; border-radius: 10px; margin-top: 0px;" />
-                        }
+
+                        <span class="plant-name">@p.PLANT_NAME</span>
+                        <div class="image-container">
+                            @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
+                            {
+                                <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)"
+                                alt="@p.PLANT_NAME"
+                                style="width: 75px; height: 80px; border-radius: 10px; margin-top: 0px;" />
+                            }
+                            <td style="font-family: 'Gloria Hallelujah', cursive; font-size: 18px; color: #66B266; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1), 0px 0px 5px rgba(75, 139, 59, 0.5); ">
+                                Status:
+                            </td>
+                            @if (plantOverdueCounts.ContainsKey(p.PLANT_ID))
+                            {
+                                var overdue_counter = plantOverdueCounts[p.PLANT_ID];
+                                @if (overdue_counter == 0)
+                                {
+                                    <img src="/plant_health_images/Healthy.png" alt="Additional Image" class="additional-image" />
+                                }
+                                else if (overdue_counter > 0 && overdue_counter <= 7)
+                                {
+                                    <img src="/plant_health_images/Ok.png" alt="Additional Image" class="additional-image" />
+                                }
+                                else if (overdue_counter > 7 && overdue_counter <= 14)
+                                {
+                                    <img src="/plant_health_images/Unhealthy.png" alt="Additional Image" class="additional-image" />
+                                }
+                                else if (overdue_counter > 14)
+                                {
+                                    <img src="/plant_health_images/Dying.png" alt="Additional Image" class="additional-image" />
+                                }
+                            }
+                        </div>
                     }
 
-                    <!-- Determines when the checkboxes are visible on the plant tiles -->
-                    @foreach (var t in user_tasks)
-                    {
-                        @if (p.PLANT_ID == t.PLANT_ID && (t.DAYS_UNTIL == 0 || (t.DONE_DATE == CurrentDay || t.DONE_DATE == null)))
+                    <!-- Circular Progress Bar Container - Positioned Above Tasks -->
+                    <!-- Wrap Progress Bars Inside a Container to Prevent Showing on Green-Fade -->
+                    <div class="progress-bar-wrapper">
+                        <div class="progress-bar-container">
+                            @foreach (var t in user_tasks.Where(task => task.PLANT_ID == p.PLANT_ID))
+                            {
+                                <div class="progress-item">
+                                    <div class="circular-progress" id="progress-@t.TASK_ID"
+                                    data-percentage="@CalculateTaskProgress(t.DAYS_UNTIL, t.FREQ)">
+                                        <div class="inner-circle">
+                                            <img src="@GetTaskIcon(t.TASK_NAME)" alt="@t.TASK_NAME icon" class="progress-icon" />
+                                        </div>                       
+                                    </div>                                
+                                </div>                                
+                            }
+                        </div>
+                    </div>
+                    <p> _______________________________ </p>
+                    <!-- Task List Container - Below Progress Bars -->
+                    <div class="task-list">
+                        @foreach (var t in user_tasks)
                         {
-                            <div class="task-container">
-                                <input type="checkbox"
-                                       id="@t.TASK_NAME-@p.PLANT_ID"
-                                       name="@t.TASK_NAME-@p.PLANT_ID"
-                                       checked='@t.IS_COMPLETED'
-                                       @onchange="(e) => CheckboxChecked(e, t)"
-                                       disabled="@(t.IS_COMPLETED ? "disabled" : null)" />
-
-                                <label for="@t.TASK_NAME-@p.PLANT_ID">@t.TASK_NAME</label>
-                            </div>
+                            @if (p.PLANT_ID == t.PLANT_ID && (t.DAYS_UNTIL == 0 || (t.DONE_DATE == R_CurrentDay || t.DONE_DATE == null)))
+                            {
+                                <div class="task-container">
+                                    <img src="@GetTaskIcon(t.TASK_NAME)" alt="@t.TASK_NAME icon" class="task-icon" />
+                                    <label for="@t.TASK_NAME-@p.PLANT_ID" class="task-label">@t.TASK_NAME</label>
+                                    <input type="checkbox"
+                                    id="@t.TASK_NAME-@p.PLANT_ID"
+                                    name="@t.TASK_NAME-@p.PLANT_ID"
+                                    checked='@t.IS_COMPLETED'
+                                    @onchange="(e) => CheckboxChecked(e, t)"
+                                    disabled="@(t.IS_COMPLETED ? "disabled" : null)"
+                                    class="task-checkbox" />
+                                </div>
+                            }
                         }
-                    }
+                    </div>
 
                     <!-- Image of the plant (only visible when green) -->
                     @if (plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID])
@@ -264,12 +416,12 @@
                         @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
                         {
                             <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)"
-                                 alt="@p.PLANT_NAME" />
+                            alt="@p.PLANT_NAME" />
                         }
                         else
                         {
                             <img src="/images/Default.webp"
-                                 alt="Default Plant Image" />
+                            alt="Default Plant Image" />
                         }
                     }
                 </div>
@@ -282,45 +434,76 @@
 <button @onclick="GoToNextDay" class="btn btn-primary">Next Day &gt;&gt;</button>
 
 <!-- Display the current day -->
-<p>Current Day: @CurrentDay.ToString("MMMM dd, yyy")</p>
-<!-- <p>Current Day2: @CurrentDay</p> -->
+@if (R_CurrentDay == DateTime.MinValue)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <p>@R_CurrentDay.ToString("MMMM dd, yyy")</p>
+}
 
 
 <!--***********************************************************************
 *	                             CODE SECTION                             *
 ************************************************************************-->
 @code {
+
     List<Plants>? plant = null;
 
-    // The list of currently active tasks
-    List<PlantTask> user_tasks = new List<PlantTask>();
 
-    // Tracks the current simulated day
-    private DateTime CurrentDay { get; set; } = DateTime.Now.Date;
-    //private bool fadeToGreen = false;
+    List<PlantTask> user_tasks = new List<PlantTask>();  // The list of currently active tasks
+                                                         // Tracks the current simulated day
+    private DateTime  CurrentDay { get; set; } = DateTime.Now.Date;
+    private DateTime R_CurrentDay { get; set; }
+
     // Dictionary to track which plants should fade to green
     private Dictionary<int, bool> plantGreenStates = new();
 
-    private AuthenticationState? authState;
-    private ClaimsPrincipal? user;
-    private string? user_email;
+    private string uuid = null!;
 
-    private string uuid;
+    private Dictionary<int, int> plantOverdueCounts = new Dictionary<int, int>();
+
+    private int tasks_finished_counter;
+
+    private int overdue_counter;
 
     private int counter;
 
-    protected override async Task OnInitializedAsync()
+    private bool hasLoaded = false;
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        user = authState.User;
-        user_email = user.Identity.Name;
-        uuid = await UserServices.GetUserID(user_email);
+        if (firstRender && !hasLoaded) // Ensures it only runs once
+        {
+            uuid = await UserServices.GetUserID(await AuthenticationStateProvider.GetAuthenticationStateAsync());
+            if(uuid == "_NULL_USER_")
+            {
+                NavigationManager.NavigateTo("/", forceLoad: true);
+                return;
+            }
 
+                // Fetch user's plants and tasks
+                var plantTask = PlantService.GetUserPlants(uuid);
+                var tasksTask = PlantService.GetAllUserTasks(uuid);
 
-        // Gets the current user's plants and tasks
-        plant = await PlantService.GetUserPlants(uuid);
-        user_tasks = await PlantService.GetAllUserTasks(uuid);
-        UpdatePlantFade();
+                // Gets the current user's plants and tasks
+                await Task.WhenAll(plantTask, tasksTask);
+
+                plant = await plantTask;
+                user_tasks = await tasksTask;
+
+                UpdatePlantFade();
+                UpdateOverdueCount();
+
+            hasLoaded = true;
+            _ = InvokeAsync(StateHasChanged); // Avoid UI thread blocking
+        }
+        await JSRuntime.InvokeVoidAsync("updateProgressCircles");
+
+        // Gets the user's relative current day
+        R_CurrentDay = await UserServices.GetRelativeCurrentDay(uuid);
     }
 
     async Task DeletePlant(int PLANT_ID)
@@ -339,7 +522,8 @@
     private void GoToNextDay()
     {
         //fadeToGreen = !fadeToGreen;  // Toggle the green fade state every time
-        CurrentDay = CurrentDay.AddDays(1);
+        R_CurrentDay = R_CurrentDay.AddDays(1);
+        UserServices.UpdateUserCurrentDate(uuid, R_CurrentDay);
 
         // Reset the green fade effect for all plants
         foreach (var key in plantGreenStates.Keys.ToList())
@@ -367,14 +551,29 @@
         }
         // Update the fade state of plants after it goes to the next day
         UpdatePlantFade();
+        UpdateOverdueCount();
         StateHasChanged();
     }
 
+    //private async Task UpdatePlantFade()
     private void UpdatePlantFade()
     {
+        // **Delay for 1 second before flipping tiles**
+        // await Task.Delay(2000);
+
         foreach (var p in plant)
         {
             plantGreenStates[p.PLANT_ID] = AllTasksFinished(p.PLANT_ID);
+        }
+
+        // _ = InvokeAsync(StateHasChanged);
+    }
+
+    private void UpdateOverdueCount()
+    {
+        foreach (var p in plant)
+        {
+            plantOverdueCounts[p.PLANT_ID] = GetOverdueForPlant(p.PLANT_ID);
         }
     }
 
@@ -387,7 +586,7 @@
         {
             t.OVERDUE = 0;
         }
-        t.DONE_DATE = CurrentDay;
+        t.DONE_DATE = R_CurrentDay;
         await PlantService.UpdateTask(t);
 
         // Update the fade state of plants after a task is checked
@@ -398,30 +597,86 @@
     // Checks if all tasks for a given plant id are completed at a given time
     private bool AllTasksFinished(int plant_id)
     {
-        counter = 0;
+        tasks_finished_counter = 0;
         @foreach (var t in user_tasks)
         {
             @if (plant_id == t.PLANT_ID && t.IS_COMPLETED == true)
             {
-                counter++;
+                tasks_finished_counter++;
             }
         }
-        return (counter == NumberOfActiveTasks(plant_id));
+        return (tasks_finished_counter == NumberOfActiveTasks(plant_id));
     }
 
     private int NumberOfActiveTasks(int plant_id)
     {
-        counter = 0;
+        tasks_finished_counter = 0;
         @foreach (var t in user_tasks)
         {
             @if (plant_id == t.PLANT_ID && t.FREQ != 0)
             {
-                counter++;
+                tasks_finished_counter++;
             }
         }
-        return counter;
+        return tasks_finished_counter;
     }
+
+    private int GetOverdueForPlant(int plant_id)
+    {
+        int overdue_counter = 0;
+        foreach (var t in user_tasks)
+        {
+            if (t.PLANT_ID == plant_id && t.OVERDUE != null)
+            {
+                overdue_counter += (int)t.OVERDUE;
+            }
+        }
+        return overdue_counter;
+    }
+
+    private string GetTaskIcon(string taskName)
+    {
+        return taskName switch
+        {
+            "Watering" => "/Icons/Watering.png",
+            "Weeding" => "/Icons/Weeding.png",
+            "Pruning" => "/Icons/Pruning.png",
+            "Pest Control" => "/Icons/PestControl.png",
+            _ => "/Icons/Default.png" // Fallback icon in case of unknown task
+        };
+    }
+
+    int CalculateTaskProgress(int? daysUntil, int? freq)
+    {
+        if (!freq.HasValue || freq.Value == 0) return 0;  // Prevent division by zero
+
+        int freqValue = freq.Value;
+        int daysValue = daysUntil ?? 0;  // Default to 0 if null
+
+        if (daysValue == 0) return 0;
+        if (daysValue <= freqValue / 4) return 25;
+        if (daysValue <= freqValue / 2) return 50;
+        if (daysValue <= (3 * freqValue) / 4) return 75;
+        return 100;
+    }
+
+    
 }
 
+<!-- JavaScript for the circle progress bars -->                     
+<script>
+    function updateProgressCircles() {
+        document.querySelectorAll(".circular-progress").forEach((progressBar) => {
+            let value = parseInt(progressBar.getAttribute("data-percentage"));
 
+            // Ensure value is between 0 and 100
+            value = Math.max(0, Math.min(value, 100));
+
+            // Apply the conic-gradient for progress
+            progressBar.style.background = `conic-gradient(green ${value * 3.6}deg, lightgray ${value * 3.6}deg)`;
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", updateProgressCircles);
+</script>
 

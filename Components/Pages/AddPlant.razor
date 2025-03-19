@@ -140,70 +140,70 @@
 
     /* The switch - the box around the slider */
     .switch {
-        position: relative;
-        display: inline-block;
-        width: 55px;  /*60*/
-        height: 28px; /*34*/
+    position: relative;
+    display: inline-block;
+    width: 55px;  /*60*/
+    height: 28px; /*34*/
     }
 
     /* Hide default HTML checkbox */
     .switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
+    opacity: 0;
+    width: 0;
+    height: 0;
     }
 
     /* The slider */
     .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #a1a1a1; /* light grey standard */
-        -webkit-transition: .4s;
-        transition: .4s;
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #a1a1a1; /* light grey standard */
+    -webkit-transition: .4s;
+    transition: .4s;
     }
 
-   .slider:before {
-        position: absolute;
-        content: "";
-        height: 20px; /*26*/
-        width: 20px;  /*26*/
-        left: 4px;
-        bottom: 4px;
-            background-color: #2C6E49; /* dark green stnadard text */
-        -webkit-transition: .4s;
-        transition: .4s;
+    .slider:before {
+    position: absolute;
+    content: "";
+    height: 20px; /*26*/
+    width: 20px;  /*26*/
+    left: 4px;
+    bottom: 4px;
+    background-color: #2C6E49; /* dark green stnadard text */
+    -webkit-transition: .4s;
+    transition: .4s;
     }
 
     input:checked + .slider {
-        background-color: #6BBF59; /* light green standard hover */
+    background-color: #6BBF59; /* light green standard hover */
     }
 
     input:focus + .slider {
-        box-shadow: 0 0 1px #2196F3;
+    box-shadow: 0 0 1px #2196F3;
     }
 
     input:checked + .slider:before {
-        -webkit-transform: translateX(26px);
-        -ms-transform: translateX(26px);
-        transform: translateX(26px);
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
     }
 
     /* Rounded sliders */
     .slider.round {
-        border-radius: 34px;
+    border-radius: 34px;
     }
 
     .slider.round:before {
-        border-radius: 50%;
+    border-radius: 50%;
     }
 
     .disabled-section {
-        pointer-events: none;
-        opacity: 0.5;
+    pointer-events: none;
+    opacity: 0.5;
     }
 </style>
 
@@ -238,11 +238,11 @@
             <div>
                 <label>Selected Image:</label>
                 <img src="data:image/webp;base64,@Convert.ToBase64String(selectedPlant.IMAGE_DATA)"
-                     alt="@selectedPlant.Name" width="100" />
+                alt="@selectedPlant.Name" width="100" />
             </div>
         }
 
-      
+
         <h4>Task Frequencies</h4>
 
         <!-- Input fields for task frequencies (days per week) -->
@@ -254,7 +254,12 @@
                 <span class="slider round"></span>
             </label>
             <div class="@(IsWaterEnabled ? "" : "disabled-section")">
-                <InputNumber @bind-Value="waterFreq" disabled="@(IsWaterEnabled ? null : "disabled")"></InputNumber>
+                <InputNumber 
+                @bind-Value="waterFreq" 
+                min="0"
+                step="1"
+                disabled="@(IsWaterEnabled ? null : "disabled")">
+                </InputNumber>
             </div>
         </div>
 
@@ -266,7 +271,12 @@
                 <span class="slider round"></span>
             </label>
             <div class="@(IsWeedEnabled ? "" : "disabled-section")">
-                <InputNumber @bind-Value="weedFreq" disabled="@(IsWeedEnabled ? null : "disabled")"></InputNumber>
+                <InputNumber 
+                @bind-Value="weedFreq" 
+                min="0"
+                step="1"
+                disabled="@(IsWeedEnabled ? null : "disabled")">
+                </InputNumber>
             </div>
         </div>
 
@@ -278,7 +288,12 @@
                 <span class="slider round"></span>
             </label>
             <div class="@(IsPruneEnabled ? "" : "disabled-section")">
-                <InputNumber @bind-Value="pruneFreq" disabled="@(IsPruneEnabled ? null : "disabled")"></InputNumber>
+                <InputNumber 
+                @bind-Value="pruneFreq"
+                min="0"
+                step="1"
+                disabled="@(IsPruneEnabled ? null : "disabled")">
+                </InputNumber>
             </div>
         </div>
 
@@ -290,7 +305,12 @@
                 <span class="slider round"></span>
             </label>
             <div class="@(IsPestEnabled ? "" : "disabled-section")">
-                <InputNumber @bind-Value="pestFreq" disabled="@(IsPestEnabled ? null : "disabled")"></InputNumber>
+                <InputNumber 
+                @bind-Value="pestFreq"
+                min="0"
+                step="1"
+                disabled="@(IsPestEnabled ? null : "disabled")">
+                </InputNumber>
             </div>
         </div>
 
@@ -355,19 +375,18 @@ else if (showPrefilledForm)
     private IBrowserFile? selectedFile;               // Stores the selected file for upload
     private const long MaxFileSize = 2 * 1024 * 1024; // Maximum file size (2MB)
 
-    private AuthenticationState? authState;           // Holds authentication state
-    private ClaimsPrincipal? user;                    // Stores user information
-    private string? user_email;                       // Stores the user's email
+    private string uuid = null!;
 
     // ******************************************************************************
     // Fetch public plants and get user details
     // ******************************************************************************
     protected override async Task OnInitializedAsync()
     {
-        publicPlants = await PlantService.GetAllPublicPlants();
-        authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        user = authState.User;
-        user_email = user.Identity.Name;
+        uuid = await UserServices.GetUserID(await AuthenticationStateProvider.GetAuthenticationStateAsync());
+        if (uuid == "_NULL_USER_")
+        {
+            NavigationManager.NavigateTo("/");
+        }
     }
 
     // ******************************************************************************
@@ -500,7 +519,7 @@ else if (showPrefilledForm)
     async Task CustomHandleSubmit()
     {
         // Get the user's unique ID
-        plant.USER_ID = await UserServices.GetUserID(user_email);
+        plant.USER_ID = uuid;
 
         // Ensure plant.IMAGE_DATA is assigned before saving
         if (selectedPlant != null && selectedPlant.IMAGE_DATA != null)
@@ -583,7 +602,7 @@ else if (showPrefilledForm)
     async Task PrefillHandleSubmit()
     {
         // Get the user's unique ID
-        plant.USER_ID = await UserServices.GetUserID(user_email);
+        plant.USER_ID = uuid;
 
         // Check if the user selected a pre-filled plant
         if (selectedPublicPlantId.HasValue)
@@ -597,7 +616,7 @@ else if (showPrefilledForm)
                     {
                         PLANT_NAME = originalPlant.PLANT_NAME,
                         IMAGE_DATA = originalPlant.IMAGE_DATA,
-                        USER_ID = await UserServices.GetUserID(user_email),
+                        USER_ID = uuid,
                         IS_PRIVATE = "Y"
                     };
 
@@ -650,7 +669,7 @@ else if (showPrefilledForm)
                     {
                         PLANT_NAME = originalPlant.PLANT_NAME,
                         IMAGE_DATA = originalPlant.IMAGE_DATA,
-                        USER_ID = await UserServices.GetUserID(user_email),
+                        USER_ID = uuid,
                         IS_PRIVATE = "Y" // Ensures it's saved under the current user
                     };
 

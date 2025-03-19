@@ -3,6 +3,8 @@
 @attribute [StreamRendering(true)]
 @inject IPlantService PlantService
 @inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IUserServices UserServices
 
 @using greenhouse.Entities;
 
@@ -387,9 +389,15 @@
     };
 
     private Plant SelectedPlant;
+    private string uuid = null!;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        uuid = await UserServices.GetUserID(await AuthenticationStateProvider.GetAuthenticationStateAsync());
+        if (uuid == "_NULL_USER_")
+        {
+            NavigationManager.NavigateTo("/");
+        }
         SelectedPlant = Plants.FirstOrDefault();
     }
 

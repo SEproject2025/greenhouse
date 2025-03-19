@@ -3,7 +3,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark w-100">
     <div class="container-fluid">
-        <a class="navbar-brand">Greenhouse</a>
+        <a class="navbar-brand" href="/">Evera</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -81,6 +81,20 @@
 }
 
 <style>
+    /* Override the random margin on the Logout button */
+    .navbar-nav .nav-item button {
+        margin: 0 !important; /* Remove any applied margin */
+        padding: 10px 15px !important; /* Ensure consistent padding */
+    }
+
+    /* Override the d-inline styles */
+    form.d-inline {
+        padding: 0 !important;
+        background-color: transparent !important;
+        margin: 0 !important;
+        border: none !important;
+    }
+
     .navbar {
         width: 100%; /* Ensure full width */
         margin: 0;
