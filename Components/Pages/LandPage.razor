@@ -6,8 +6,34 @@
 <!--***********************************************************************
 *	                             CSS/STYLING SECTION
 ************************************************************************-->
-<StandardStyles />
 <style>
+
+    body{
+        background-color: #CFE8A9;
+    }
+
+    /* Logo style */
+    .logo {
+        position: absolute;
+        top: -50px; /* Moves half out */
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        background: white;
+    }
+
+        /* Logo image inside */
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
     .container {
         font-family: 'Arial', sans-serif;
         color: #2C6E49;
@@ -24,17 +50,23 @@
     .subtitle {
         font-size: 20px;
         margin-bottom: 30px;
-        color: #6BBF59;
+        color: #2C6E49;
     }
 
     .content-box {
         background-color: #f5f5f5;
         border: 1px solid #dcdcdc;
         border-radius: 12px;
-        padding: 20px;
         margin: 20px auto;
-        width: 50%;
         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        position: relative; /* Important for absolute logo positioning */
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(10px);
+        padding: 60px 30px 40px; /* Extra top padding to compensate for logo overlap */
+        text-align: center;
+        max-width: 350px;
+        width: 100%;
+        margin-top: 60px; /* Optional: to give breathing space */
     }
 
     .action-buttons {
@@ -59,26 +91,31 @@
         .btn:hover {
             background-color: #5AA74E;
         }
+
 </style>
 
 <!--***********************************************************************
 *	                             HTML SECTION
 ************************************************************************-->
+
+
+
 <div class="container">
     <h1 class="title">Welcome to Evera!</h1>
-    <h3 class="subtitle">add a beautiful subtitle here lalalala</h3>
+    <h3 class="subtitle">Your guide to growing healthy plants</h3>
 
     <div class="content-box">
+
+        <div class="logo">
+            <img src="/path/to/logo.png" alt="PlantApp Logo">
+        </div>
+
+
         <p>
             Start managing your garden with Evera! Track your plants, monitor their watering schedules,
             and explore care guides tailored for you.
         </p>
         <p>Use the Sidebar to explore features like:</p>
-        <ul>
-            <li>Adding your plants blah blah....</li>
-            <li>Plant schedules blah blah ...... </li>
-            <li>Care Tips blah blah .....</li>
-        </ul>
     </div>
 
     <div class="action-buttons">
