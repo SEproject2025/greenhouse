@@ -141,7 +141,7 @@
             calendarDays.Add(new CalendarDay
                 {
                     Day = i,
-                    IsCurrent = (i == currentDay)
+                    IsCurrent = (currentYear == SelectedDate.Year && currentMonth == SelectedDate.Month && i == SelectedDate.Day)
                 });
         }
     }
