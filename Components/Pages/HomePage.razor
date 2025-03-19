@@ -148,15 +148,15 @@
         border-radius: 15px;
         width: 300px;
         text-align: center;
-        
+
         /*
-        
+
         padding: 20px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         text-align: center;
-        
+
         width: 307px;
-        
+
         height: 250px; 
         overflow: hidden;
         display: flex;
@@ -201,9 +201,12 @@
 
     <!-- Right Panel: Weather Widget on Top, Calendar Below -->
     <div class="right-panel">
-        <div class="calendar-container">
-            <Calendar />
-        </div>
+        @if (relative_user_date != default)
+        {
+            <div class="calendar-container">
+                <Calendar SelectedDate="new DateTime(relative_user_date.Year, relative_user_date.Month, relative_user_date.Day)" />
+            </div>
+        }
 
         <div class="weather-container">
             <Weather />
@@ -214,23 +217,23 @@
 <!-- Weather Widget Script -->
 <script>
     window.renderTomorrowWidget = () => {
-        if (window.__TOMORROW__) {
-            window.__TOMORROW__.renderWidget();
-        }
+    if (window.__TOMORROW__) {
+    window.__TOMORROW__.renderWidget();
+    }
     };
 
     (function(d, s, id) {
-        if (d.getElementById(id)) {
-            if (window.__TOMORROW__) {
-                window.__TOMORROW__.renderWidget();
-            }
-            return;
-        }
-        const fjs = d.getElementsByTagName(s)[0];
-        const js = d.createElement(s);
-        js.id = id;
-        js.src = "https://www.tomorrow.io/v1/widget/sdk/sdk.bundle.min.js";
-        fjs.parentNode.insertBefore(js, fjs);
+    if (d.getElementById(id)) {
+    if (window.__TOMORROW__) {
+    window.__TOMORROW__.renderWidget();
+    }
+    return;
+    }
+    const fjs = d.getElementsByTagName(s)[0];
+    const js = d.createElement(s);
+    js.id = id;
+    js.src = "https://www.tomorrow.io/v1/widget/sdk/sdk.bundle.min.js";
+    fjs.parentNode.insertBefore(js, fjs);
     })(document, 'script', 'tomorrow-sdk');
 </script>
 
@@ -239,10 +242,12 @@
 ************************************************************************-->
 @code {
     private List<Plants> userPlants = new();
-      
+
     private string uuid = null!; 
-                               
+
     private bool hasLoaded = false;
+
+    private DateTime relative_user_date;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -256,6 +261,7 @@
 
             hasLoaded = true;
             userPlants = await PlantService.GetUserPlants(uuid);
+            relative_user_date = await UserServices.GetRelativeCurrentDay(uuid);
             StateHasChanged(); // Force UI update after fetching plants
         }
     }
