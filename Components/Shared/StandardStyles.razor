@@ -1,0 +1,71 @@
+﻿<style>
+    @@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap');
+
+    body {
+        background-color: #CFE8A9; /* Soft pastel green */
+        min-height: 100vh;
+        margin: 0;
+        font-family: 'Merriweather', serif;
+    }
+
+    .title {
+        font-size: 48px;
+        text-align: center;
+        color: #2C6E49;
+        margin-top: 20px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #4F7942;
+        margin-bottom: 30px;
+    }
+
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 40px;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .plant-card {
+        position: relative;
+        background: white;
+        padding: 15px;
+        border-radius: 15px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        width: 130px;
+        text-align: center;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        transform: perspective(600px) translateY(5px);
+    }
+
+        .plant-card:hover {
+            transform: perspective(600px) translateY(-5px) scale(1.1);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .plant-card img {
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+    .plant-name {
+        font-size: 14px;
+        font-weight: bold;
+        color: #2C6E49;
+    }
+
+    .calendar-container, .weather-container {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+</style>
