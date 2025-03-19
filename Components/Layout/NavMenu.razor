@@ -15,14 +15,10 @@
                     <Authorized>
                 <li class="nav-item px-3">
                     <NavLink class="nav-link" href="HomePage">
-                        <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Home Page
+                        <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Home
                     </NavLink>
                 </li>
-                <li class="nav-item">
-                    <NavLink class="nav-link" href="/" Match="NavLinkMatch.All">
-                        <span class="bi bi-house-door-fill"></span> Home
-                    </NavLink>
-                </li>
+                
                 <li class="nav-item">
                     <NavLink class="nav-link" href="/garden">
                         <span class="bi bi-plus-square-fill"></span> Garden
@@ -41,8 +37,8 @@
             <ul class="navbar-nav ms-auto">
                 <AuthorizeView>
                     <Authorized>
-                        <li class="nav-item"> <!--removed href="/Account/Manage" from this line-->
-                            <NavLink class="nav-link">
+                        <li class="nav-item">
+                            <NavLink class="nav-link" href="/Account/Manage">
                                 <span class="bi bi-person-fill"></span> @context.User.Identity?.Name
                             </NavLink>
                         </li>
