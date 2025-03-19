@@ -393,7 +393,7 @@ body {
                         {"Benefits",    "Low-calorie, rich in vitamins"}
                     }}
     };
-
+    List<Plants>? publicPlants = null; // List of public plants
     private Plant SelectedPlant;
     private string uuid = null!;
 
@@ -404,7 +404,7 @@ body {
         {
             NavigationManager.NavigateTo("/");
         }
-        SelectedPlant = Plants.FirstOrDefault();
+        publicPlants = await PlantService.GetAllPublicPlants();
     }
 
     private void SelectPlant(Plant plant)
