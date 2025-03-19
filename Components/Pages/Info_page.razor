@@ -9,10 +9,16 @@
 @using greenhouse.Entities;
 
 <style>
-    .plant-info-container {
-    display: flex;
-    height: 100vh;
-    background: #f5f5f5;
+body {
+   background-color: #CFE8A9; /* Soft pastel green */
+   min-height: 100vh;
+   margin: 0;
+}
+
+.plant-info-container {
+     display: flex;
+     height: 100vh;
+     background: #f5f5f5;
 }
 
 /* Sidebar Styles */
@@ -387,7 +393,7 @@
                         {"Benefits",    "Low-calorie, rich in vitamins"}
                     }}
     };
-
+    List<Plants>? publicPlants = null; // List of public plants
     private Plant SelectedPlant;
     private string uuid = null!;
 
@@ -398,7 +404,7 @@
         {
             NavigationManager.NavigateTo("/");
         }
-        SelectedPlant = Plants.FirstOrDefault();
+        publicPlants = await PlantService.GetAllPublicPlants();
     }
 
     private void SelectPlant(Plant plant)
