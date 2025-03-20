@@ -387,6 +387,7 @@ else if (showPrefilledForm)
         {
             NavigationManager.NavigateTo("/");
         }
+        publicPlants = await PlantService.GetAllPublicPlants();
     }
 
     // ******************************************************************************

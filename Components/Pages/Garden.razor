@@ -492,26 +492,29 @@ else
                 return;
             }
 
-                // Fetch user's plants and tasks
-                var plantTask = PlantService.GetUserPlants(uuid);
-                var tasksTask = PlantService.GetAllUserTasks(uuid);
+            // Fetch user's plants and tasks
+            var plantTask = PlantService.GetUserPlants(uuid);
+            var tasksTask = PlantService.GetAllUserTasks(uuid);
 
-                // Gets the current user's plants and tasks
-                await Task.WhenAll(plantTask, tasksTask);
+            // Gets the current user's plants and tasks
+            await Task.WhenAll(plantTask, tasksTask);
 
-                plant = await plantTask;
-                user_tasks = await tasksTask;
+            plant = await plantTask;
+            user_tasks = await tasksTask;
 
-                UpdatePlantFade();
-                UpdateOverdueCount();
+            // Gets the user's relative current day
+            R_CurrentDay = await UserServices.GetRelativeCurrentDay(uuid);
+
+            UpdatePlantFade();
+            UpdateOverdueCount();
 
             hasLoaded = true;
             _ = InvokeAsync(StateHasChanged); // Avoid UI thread blocking
         }
         await JSRuntime.InvokeVoidAsync("updateProgressCircles");
 
-        // Gets the user's relative current day
-        R_CurrentDay = await UserServices.GetRelativeCurrentDay(uuid);
+        
+        
     }
 
     async Task DeletePlant(int PLANT_ID)
