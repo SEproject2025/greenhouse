@@ -54,7 +54,7 @@
     /* Delete button as a shovel icon in the top-left corner of the tile    */
     .delete-button {
         position: absolute;
-        top: 10px;
+        top: 10px ;
         right: 10px; /* Changed from left to right                        */
         width: 30px;
         height: 30px;
@@ -142,7 +142,7 @@
     .tile {
         height: 375px;
         width: 300px;
-        background-color: #d2d9d5;
+        background-color: #ffffff;
         border: 2px solid black;
         display: inline-block;
         position: relative;
@@ -183,7 +183,7 @@
             margin-top: 5px;
             top: 58%;
             left: 40px;
-            color: black;
+          /*  color: black; */
             font-family: Arial, sans-serif;
             font-size: 14px;
         }
@@ -201,6 +201,11 @@
     .task-label {
         font-size: 20px; /* Increase task text size */
        /* font-weight: bold; */
+    }
+
+    .task-label-overdue {
+        font-size: 20px; /* Increase task text size */
+        color: red;
     }
 
     .task-container input[type="checkbox"] {
@@ -397,14 +402,17 @@
                             {
                                 <div class="task-container">
                                     <img src="@GetTaskIcon(t.TASK_NAME)" alt="@t.TASK_NAME icon" class="task-icon" />
-                                    <label for="@t.TASK_NAME-@p.PLANT_ID" class="task-label">@t.TASK_NAME</label>
-                                    <input type="checkbox"
-                                    id="@t.TASK_NAME-@p.PLANT_ID"
-                                    name="@t.TASK_NAME-@p.PLANT_ID"
-                                    checked='@t.IS_COMPLETED'
-                                    @onchange="(e) => CheckboxChecked(e, t)"
-                                    disabled="@(t.IS_COMPLETED ? "disabled" : null)"
-                                    class="task-checkbox" />
+                                    <label 
+                                        for="@t.TASK_NAME-@p.PLANT_ID" 
+                                        class="@(t.OVERDUE > 0 ? "task-label-overdue" : "task-label")">@t.TASK_NAME</label>
+                                    <input 
+                                        type="checkbox"
+                                        id="@t.TASK_NAME-@p.PLANT_ID"
+                                        name="@t.TASK_NAME-@p.PLANT_ID"
+                                        checked='@t.IS_COMPLETED'
+                                        @onchange="(e) => CheckboxChecked(e, t)"
+                                        disabled="@(t.IS_COMPLETED ? "disabled" : null)"
+                                        class="task-checkbox" />
                                 </div>
                             }
                         }
