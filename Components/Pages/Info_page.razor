@@ -3,14 +3,22 @@
 @attribute [StreamRendering(true)]
 @inject IPlantService PlantService
 @inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IUserServices UserServices
 
 @using greenhouse.Entities;
 
 <style>
-    .plant-info-container {
-    display: flex;
-    height: 100vh;
-    background: #f5f5f5;
+body {
+   background-color: #CFE8A9; /* Soft pastel green */
+   min-height: 100vh;
+   margin: 0;
+}
+
+.plant-info-container {
+     display: flex;
+     height: 100vh;
+     background: #f5f5f5;
 }
 
 /* Sidebar Styles */
@@ -385,12 +393,18 @@
                         {"Benefits",    "Low-calorie, rich in vitamins"}
                     }}
     };
-
+    List<Plants>? publicPlants = null; // List of public plants
     private Plant SelectedPlant;
+    private string uuid = null!;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        SelectedPlant = Plants.FirstOrDefault();
+        uuid = await UserServices.GetUserID(await AuthenticationStateProvider.GetAuthenticationStateAsync());
+        if (uuid == "_NULL_USER_")
+        {
+            NavigationManager.NavigateTo("/");
+        }
+        publicPlants = await PlantService.GetAllPublicPlants();
     }
 
     private void SelectPlant(Plant plant)

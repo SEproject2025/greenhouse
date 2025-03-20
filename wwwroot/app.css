@@ -55,7 +55,10 @@ h1:focus {
     width: 120px;
     height: 20px;
     border-radius: 20px;
-    background: linear-gradient(#8BC34A 0 0) 0/0% no-repeat #C8E6C9;
+    background: linear-gradient(#8BC34A 0 0) 0/0% no-repeat #f0f0f0;
+    border-style: solid;
+    border-width: 1px; /* Set a very thin border */
+    border-color: black;
     animation: l2 2s infinite steps(10);
     margin: 10px auto; /* Centers loader */
 }
