@@ -96,9 +96,16 @@
         padding: 2rem;
         border-radius: 10px;
         background-color: white;
-        box-shadow: var(--shadow);
+        box-shadow: 0 8px 16px rgba(76, 175, 80, 0.4); /* Green shadow */
+        border: 2px solid rgba(76, 175, 80, 0.7); /* Thin green outline */
         transition: all 0.3s ease;
     }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(76, 175, 80, 0.6); /* Stronger green shadow on hover */
+            border: 2px solid rgba(76, 175, 80, 1); /* Darker green outline on hover */
+        }
 
     .testimonial-section {
         padding: 5rem 0;
@@ -154,7 +161,7 @@
 </section>
 
 <section class="testimonial-section">
-    <h2>What Users Say</h2>
+    <h2>What Our Users Say</h2>
     <div class="testimonial-card">
         <p>"Since using Evera, my plants are thriving! The care history feature is so helpful!"</p>
         <h4>- Alex Johnson</h4>
@@ -164,7 +171,7 @@
 <section class="cta-section">
     <h2>Ready to Start Growing?</h2>
     <p>Track your plants today and watch them flourish.</p>
-    <button class="btn-hero btn-hero-secondary">Get Started Now</button>
+    <button class="btn-hero btn-hero-secondary" id="scrollToTopBtn">Get Started Now</button>
 </section>
 
 <!--***********************************************************************
@@ -172,3 +179,9 @@
 ************************************************************************-->
 @code {
 }
+
+<script>
+    document.getElementById("scrollToTopBtn").addEventListener("click", function() {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+</script>
