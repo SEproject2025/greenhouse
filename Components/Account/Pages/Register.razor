@@ -15,65 +15,125 @@
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
 
+<!--***********************************************************************
+*                                CSS/STYLING SECTION
+************************************************************************-->
+<style>
+	.register-wrapper {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 100vh;
+		background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/background_photos/Leafy_Blurry.png') center/cover no-repeat;
+	}
+
+	.register-container {
+		background-color: white;
+		padding: 40px;
+		border-radius: 12px;
+		box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+		width: 100%;
+		max-width: 400px;
+	}
+
+		.register-container h2 {
+			text-align: center;
+			margin-bottom: 20px;
+		}
+
+	.password-rules {
+		color: white;
+		background-color: rgba(0, 0, 0, 0.5);
+		width: fit-content;
+		margin: 20px auto;
+		padding: 15px 25px;
+		border-radius: 10px;
+		box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+	}
+
+		.password-rules h5 {
+			color: #fff;
+			text-align: center;
+		}
+
+		.password-rules li {
+			color: #f1f1f1;
+		}
+
+	hr {
+		border: none;
+		border-top: 1px solid #ccc;
+		width: 32%;
+		margin: 0 auto;
+	}
+
+	.btn-primary {
+		color: #fff;
+		background-color: #128016;
+		border-color: #1861ac;
+	}
+
+		.btn-primary:hover {
+			color: #fff;
+			background-color: #08590b;
+			border-color: #0a58ca;
+		}
+
+</style>
+
+
+
+<!--***********************************************************************
+*                                HTML SECTION
+************************************************************************-->
 <PageTitle>Register</PageTitle>
 
-<h1>Register</h1>
+<h1 class="visually-hidden">Register</h1> <!-- Keeps heading for accessibility -->
 
-<div class="row">
-	<div class="col-md-4">
-		<StatusMessage Message="@Message" />
-		<EditForm Model="Input" asp-route-returnUrl="@ReturnUrl" method="post" OnValidSubmit="RegisterUser" FormName="register">
-			<DataAnnotationsValidator />
-			<h2>Create a new account.</h2>
-			<hr />
-			<ValidationSummary class="text-danger" role="alert" />
-			<div class="form-floating mb-3">
-				<InputText
-				@bind-Value="Input.Email"
-				class="form-control"
-				autocomplete="username"
-				aria-required="true"
-				placeholder="name@example.com" />
-				<label for="email">Email</label>
-				<ValidationMessage For="() => Input.Email" class="text-danger" />
-			</div>
-			<div class="form-floating mb-3">
-				<InputText
-				type="password"
-				@bind-Value="Input.Password"
-				class="form-control"
-				autocomplete="new-password"
-				aria-required="true"
-				placeholder="password" />
-				<label for="password">Password</label>
-				<ValidationMessage For="() => Input.Password" class="text-danger" />
-			</div>
-			<div class="form-floating mb-3">
-				<InputText
-				type="password"
-				@bind-Value="Input.ConfirmPassword"
-				class="form-control"
-				autocomplete="new-password"
-				aria-required="true"
-				placeholder="password" />
-				<label for="confirm-password">Confirm Password</label>
-				<ValidationMessage For="() => Input.ConfirmPassword" class="text-danger" />
-			</div>
-			<button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-		</EditForm>
+<div class="register-wrapper">
+	<div class="register-container">
+		<section>
+			<StatusMessage Message="@Message" />
+			<EditForm Model="Input" asp-route-returnUrl="@ReturnUrl" method="post" OnValidSubmit="RegisterUser" FormName="register">
+				<DataAnnotationsValidator />
+				<h2>Create an Account</h2>
+				<hr />
+				<ValidationSummary class="text-danger" role="alert" />
+				<div class="form-floating mb-3">
+					<InputText @bind-Value="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+					<label for="email">Email</label>
+					<ValidationMessage For="() => Input.Email" class="text-danger" />
+				</div>
+				<div class="form-floating mb-3">
+					<InputText type="password" @bind-Value="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+					<label for="password">Password</label>
+					<ValidationMessage For="() => Input.Password" class="text-danger" />
+				</div>
+				<div class="form-floating mb-3">
+					<InputText type="password" @bind-Value="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+					<label for="confirm-password">Confirm Password</label>
+					<ValidationMessage For="() => Input.ConfirmPassword" class="text-danger" />
+				</div>
+				<button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+			</EditForm>
+		</section>
 	</div>
-</div> 
-<hr style="width:32%"/>
-<h5>Password Requirements:</h5>
-<ul>
-	<li>Must be <b>8</b> or more characters long</li>
-	<li>Must have at least one <b>number</b></li>
-	<li>Must have at least one <b>lowercase letter</b></li>
-	<li>Must have at least one <b>uppercase letter</b></li>
-	<li>Must have at least one <b>non-alphanumeric character</b></li>
-</ul>
-<hr style="width:32%" />
+</div>
 
+<div class="password-rules">
+	<h5>Password Requirements:</h5>
+	<ul>
+		<li>Must be <b>8</b> or more characters long</li>
+		<li>Must have at least one <b>number</b></li>
+		<li>Must have at least one <b>lowercase letter</b></li>
+		<li>Must have at least one <b>uppercase letter</b></li>
+		<li>Must have at least one <b>non-alphanumeric character</b></li>
+	</ul>
+</div>
+
+<!--***********************************************************************
+*                                CODE SECTION
+************************************************************************-->
 @code {
 
 	private IEnumerable<IdentityError>? identityErrors;
