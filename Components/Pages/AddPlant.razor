@@ -316,7 +316,10 @@
 
 
         <!-- Submit button to save the plant details -->
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button 
+            type="submit" 
+            class="btn btn-primary" 
+            disabled="@submit_disabled">Submit</button>
     </EditForm>
 }
 // Display the form for selecting a prefilled plant 
@@ -339,8 +342,15 @@ else if (showPrefilledForm)
         </InputSelect>
 
         <!-- Buttons to submit or edit the selected plant -->
-        <button type="submit" class="btn btn-primary">Submit</button>
-        <button type="button" class="btn btn-secondary" @onclick="EditSelectedPlant">Edit</button>
+        <button 
+            type="submit" 
+            class="btn btn-primary" 
+            disabled="@submit_disabled">Submit</button>
+        <button 
+            type="button" 
+            class="btn btn-secondary"
+            disabled="@submit_disabled"
+            @onclick="EditSelectedPlant">Edit</button>
     </EditForm>
 }
 
@@ -377,6 +387,8 @@ else if (showPrefilledForm)
 
     private string uuid = null!;
 
+    private bool submit_disabled = true;
+
     // ******************************************************************************
     // Fetch public plants and get user details
     // ******************************************************************************
@@ -388,6 +400,7 @@ else if (showPrefilledForm)
             NavigationManager.NavigateTo("/");
         }
         publicPlants = await PlantService.GetAllPublicPlants();
+        submit_disabled = false;
     }
 
     // ******************************************************************************
@@ -519,6 +532,7 @@ else if (showPrefilledForm)
     // ******************************************************************************
     async Task CustomHandleSubmit()
     {
+        submit_disabled = true;
         // Get the user's unique ID
         plant.USER_ID = uuid;
 
@@ -602,6 +616,7 @@ else if (showPrefilledForm)
     // ******************************************************************************
     async Task PrefillHandleSubmit()
     {
+        submit_disabled = true;
         // Get the user's unique ID
         plant.USER_ID = uuid;
 
