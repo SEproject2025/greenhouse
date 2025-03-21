@@ -527,6 +527,14 @@ else if (showPrefilledForm)
         {
             plant.IMAGE_DATA = selectedPlant.IMAGE_DATA;
         }
+        else
+        {
+            var defaultImagePath = Path.Combine("wwwroot", "images", "Default.webp");
+            if (File.Exists(defaultImagePath))
+            {
+                plant.IMAGE_DATA = await File.ReadAllBytesAsync(defaultImagePath);
+            }
+        }
 
         // Check if the plant is an edit (already exists)
         if (PLANT_ID.HasValue && PLANT_ID > 0)
