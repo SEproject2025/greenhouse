@@ -40,24 +40,33 @@
 			text-align: center;
 			margin-bottom: 20px;
 		}
-
+	/* The rules of creating a password   */
 	.password-rules {
-		color: white;
-		background-color: rgba(0, 0, 0, 0.5);
+		background-color: #DCEDC8; /* very light green */
 		width: fit-content;
 		margin: 20px auto;
 		padding: 15px 25px;
 		border-radius: 10px;
-		box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+		box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+		font-size: 0.85rem;
 	}
 
 		.password-rules h5 {
-			color: #fff;
+			color: #2e5338;
 			text-align: center;
+			margin-bottom: 10px;
+			font-size: 1rem;
+		}
+
+		.password-rules ul {
+			padding-left: 18px;
+			margin: 0;
 		}
 
 		.password-rules li {
-			color: #f1f1f1;
+			color: #333;
+			margin-bottom: 2px; /* ↓ Smaller spacing between list items */
+			line-height: 1; /* ↓ Tighter line height */
 		}
 
 	hr {
@@ -104,6 +113,16 @@
 			<EditForm Model="Input" asp-route-returnUrl="@ReturnUrl" method="post" OnValidSubmit="RegisterUser" FormName="register">
 				<DataAnnotationsValidator />
 				<h2>Create an Account</h2>
+				<div class="password-rules">
+					<h5>Password Must Have:</h5>
+					<ul>
+						<li>8 or more characters</li>
+						<li>One number</li>
+						<li>One lowercase letter</li>
+						<li>One uppercase letter</li>
+						<li>One special character</li>
+					</ul>
+				</div>
 				<hr />
 				<ValidationSummary class="text-danger" role="alert" />
 				<div class="form-floating mb-3">
