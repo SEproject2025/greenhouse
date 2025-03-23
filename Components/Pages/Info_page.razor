@@ -148,250 +148,519 @@ body {
 @code {
     private List<Plant> Plants = new()
     {
-        new Plant { Name = "Beet", ScientificName = "Beta vulgaris", Image = "images/Beats.webp",
-                    Description = "Beets are a root vegetable known for their deep red or purple color, though they also come in golden and striped varieties. They have an earthy, slightly sweet taste and are often eaten raw, roasted, pickled, or used in soups like borscht. The greens are also edible and packed with nutrients.",
-                    Attributes = new Dictionary<string, string>
-                    {
-                        {"Care Level",  "Low-maintenance"},
-                        {"Environment", "Cool-season"},
-                        {"Light",       "Full sun to partial shade"},
-                        {"Water",       "Moderate, keep soil moist"},
-                        {"Temperature", "50-75°F (10-24°C)"},
-                        {"Growth Rate", "Moderate"},
-                        {"Benefits",    "High in fiber, antioxidants, and nitrates that support heart health"}
-                    }
-        },
-        new Plant { Name = "Broccoli",   ScientificName = "Brassica oleracea",               Image = "images/Broccoli.webp",    Description = "A nutrient-rich vegetable belonging to the cabbage family. It has tightly packed green florets atop a thick stalk and is known for its high fiber, vitamin C, and antioxidant content.",
-                    Attributes = new Dictionary<string, string>
-                    {
-                        {"Care Level",  "Medium-maintenance"},
-                        {"Environment", "Cool-season"},
-                        {"Light",       "Full sun"},
-                        {"Water",       "Moderate, keep soil moist"},
-                        {"Temperature", "55-75°F (13-24°C)"},
-                        {"Growth Rate", "Moderate"},
-                        {"Benefits",    "High in fiber, vitamins C and K, antioxidants"}
-                    }},
-        new Plant { Name = "Cabbage",    ScientificName = "Brassica oleracea var. capitata", Image = "images/Cabbage.webp",     Description = "A leafy green, red, or white biennial plant grown as an annual vegetable crop. It has a dense, layered head and is used in salads, soups, and fermented dishes like sauerkraut.",
-                    Attributes = new Dictionary<string, string>
-                    {
-                        {"Care Level",  "Medium-maintenance"},
-                        {"Environment", "Cool-season"},
-                        {"Light",       "Full sun"},
-                        {"Water",       "Moderate, consistent moisture"},
-                        {"Temperature", "45-75°F (7-24°C)"},
-                        {"Growth Rate", "Moderate"},
-                        {"Benefits",    "Rich in vitamin C, supports digestion"}
-                    }},
-        new Plant { Name = "Cantaloupe", ScientificName = "Cucumis melo",                    Image = "images/Cantaloupe.webp",  Description = "A sweet, orange-fleshed melon with a netted rind. It is hydrating, packed with vitamins A and C, and commonly eaten fresh or in fruit salads.",
-                    Attributes = new Dictionary<string, string>
-                    {
-                        {"Care Level",  "High-maintenance"},
-                        {"Environment", "Warm-season"},
-                        {"Light",       "Full sun"},
-                        {"Water",       "High, consistent moisture"},
-                        {"Temperature", "70-90°F (21-32°C)"},
-                        {"Growth Rate", "Fast"},
-                        {"Benefits",    "Hydrating, high in vitamin A"}
-                    }},
-        new Plant { Name = "Carrot",     ScientificName = "Daucus carota",                   Image = "images/Carrot.webp",      Description = "A crunchy, root vegetable typically orange but available in various colors. Rich in beta-carotene, it supports eye health and is enjoyed raw, cooked, or juiced.",
-                    Attributes = new Dictionary<string, string>
-                    {
-                        {"Care Level",  "Low-maintenance"},
-                        {"Environment", "Cool-season"},
-                        {"Light",       "Full sun to partial shade"},
-                        {"Water",       "Moderate"},
-                        {"Temperature", "55-75°F (13-24°C)"},
-                        {"Growth Rate", "Slow"},
-                        {"Benefits",    "Supports eye health, high in beta-carotene"}
-                    }},
-        new Plant { Name = "Cauliflower",ScientificName = "Brassica oleracea",               Image = "images/Cauliflower.webp", Description = "A cruciferous vegetable with a white, dense head composed of undeveloped flower buds. It is low in calories and can be eaten raw, roasted, steamed, or mashed as a substitute for potatoes or rice.",
-                    Attributes = new Dictionary<string, string>
-                    {
-                        {"Care Level",  "High-maintenance"},
-                        {"Environment", "Cool-season"},
-                        {"Light",       "Full sun"},
-                        {"Water",       "Moderate"},
-                        {"Temperature", "50-75°F (10-24°C)"},
-                        {"Growth Rate", "Slow"},
-                        {"Benefits",    "Low in calories, rich in fiber"}
-                    }},
-        new Plant { Name = "Corn",       ScientificName = "Zea mays",                        Image = "images/Corn.webp",        Description = "A cereal grain with kernels on a cob, commonly eaten as a vegetable. It is used in a variety of dishes, including corn on the cob, popcorn, and tortillas.",
-                    Attributes = new Dictionary<string, string>
-                    {
-                        {"Care Level",  "High-maintenance"},
-                        {"Environment", "Warm-season"},
-                        {"Light",       "Full sun"},
-                        {"Water",       "High"},
-                        {"Temperature", "60-95°F (16-35°C)"},
-                        {"Growth Rate", "Fast"},
-                        {"Benefits",    "Provides energy, good source of fiber"}
-                    }},
-        new Plant { Name = "Cucumber",   ScientificName = "Cucumis sativus",                 Image = "images/Cucumbers.webp",    Description = "A cool, refreshing green fruit with high water content. It is often used in salads, sandwiches, or pickled to make pickles.",
-                    Attributes = new Dictionary<string, string>
-                    {
-                        {"Care Level",  "Medium-maintenance"},
-                        {"Environment", "Warm-season"},
-                        {"Light",       "Full sun"},
-                        {"Water",       "High"},
-                        {"Temperature", "70-90°F (21-32°C)"},
-                        {"Growth Rate", "Fast"},
-                        {"Benefits",    "Hydrating, supports digestion"}
-                    }},
-        new Plant { Name = "Eggplant",   ScientificName = "Solanum melongena",               Image = "images/Eggplant.webp",    Description = "A deep purple, glossy vegetable with a spongy texture. It is commonly used in dishes like eggplant parmesan, ratatouille, and baba ganoush.",
-                    Attributes = new Dictionary<string, string>
-                    {
-                        {"Care Level",  "Medium-maintenance"},
-                        {"Environment", "Warm-season"},
-                        {"Light",       "Full sun"},
-                        {"Water",       "Moderate"},
-                        {"Temperature", "70-85°F (21-29°C)"},
-                        {"Growth Rate", "Moderate"},
-                        {"Benefits",    "High in antioxidants, supports brain health"}
-                    }},
-        new Plant { Name = "Green Beans",ScientificName = "Phaseolus vulgaris",              Image = "images/GreenBeans.webp",  Description = "Also known as snap beans or string beans, these are long, slender green pods with small seeds inside. They are eaten fresh, steamed, or sautéed.",
-                    Attributes = new Dictionary<string, string>
-                    {
-                        {"Care Level",  "Low-maintenance"},
-                        {"Environment", "Warm-season"},
-                        {"Light",       "Full sun"},
-                        {"Water",       "Moderate"},
-                        {"Temperature", "65-85°F (18-29°C)"},
-                        {"Growth Rate", "Fast"},
-                        {"Benefits",    "Good source of protein, fiber"}
-                    }},
-        new Plant { Name = "Lettuce",    ScientificName = "Lactuca sativa",                  Image = "images/Lettuce.webp",     Description = "A leafy green vegetable commonly used in salads and sandwiches. It comes in various varieties, such as romaine, iceberg, and butterhead.",
-                    Attributes = new Dictionary<string, string>
-                    {
-                        {"Care Level",  "Low-maintenance"},
-                        {"Environment", "Cool-season"},
-                        {"Light",       "Partial shade to full sun"},
-                        {"Water",       "Moderate"},
-                        {"Temperature", "Moderate"},
-                        {"Growth Rate", "Fast"},
-                        {"Benefits",    "Hydrating, supports digestion"}
-                    }},
-        new Plant { Name = "Onions",     ScientificName = "Allium cepa",                     Image = "images/Onions.webp",      Description = "A bulb vegetable with a pungent flavor, available in white, yellow, and red varieties. They are used in cooking to add depth to savory dishes.",
-                    Attributes = new Dictionary<string, string>
-                    {
-                        {"Care Level",  "Medium-maintenance"},
-                        {"Environment", "Cool or warm-season"},
-                        {"Light",       "Full sun"},
-                        {"Water",       "Moderate"},
-                        {"Temperature", "50-85°F (10-29°C)"},
-                        {"Growth Rate", "Slow"},
-                        {"Benefits",    "Supports immune health, anti-inflammatory"}
-                    }},
-        new Plant { Name = "Peas",       ScientificName = "Pisum sativum",                   Image = "images/Peas.webp",        Description = "Small, round, green legumes that grow in pods. They are eaten fresh, frozen, or dried and are rich in protein and fiber.",
-                    Attributes = new Dictionary<string, string>
-                    {
-                        {"Care Level",  "Low-maintenance"},
-                        {"Environment", "Cool-season"},
-                        {"Light",       "Full sun to partial shade"},
-                        {"Water",       "Moderate"},
-                        {"Temperature", "50-75°F (10-24°C)"},
-                        {"Growth Rate", "Fast"},
-                        {"Benefits",    "High in protein, supports heart health"}
-                    }},
-        new Plant { Name = "Peppers",    ScientificName = "Capsicum annuum",                 Image = "images/Peppers.webp",     Description = "A diverse group of fruits ranging from sweet bell peppers to hot chili peppers. They are used in salads, stir-fries, and spicy dishes.",
-                    Attributes = new Dictionary<string, string>
-                    {
-                        {"Care Level",  "Medium-maintenance"},
-                        {"Environment", "Warm-season"},
-                        {"Light",       "Full sun"},
-                        {"Water",       "Moderate"},
-                        {"Temperature", "70-85°F (21-29°C)"},
-                        {"Growth Rate", "Moderate"},
-                        {"Benefits",    "High in vitamin C, boosts metabolism"}
-                    }},
-        new Plant { Name = "Potatoes",   ScientificName = "Solanum tuberosum",               Image = "images/Potatoes.webp",    Description = "A starchy tuber widely consumed worldwide. Potatoes can be baked, mashed, fried, or boiled.",
-                    Attributes = new Dictionary<string, string>
-                    {
-                        {"Care Level",  "Medium-maintenance"},
-                        {"Environment", "Cool-season"},
-                        {"Light",       "Full sun"},
-                        {"Water",       "Moderate"},
-                        {"Temperature", "50-75°F (10-24°C)"},
-                        {"Growth Rate", "Moderate"},
-                        {"Benefits",    "High in potassium, provides energy"}
-                    }},
-        new Plant { Name = "Pumpkins",   ScientificName = "Cucurbita pepo",                  Image = "images/Pumpkins.webp",    Description = "A large, orange winter squash known for its sweet flesh and seeds. It is used in pies, soups, and decorations for fall festivals.",
-                    Attributes = new Dictionary<string, string>
-                    {
-                        {"Care Level",  "High-maintenance"},
-                        {"Environment", "Warm-season"},
-                        {"Light",       "Full sun"},
-                        {"Water",       "High"},
-                        {"Temperature", "70-85°F (21-29°C)"},
-                        {"Growth Rate", "Fast"},
-                        {"Benefits",    "Rich in beta-carotene, supports eye health"}
-                    }},
-        new Plant { Name = "Radishes",   ScientificName = "Raphanus sativus",                Image = "images/Radishes.webp",    Description = "Small, crunchy root vegetables with a peppery taste. They are commonly eaten raw in salads or pickled.",
-                    Attributes = new Dictionary<string, string>
-                    {
-                        {"Care Level",  "Low-maintenance"},
-                        {"Environment", "Cool-season"},
-                        {"Light",       "Full sun"},
-                        {"Water",       "Moderate"},
-                        {"Temperature", "50-70°F (10-21°C)"},
-                        {"Growth Rate", "Fast"},
-                        {"Benefits",    "Supports digestion, high in fiber"}
-                    }},
-        new Plant { Name = "Squash",     ScientificName = "Cucurbita pepo",                  Image = "images/Squash.webp",      Description = "A family of vegetables that includes zucchini, butternut squash, and acorn squash. Some varieties are eaten in summer, while others are stored for winter use.",
-                    Attributes = new Dictionary<string, string>
-                    {
-                        {"Care Level",  "Low-maintenance"},
-                        {"Environment", "Warm-season"},
-                        {"Light",       "Full sun"},
-                        {"Water",       "Moderate"},
-                        {"Temperature", "65-85°F (18-29°C)"},
-                        {"Growth Rate", "Fast"},
-                        {"Benefits",    "High in fiber, supports heart health"}
-                    }},
-        new Plant { Name = "Sunflower",  ScientificName = "Helianthus annuus",               Image = "images/Sunflower.webp",   Description = "Grown for its edible seeds and oil, sunflowers have bright yellow blooms that track the sun.",
-                    Attributes = new Dictionary<string, string>
-                    {
-                        {"Care Level",  "Low-maintenance"},
-                        {"Environment", "Warm-season"},
-                        {"Light",       "Full sun"},
-                        {"Water",       "Moderate"},
-                        {"Temperature", "65-90°F (18-32°C)"},
-                        {"Growth Rate", "Fast"},
-                        {"Benefits",    "Edible seeds, attracts pollinators"}
-                    }},
-        new Plant { Name = "Tomato",     ScientificName = "Solanum lycopersicum",            Image = "images/Tomato.webp",      Description = "A juicy, red fruit often mistaken for a vegetable. It is a staple in salads, sauces, and sandwiches.",
-                    Attributes = new Dictionary<string, string>
-                    {
-                        {"Care Level",  "Medium-maintenance"},
-                        {"Environment", "Warm-season"},
-                        {"Light",       "Full sun"},
-                        {"Water",       "Moderate"},
-                        {"Temperature", "70-85°F (21-29°C)"},
-                        {"Growth Rate", "Fast"},
-                        {"Benefits",    "High in lycopene, supports heart health"}
-                    }},
-        new Plant { Name = "Watermelon", ScientificName = "Citrullus lanatus",               Image = "images/Watermelon.webp",  Description = "A large, hydrating fruit with a green rind and sweet, red flesh. It is mostly consumed fresh in summer.",
-                    Attributes = new Dictionary<string, string>
-                    {
-                        {"Care Level",  "High-maintenance"},
-                        {"Environment", "Warm-season"},
-                        {"Light",       "Full sun"},
-                        {"Water",       "High"},
-                        {"Temperature", "75-95°F (24-35°C)"},
-                        {"Growth Rate", "Fast"},
-                        {"Benefits",    "Hydrating, rich in antioxidants"}
-                    }},
-        new Plant { Name = "Zucchini",   ScientificName = "Cucurbita pepo",                  Image = "images/Zucchini.webp",    Description = "A summer squash with a mild flavor, often used in stir-fries, baked goods, and grilled dishes.",
-                    Attributes = new Dictionary<string, string>
-                    {
-                        {"Care Level",  "Medium-maintenance"},
-                        {"Environment", "Warm-season"},
-                        {"Light",       "Full sun"},
-                        {"Water",       "Moderate"},
-                        {"Temperature", "70-85°F (21-29°C)"},
-                        {"Growth Rate", "Fast"},
-                        {"Benefits",    "Low-calorie, rich in vitamins"}
-                    }}
+       new Plant{
+          Name = "Beet",
+          ScientificName = "Beta vulgaris",
+          Image = "images/Beets.webp",
+          Attributes = new Dictionary<string, string>
+          {
+              {"Description", "Beets are a root vegetable known for their deep red or purple color, though they also come in golden and striped varieties. They have an earthy, slightly sweet taste and are often eaten raw, roasted, pickled, or used in soups like borscht. The greens are also edible and packed with nutrients."},
+              {"Care Level",  "Low-maintenance"},
+              {"Environment", "Cool-season"},
+              {"Light",       "Full sun to partial shade"},
+              {"Water",       "Moderate, keep soil moist"},
+              {"Temperature", "50-75°F (10-24°C)"},
+              {"Growth Rate", "Moderate"},
+              {"Benefits",    "High in fiber, antioxidants, and nitrates that support heart health"},
+              {"Soil Type", "Loose, well-draining, rich in organic matter"},
+              {"pH Level", "6.0 - 7.5"},
+              {"Fertilizer", "Low nitrogen, balanced phosphorus and potassium"},
+              {"Common Pests", "Aphids, leaf miners, flea beetles"},
+              {"Companion Plants", "Lettuce, onions, bush beans, radishes"},
+              {"Thinning", "Thin seedlings to 3-4 inches apart for proper root growth"},
+              {"Harvest Time", "50-70 days after planting, when roots are 1.5-3 inches in diameter"}
+          }
+       },
+       new Plant{
+          Name = "Broccoli",
+          ScientificName = "Brassica oleracea var. italica",
+          Image = "images/Broccoli.webp",
+          Attributes = new Dictionary<string, string>
+          {
+             {"Description", "Broccoli is a cool-season vegetable known for its dense, nutrient-packed green florets. It is rich in vitamins, fiber, and antioxidants, making it a staple in healthy diets. Broccoli is best when harvested before the buds bloom into yellow flowers."},
+             {"Care Level",  "Medium-maintenance"},
+             {"Environment", "Cool-season"},
+             {"Light",       "Full sun"},
+             {"Water",       "Moderate, keep soil evenly moist"},
+             {"Temperature", "55-75°F (13-24°C)"},
+             {"Growth Rate", "Moderate"},
+             {"Benefits",    "High in fiber, vitamins C and K, and antioxidants"},
+             {"Soil Type", "Well-draining, rich in organic matter"},
+             {"pH Level", "6.0 - 7.0"},
+             {"Fertilizer", "Balanced (10-10-10) at planting, nitrogen-rich during growth"},
+             {"Common Pests", "Cabbage worms, aphids, flea beetles, cutworms"},
+             {"Companion Plants", "Onions, carrots, celery, marigolds"},
+             {"Spacing", "18 inches apart for proper growth"},
+             {"Mulching", "Retains moisture and suppresses weeds"},
+             {"Side Shoots", "Produces smaller heads after main harvest"},
+             {"Harvest Time", "60-90 days after planting, before buds bloom"}
+          }
+       },
+       new Plant{
+          Name = "Cabbage",
+          ScientificName = "Brassica oleracea var. capitata",
+          Image = "images/Cabbage.webp",
+          Attributes = new Dictionary<string, string>{
+             {"Description", "Cabbage is a leafy vegetable with a dense, round head, commonly used in salads, slaws, soups, and fermented dishes like sauerkraut. It is a cool-season crop known for its crisp texture and rich nutrient content."},
+             {"Care Level",  "Medium-maintenance"},
+             {"Environment", "Cool-season"},
+             {"Light",       "Full sun"},
+             {"Water",       "Consistent moisture, about 1.5 inches per week"},
+             {"Temperature", "55-75°F (13-24°C)"},
+             {"Growth Rate", "Moderate"},
+             {"Benefits",    "High in fiber, vitamins C and K, and antioxidants"},
+             {"Soil Type", "Well-draining, fertile soil enriched with compost"},
+             {"pH Level", "6.0 - 7.5"},
+             {"Fertilizer", "Balanced (10-10-10) at planting, nitrogen-rich during leafy growth"},
+             {"Common Pests", "Cabbage worms, aphids, flea beetles, slugs"},
+             {"Companion Plants", "Dill, onions, potatoes, celery"},
+             {"Spacing", "12-18 inches apart for proper head formation"},
+             {"Mulching", "Helps retain moisture and regulate soil temperature"},
+             {"Head Formation", "Firm heads indicate readiness for harvest"},
+             {"Harvest Time", "70-120 days after planting, cut before heads split"}
+          }
+       },
+       new Plant{
+          Name = "Cantaloupe",
+          ScientificName = "Cucumis melo var. cantalupensis",
+          Image = "images/Cantaloupe.webp",
+          Attributes = new Dictionary<string, string>{
+              {"Description", "Cantaloupe is a sweet, orange-fleshed melon with a netted rind, known for its refreshing taste and high water content. It thrives in warm climates and is commonly eaten fresh, in fruit salads, or blended into smoothies."},
+              {"Care Level",  "Medium-maintenance"},
+              {"Environment", "Warm-season"},
+              {"Light",       "Full sun"},
+              {"Water",       "Regular watering, keep soil evenly moist but not waterlogged"},
+              {"Temperature", "75-95°F (24-35°C)"},
+              {"Growth Rate", "Fast"},
+              {"Benefits",    "Rich in vitamins A and C, hydration support, and antioxidants"},
+              {"Soil Type", "Well-draining, sandy loam enriched with compost"},
+              {"pH Level", "6.0 - 6.8"},
+              {"Fertilizer", "Balanced (10-10-10) early, higher phosphorus and potassium during fruiting"},
+              {"Common Pests", "Aphids, cucumber beetles, squash bugs"},
+              {"Companion Plants", "Corn, radishes, marigolds, beans"},
+              {"Spacing", "2-3 feet apart to allow vine spreading"},
+              {"Mulching", "Helps retain moisture and prevent weed growth"},
+              {"Pollination", "Hand pollinate if bee activity is low"},
+              {"Harvest Time", "70-90 days after planting, when the fruit detaches easily from the vine"}
+          }
+       },
+       new Plant{
+          Name = "Carrot",
+          ScientificName = "Daucus carota",
+          Image = "images/Carrot.webp",
+          Attributes = new Dictionary<string, string>{
+             {"Description", "Carrots are crunchy root vegetables, typically orange, though they also come in purple, red, yellow, and white varieties. They are rich in beta-carotene and widely used in salads, soups, and juices."},
+             {"Care Level",  "Low-maintenance"},
+             {"Environment", "Cool-season"},
+             {"Light",       "Full sun to partial shade"},
+             {"Water",       "Moderate, keep soil moist but not soggy"},
+             {"Temperature", "55-75°F (13-24°C)"},
+             {"Growth Rate", "Moderate"},
+             {"Benefits",    "High in vitamin A, supports eye health and immune function"},
+             {"Soil Type", "Well-draining, loose, sandy soil to allow root development"},
+             {"pH Level", "6.0 - 6.8"},
+             {"Fertilizer", "Balanced (10-10-10) during early growth, avoid high nitrogen"},
+             {"Common Pests", "Carrot flies, aphids, slugs"},
+             {"Companion Plants", "Onions, leeks, rosemary, lettuce"},
+             {"Spacing", "2-3 inches apart to avoid crowding"},
+             {"Thinning", "Thin seedlings to allow space for root growth"},
+             {"Mulching", "Helps keep soil moist and prevent weeds"},
+             {"Harvest Time", "60-80 days after planting, when roots are full-sized"}
+          }
+       },
+       new Plant{
+          Name = "Cauliflower",
+          ScientificName = "Brassica oleracea var. botrytis",
+          Image = "images/Cauliflower.webp",
+          Attributes = new Dictionary<string, string>{
+             {"Description", "Cauliflower is a cool-season vegetable known for its white, compact flower head. It is part of the Brassica family and is often used in soups, stir-fries, and as a low-carb substitute for rice or mashed potatoes."},
+             {"Care Level",  "Medium-maintenance"},
+             {"Environment", "Cool-season"},
+             {"Light",       "Full sun"},
+             {"Water",       "Consistent moisture, avoid waterlogging"},
+             {"Temperature", "60-70°F (15-21°C)"},
+             {"Growth Rate", "Moderate"},
+             {"Benefits",    "Rich in vitamins C and K, supports bone health and immunity"},
+             {"Soil Type", "Well-draining, fertile soil with high organic matter"},
+             {"pH Level", "6.0 - 7.0"},
+             {"Fertilizer", "High nitrogen during early growth, balanced during head formation"},
+             {"Common Pests", "Cabbage worms, aphids, root maggots"},
+             {"Companion Plants", "Basil, oregano, sage, celery"},
+             {"Spacing", "18-24 inches apart to allow for proper head formation"},
+             {"Thinning", "Thin seedlings to ensure strong, healthy plants"},
+             {"Mulching", "Use mulch to retain moisture and keep soil cool"},
+             {"Harvest Time", "70-120 days after planting, when the head is firm and compact"}
+          }
+       },
+       new Plant{
+          Name = "Corn",
+          ScientificName = "Zea mays",
+          Image = "images/Corn.webp",
+          Attributes = new Dictionary<string, string>{
+             {"Description", "Corn is a tall, annual plant that produces large, yellow or multicolored kernels on ears. It is widely grown for food, as well as for industrial uses like biofuel and animal feed."},
+             {"Care Level",  "Medium-maintenance"},
+             {"Environment", "Warm-season"},
+             {"Light",       "Full sun"},
+             {"Water",       "Regular watering, especially during tasseling and ear development"},
+             {"Temperature", "60-95°F (16-35°C)"},
+             {"Growth Rate", "Fast"},
+             {"Benefits",    "High in carbohydrates, a good source of fiber, vitamins B and C, and antioxidants"},
+             {"Soil Type", "Well-draining, fertile soil with plenty of organic matter"},
+             {"pH Level", "5.8 - 7.0"},
+             {"Fertilizer", "High nitrogen during early growth, balanced fertilizer during ear development"},
+             {"Common Pests", "Corn earworms, aphids, rootworms"},
+             {"Companion Plants", "Beans, squash, melons"},
+             {"Spacing", "8-12 inches apart in rows for good air circulation and pollination"},
+             {"Pollination", "Corn is wind-pollinated, so plant in blocks rather than single rows to improve pollination"},
+             {"Mulching", "Apply mulch to retain moisture and suppress weeds"},
+             {"Harvest Time", "60-100 days after planting, when kernels are full and milky"},
+          }
+       },
+       new Plant{
+          Name = "Cucumber",
+          ScientificName = "Cucumis sativus",
+          Image = "images/Cucumber.webp",
+          Attributes = new Dictionary<string, string>{
+             {"Description", "Cucumbers are crisp, green fruits that are commonly eaten fresh in salads or used for pickling. They have a mild flavor and high water content, making them a refreshing snack."},
+             {"Care Level",  "Medium-maintenance"},
+             {"Environment", "Warm-season"},
+             {"Light",       "Full sun"},
+             {"Water",       "Consistent watering, keep soil moist, especially during fruit development"},
+             {"Temperature", "70-95°F (21-35°C)"},
+             {"Growth Rate", "Fast"},
+             {"Benefits",    "High in water content, supports hydration, rich in antioxidants"},
+             {"Soil Type", "Well-draining, loamy soil with good fertility"},
+             {"pH Level", "6.0 - 6.5"},
+             {"Fertilizer", "Balanced fertilizer with higher potassium and phosphorus during fruiting"},
+             {"Common Pests", "Aphids, cucumber beetles, powdery mildew"},
+             {"Companion Plants", "Beans, peas, radishes, corn"},
+             {"Spacing", "12-18 inches apart, plant in hills for better air circulation"},
+             {"Mulching", "Use mulch to retain moisture, suppress weeds, and protect roots"},
+             {"Pruning", "Remove excess leaves to allow better airflow and fruit production"},
+             {"Harvest Time", "50-70 days after planting, when cucumbers are firm and green"},
+          }
+       },
+       new Plant{
+          Name = "Eggplant",
+          ScientificName = "Solanum melongena",
+          Image = "images/Eggplant.webp",
+          Attributes = new Dictionary<string, string>{
+             {"Description", "Eggplants, also known as aubergines, are dark purple, glossy fruits with a mild, slightly bitter taste. They are often used in Mediterranean and Asian dishes, such as baba ganoush, moussaka, and stir-fries."},
+             {"Care Level",  "Medium-maintenance"},
+             {"Environment", "Warm-season"},
+             {"Light",       "Full sun"},
+             {"Water",       "Moderate, keep soil consistently moist but well-drained"},
+             {"Temperature", "70-85°F (21-29°C)"},
+             {"Growth Rate", "Moderate"},
+             {"Benefits",    "Rich in fiber, antioxidants, vitamins C and K, supports heart health"},
+             {"Soil Type", "Well-draining, rich in organic matter"},
+             {"pH Level", "5.5 - 6.5"},
+             {"Fertilizer", "Balanced fertilizer during early growth, higher potassium and phosphorus during fruiting"},
+             {"Common Pests", "Aphids, flea beetles, spider mites"},
+             {"Companion Plants", "Beans, peas, marigolds, spinach"},
+             {"Spacing", "18-24 inches apart to ensure healthy growth and air circulation"},
+             {"Pruning", "Remove dead or damaged leaves, trim excess growth to promote airflow"},
+             {"Harvest Time", "65-80 days after transplanting, when the fruit is glossy and firm, before it becomes overripe"}
+          }
+       },
+       new Plant{
+          Name = "Green Beans",
+          ScientificName = "Phaseolus vulgaris",
+          Image = "images/GreenBeans.webp",
+          Attributes = new Dictionary<string, string>{
+             {"Description", "Green beans, also known as string beans or snap beans, are tender, crisp vegetables that are commonly eaten fresh or cooked. They are rich in vitamins A, C, and K, as well as fiber, and can be steamed, sautéed, or used in salads."},
+             {"Care Level",  "Low-maintenance"},
+             {"Environment", "Warm-season"},
+             {"Light",       "Full sun"},
+             {"Water",       "Moderate, keep soil moist but not waterlogged"},
+             {"Temperature", "70-85°F (21-29°C)"},
+             {"Growth Rate", "Fast"},
+             {"Benefits",    "High in fiber, vitamins A and C, supports digestive health"},
+             {"Soil Type", "Well-draining, loamy soil rich in organic matter"},
+             {"pH Level", "6.0 - 7.0"},
+             {"Fertilizer", "Balanced fertilizer during planting, high phosphorus during flowering"},
+             {"Common Pests", "Aphids, Mexican bean beetles, whiteflies"},
+             {"Companion Plants", "Corn, carrots, cucumbers, oregano"},
+             {"Spacing", "2-4 inches apart, rows 18-24 inches apart"},
+             {"Pruning", "No pruning required, but remove damaged plants to prevent pest problems"},
+             {"Harvest Time", "50-60 days after planting, when the beans are firm and crisp but not overripe"}
+          }
+       },
+       new Plant{
+          Name = "Lettuce",
+          ScientificName = "Lactuca sativa",
+          Image = "images/Lettuce.webp",
+          Attributes = new Dictionary<string, string>{
+             {"Description", "Lettuce is a leafy vegetable commonly used in salads, sandwiches, and wraps. It has a mild, crisp texture and comes in various varieties, including leaf, Romaine, and iceberg. Lettuce is low in calories and rich in vitamins A and K."},
+             {"Care Level",  "Low-maintenance"},
+             {"Environment", "Cool-season"},
+             {"Light",       "Full sun to partial shade"},
+             {"Water",       "Moderate, keep soil consistently moist"},
+             {"Temperature", "55-75°F (13-24°C)"},
+             {"Growth Rate", "Fast"},
+             {"Benefits",    "High in vitamins A and K, supports hydration and digestive health"},
+             {"Soil Type", "Well-draining, slightly acidic soil"},
+             {"pH Level", "6.0 - 6.8"},
+             {"Fertilizer", "Lightly fertilize with nitrogen-rich fertilizer to encourage leafy growth"},
+             {"Common Pests", "Aphids, slugs, snails"},
+             {"Companion Plants", "Carrots, radishes, cucumbers, onions"},
+             {"Spacing", "8-12 inches apart"},
+             {"Pruning", "Remove any yellow or damaged leaves to keep the plant healthy"},
+             {"Harvest Time", "30-45 days for leaf varieties, 60-75 days for head varieties"}
+          }
+       },
+       new Plant{
+          Name = "Onion",
+          ScientificName = "Allium cepa",
+          Image = "images/Onion.webp",
+          Attributes = new Dictionary<string, string>{
+             {"Description", "Onions are a staple vegetable used in many cuisines worldwide. They come in various types, including red, yellow, and white, and are known for their strong flavor, which can range from sweet to pungent. Onions are used fresh, cooked, or pickled."},
+             {"Care Level",  "Medium-maintenance"},
+             {"Environment", "Cool-season to warm-season"},
+             {"Light",       "Full sun"},
+             {"Water",       "Moderate, avoid over-watering"},
+             {"Temperature", "55-75°F (13-24°C)"},
+             {"Growth Rate", "Moderate"},
+             {"Benefits",    "Rich in vitamins C and B6, supports heart health and immune function"},
+             {"Soil Type", "Well-draining, loose, and fertile soil"},
+             {"pH Level", "6.0 - 7.0"},
+             {"Fertilizer", "Balanced fertilizer (10-10-10) at planting, additional nitrogen for leaf growth"},
+             {"Common Pests", "Onion flies, thrips, aphids"},
+             {"Companion Plants", "Carrots, lettuce, cabbage, beets"},
+             {"Spacing", "2-4 inches apart"},
+             {"Pruning", "Remove any dead or yellowing leaves, and thin out crowded plants"},
+             {"Harvest Time", "90-120 days, depending on variety"}
+          }
+       },
+       new Plant{
+          Name = "Peas",
+          ScientificName = "Pisum sativum",
+          Image = "images/Peas.webp",
+          Attributes = new Dictionary<string, string>{
+             {"Description", "Peas are a cool-season vegetable known for their sweet, tender pods and edible seeds. They come in several varieties, including shelling peas, snap peas, and snow peas. They are often used fresh, frozen, or in dishes like soups and salads."},
+             {"Care Level",  "Low-maintenance"},
+             {"Environment", "Cool-season"},
+             {"Light",       "Full sun"},
+             {"Water",       "Moderate, keep soil consistently moist"},
+             {"Temperature", "55-75°F (13-24°C)"},
+             {"Growth Rate", "Moderate"},
+             {"Benefits",    "High in protein, fiber, and vitamins A, C, and K, supports digestive health"},
+             {"Soil Type", "Well-draining, fertile soil with good organic matter"},
+             {"pH Level", "6.0 - 7.5"},
+             {"Fertilizer", "Balanced fertilizer (10-10-10) at planting, additional nitrogen during growth"},
+             {"Common Pests", "Aphids, pea weevil, cutworms"},
+             {"Companion Plants", "Carrots, radishes, cucumbers, corn"},
+             {"Spacing", "2-3 inches apart, with 12-18 inches between rows"},
+             {"Pruning", "Remove spent vines and supports to promote healthy growth"},
+             {"Harvest Time", "50-70 days, depending on variety"}
+          }
+       },
+       new Plant{
+          Name = "Peppers",
+          ScientificName = "Capsicum annuum",
+          Image = "images/Peppers.webp",
+          Attributes = new Dictionary<string, string>{
+             {"Description", "Peppers are a warm-season vegetable known for their sweet, tangy, or spicy flavors, depending on the variety. They come in many colors, including red, yellow, green, and orange. They are used in a wide variety of dishes, from salads to salsas."},
+             {"Care Level",  "Medium-maintenance"},
+             {"Environment", "Warm-season"},
+             {"Light",       "Full sun"},
+             {"Water",       "Moderate, keep soil evenly moist"},
+             {"Temperature", "70-85°F (21-29°C)"},
+             {"Growth Rate", "Moderate to fast"},
+             {"Benefits",    "Rich in vitamins A and C, antioxidants, supports immune health"},
+             {"Soil Type", "Well-draining, loamy soil, enriched with organic matter"},
+             {"pH Level", "6.0 - 6.8"},
+             {"Fertilizer", "Balanced fertilizer (10-10-10) during early growth, higher potassium and phosphorus when fruiting"},
+             {"Common Pests", "Aphids, spider mites, flea beetles, whiteflies"},
+             {"Companion Plants", "Basil, oregano, onions, tomatoes"},
+             {"Spacing", "18-24 inches apart, with 24-36 inches between rows"},
+             {"Pruning", "Pinch off the first few flowers to encourage stronger growth, remove any dead or damaged leaves"},
+             {"Harvest Time", "60-90 days, depending on variety and growing conditions"}
+          }
+       },
+       new Plant{
+          Name = "Potatoes",
+          ScientificName = "Solanum tuberosum",
+          Image = "images/Potatoes.webp",
+          Attributes = new Dictionary<string, string>{
+             {"Description", "Potatoes are a starchy, tuberous vegetable that are a staple food in many cuisines worldwide. They come in a variety of colors, from white and yellow to red and purple. Potatoes are versatile in cooking and are commonly used for mashed potatoes, fries, and baked dishes."},
+             {"Care Level",  "Medium-maintenance"},
+             {"Environment", "Cool-season"},
+             {"Light",       "Full sun"},
+             {"Water",       "Moderate, keep soil consistently moist but not soggy"},
+             {"Temperature", "60-70°F (15-21°C)"},
+             {"Growth Rate", "Moderate"},
+             {"Benefits",    "Rich in carbohydrates, vitamins C and B6, supports energy production"},
+             {"Soil Type", "Loose, well-draining, slightly acidic soil"},
+             {"pH Level", "5.8 - 6.5"},
+             {"Fertilizer", "Balanced fertilizer (10-10-10) at planting, higher potassium during tuber formation"},
+             {"Common Pests", "Colorado potato beetle, aphids, wireworms, flea beetles"},
+             {"Companion Plants", "Beans, corn, cabbage, horseradish"},
+             {"Spacing", "12-15 inches apart, with 30-36 inches between rows"},
+             {"Pruning", "Remove any dead or yellowing leaves to improve airflow and reduce disease risk"},
+             {"Harvest Time", "70-120 days, depending on variety"}
+          }
+       },
+       new Plant{
+          Name = "Pumpkins",
+          ScientificName = "Cucurbita pepo",
+          Image = "images/Pumpkins.webp",
+          Attributes = new Dictionary<string, string>{
+             {"Description", "Pumpkins are large, round, orange fruits often associated with fall and Halloween. They are part of the gourd family and are used for baking, soups, and pies. Pumpkins are also grown for their seeds, which can be roasted and eaten as a snack."},
+             {"Care Level",  "Medium-maintenance"},
+             {"Environment", "Warm-season"},
+             {"Light",       "Full sun"},
+             {"Water",       "Regular watering, especially during dry periods, keep soil moist but not waterlogged"},
+             {"Temperature", "70-85°F (21-29°C)"},
+             {"Growth Rate", "Fast"},
+             {"Benefits",    "High in vitamin A, antioxidants, and fiber"},
+             {"Soil Type", "Well-draining, slightly acidic soil"},
+             {"pH Level", "6.0 - 6.8"},
+             {"Fertilizer", "Balanced fertilizer (10-10-10) during early growth, higher phosphorus during fruiting"},
+             {"Common Pests", "Squash bugs, aphids, cucumber beetles, powdery mildew"},
+             {"Companion Plants", "Corn, beans, marigolds, nasturtiums"},
+             {"Spacing", "3-4 feet apart for vines to spread"},
+             {"Pruning", "Remove excess vines to focus energy on larger fruit production, prune any dead or diseased leaves"},
+             {"Harvest Time", "90-120 days after planting, depending on variety"}
+          }
+       },
+       new Plant{
+          Name = "Radishes",
+          ScientificName = "Raphanus sativus",
+          Image = "images/Radishes.webp",
+          Attributes = new Dictionary<string, string>{
+             {"Description", "Radishes are small, crunchy root vegetables with a slightly spicy flavor. They come in various colors, including red, white, purple, and black, and are often eaten raw in salads or as a garnish."},
+             {"Care Level",  "Low-maintenance"},
+             {"Environment", "Cool-season"},
+             {"Light",       "Full sun to partial shade"},
+             {"Water",       "Moderate, keep soil moist but not soggy"},
+             {"Temperature", "50-70°F (10-21°C)"},
+             {"Growth Rate", "Fast"},
+             {"Benefits",    "High in vitamin C, antioxidants, and fiber"},
+             {"Soil Type", "Loamy, well-draining soil"},
+             {"pH Level", "6.0 - 7.0"},
+             {"Fertilizer", "Light, balanced fertilizer (10-10-10) to avoid over-fertilization"},
+             {"Common Pests", "Flea beetles, root maggots, aphids"},
+             {"Companion Plants", "Lettuce, carrots, cucumbers"},
+             {"Spacing", "2-3 inches apart"},
+             {"Pruning", "No pruning required, just thin seedlings if too crowded"},
+             {"Harvest Time", "20-30 days after planting, when roots are firm and well-sized"}
+          }
+       },
+       new Plant{
+          Name = "Squash",
+          ScientificName = "Cucurbita spp.",
+          Image = "images/Squash.webp",
+          Attributes = new Dictionary<string, string>{
+             {"Description", "Squash is a versatile, fast-growing vegetable that comes in many varieties, such as summer and winter squash. It is typically grown for its tender, edible fruit and can be cooked in a variety of ways, including roasted, grilled, or in soups."},
+             {"Care Level",  "Medium-maintenance"},
+             {"Environment", "Warm-season"},
+             {"Light",       "Full sun"},
+             {"Water",       "Moderate to high, keep soil consistently moist"},
+             {"Temperature", "70-85°F (21-29°C)"},
+             {"Growth Rate", "Fast"},
+             {"Benefits",    "High in vitamins A and C, antioxidants, and fiber"},
+             {"Soil Type", "Well-draining, rich in organic matter"},
+             {"pH Level", "6.0 - 7.5"},
+             {"Fertilizer", "Balanced fertilizer (10-10-10) during growth, higher potassium during fruiting"},
+             {"Common Pests", "Squash bugs, cucumber beetles, aphids"},
+             {"Companion Plants", "Beans, corn, peas, marigold"},
+             {"Spacing", "24-36 inches apart"},
+             {"Pruning", "Remove spent leaves and dead vines to improve airflow"},
+             {"Harvest Time", "50-100 days after planting, depending on the variety"}
+          }
+       },
+       new Plant{
+          Name = "Sunflower",
+          ScientificName = "Helianthus annuus",
+          Image = "images/Sunflower.webp",
+          Attributes = new Dictionary<string, string>{
+             {"Description", "Sunflowers are tall, vibrant flowers known for their large, bright yellow petals and edible seeds. They thrive in full sun and are often grown for their beauty or for harvesting seeds, which can be used in snacks, oil production, and bird feed."},
+             {"Care Level",  "Low-maintenance"},
+             {"Environment", "Warm-season"},
+             {"Light",       "Full sun"},
+             {"Water",       "Moderate, water deeply but infrequently"},
+             {"Temperature", "70-78°F (21-26°C)"},
+             {"Growth Rate", "Fast"},
+             {"Benefits",    "High in vitamin E, healthy fats, and antioxidants"},
+             {"Soil Type", "Well-draining, moderately rich in organic matter"},
+             {"pH Level", "6.0 - 7.5"},
+             {"Fertilizer", "Balanced fertilizer during early growth, low-nitrogen fertilizer during flowering"},
+             {"Common Pests", "Aphids, sunflower beetles, caterpillars"},
+             {"Companion Plants", "Corn, peas, beans, pumpkins"},
+             {"Spacing", "12-36 inches apart, depending on the variety"},
+             {"Pruning", "Remove dead flowers and leaves to promote healthy growth"},
+             {"Harvest Time", "70-100 days after planting, depending on the variety"}
+          }
+       },
+       new Plant {
+          Name = "Tomato",
+          ScientificName = "Solanum lycopersicum",
+          Image = "images/Tomato.webp",
+          Attributes = new Dictionary<string, string>{
+             {"Description", "A juicy, red fruit often mistaken for a vegetable. It is a staple in salads, sauces, and sandwiches."},
+             {"Care Level",  "Medium-maintenance"},
+             {"Environment", "Warm-season"},
+             {"Light",       "Full sun"},
+             {"Water",       "Moderate"},
+             {"Temperature", "70-85°F (21-29°C)"},
+             {"Growth Rate", "Fast"},
+             {"Benefits",    "High in lycopene, supports heart health"},
+             {"Soil Type", "Well-draining, rich in organic matter"},
+             {"pH Level", "6.2 - 6.8"},
+             {"Fertilizer", "Balanced (10-10-10) during early growth, higher phosphorus during fruiting"},
+             {"Common Pests", "Aphids, tomato hornworms, whiteflies"},
+             {"Companion Plants", "Basil, marigold, carrots, onions"},
+             {"Pruning", "Remove suckers to promote airflow and fruit production"},
+             {"Harvest Time", "60-85 days after transplanting"}
+          }
+       },
+       new Plant{
+          Name = "Watermelon",
+          ScientificName = "Citrullus lanatus",
+          Image = "images/Watermelon.webp",
+          Attributes = new Dictionary<string, string>{
+             {"Description", "Watermelon is a large, sweet fruit with a thick green rind and juicy, red or pink flesh. It is often enjoyed in the summer and is high in water content, making it a refreshing treat."},
+             {"Care Level",  "Medium-maintenance"},
+             {"Environment", "Warm-season"},
+             {"Light",       "Full sun"},
+             {"Water",       "High, keep soil consistently moist during growing season"},
+             {"Temperature", "70-90°F (21-32°C)"},
+             {"Growth Rate", "Fast"},
+             {"Benefits",    "High in vitamins A and C, antioxidants, and hydration"},
+             {"Soil Type", "Well-draining, loamy soil rich in organic matter"},
+             {"pH Level", "6.0 - 6.8"},
+             {"Fertilizer", "Balanced fertilizer for early growth, low-nitrogen fertilizer during fruiting"},
+             {"Common Pests", "Aphids, cucumber beetles, slugs"},
+             {"Companion Plants", "Corn, pumpkins, marigolds"},
+             {"Spacing", "36-42 inches apart, with ample room for spreading vines"},
+             {"Pruning", "Remove excess vines to allow better air circulation and fruit production"},
+             {"Harvest Time", "80-90 days after planting, when the fruit sounds hollow when tapped"}
+          }
+       },
+       new Plant{
+          Name = "Zucchini",
+          ScientificName = "Cucurbita pepo",
+          Image = "images/Zucchini.webp",
+          Attributes = new Dictionary<string, string>{
+             {"Description", "Zucchini is a summer squash with dark green, smooth skin and tender flesh. It has a mild flavor and is versatile in cooking, often used in stir-fries, baked dishes, and as a raw snack."},
+             {"Care Level",  "Medium-maintenance"},
+             {"Environment", "Warm-season"},
+             {"Light",       "Full sun"},
+             {"Water",       "Moderate, keep soil consistently moist"},
+             {"Temperature", "70-90°F (21-32°C)"},
+             {"Growth Rate", "Fast"},
+             {"Benefits",    "High in vitamin C, manganese, and antioxidants"},
+             {"Soil Type", "Well-draining, loamy soil rich in organic matter"},
+             {"pH Level", "6.0 - 6.5"},
+             {"Fertilizer", "Balanced fertilizer for early growth, higher potassium during fruiting"},
+             {"Common Pests", "Cucumber beetles, aphids, squash bugs"},
+             {"Companion Plants", "Beans, corn, marigolds"},
+             {"Spacing", "24-36 inches apart to allow for proper vine spread"},
+             {"Pruning", "Remove excess vines and dead leaves to improve airflow"},
+             {"Harvest Time", "50-60 days after planting, when fruit is small and tender"}
+          }
+       },
     };
     List<Plants>? publicPlants = null; // List of public plants
     private Plant SelectedPlant;
