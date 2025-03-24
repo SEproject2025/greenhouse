@@ -94,15 +94,18 @@ body {
     margin-top: 10px;
     font-size: 1.1em;
 }
-.attribute {
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-}
+
+    .attribute {
+        display: flex;
+        align-items: flex-start; /* Align text at the top */
+        flex-wrap: wrap; /* Ensure text wraps properly */
+        margin-bottom: 5px;
+        max-width: 100%; /* Prevent overflow */
+        word-wrap: break-word; /* Ensure words break properly */
+        overflow-wrap: break-word;
+    }
 
 </style>
-
-
 
 <div class="plant-info-container">
     <!-- Sidebar for plant selection -->
@@ -150,7 +153,7 @@ body {
     {
        new Plant{
           Name = "Beet",
-          ScientificName = "Beta vulgaris",
+          ScientificName = "{Beta vulgaris}",
           Image = "images/Beets.webp",
           Attributes = new Dictionary<string, string>
           {
@@ -173,7 +176,7 @@ body {
        },
        new Plant{
           Name = "Broccoli",
-          ScientificName = "Brassica oleracea var. italica",
+          ScientificName = "{Brassica oleracea var. italica}",
           Image = "images/Broccoli.webp",
           Attributes = new Dictionary<string, string>
           {
@@ -198,7 +201,7 @@ body {
        },
        new Plant{
           Name = "Cabbage",
-          ScientificName = "Brassica oleracea var. capitata",
+          ScientificName = "{Brassica oleracea var. capitata}",
           Image = "images/Cabbage.webp",
           Attributes = new Dictionary<string, string>{
              {"Description", "Cabbage is a leafy vegetable with a dense, round head, commonly used in salads, slaws, soups, and fermented dishes like sauerkraut. It is a cool-season crop known for its crisp texture and rich nutrient content."},
@@ -222,7 +225,7 @@ body {
        },
        new Plant{
           Name = "Cantaloupe",
-          ScientificName = "Cucumis melo var. cantalupensis",
+          ScientificName = "{Cucumis melo var. cantalupensis}",
           Image = "images/Cantaloupe.webp",
           Attributes = new Dictionary<string, string>{
               {"Description", "Cantaloupe is a sweet, orange-fleshed melon with a netted rind, known for its refreshing taste and high water content. It thrives in warm climates and is commonly eaten fresh, in fruit salads, or blended into smoothies."},
@@ -246,7 +249,7 @@ body {
        },
        new Plant{
           Name = "Carrot",
-          ScientificName = "Daucus carota",
+          ScientificName = "{Daucus carota}",
           Image = "images/Carrot.webp",
           Attributes = new Dictionary<string, string>{
              {"Description", "Carrots are crunchy root vegetables, typically orange, though they also come in purple, red, yellow, and white varieties. They are rich in beta-carotene and widely used in salads, soups, and juices."},
@@ -270,7 +273,7 @@ body {
        },
        new Plant{
           Name = "Cauliflower",
-          ScientificName = "Brassica oleracea var. botrytis",
+          ScientificName = "{Brassica oleracea var. botrytis}",
           Image = "images/Cauliflower.webp",
           Attributes = new Dictionary<string, string>{
              {"Description", "Cauliflower is a cool-season vegetable known for its white, compact flower head. It is part of the Brassica family and is often used in soups, stir-fries, and as a low-carb substitute for rice or mashed potatoes."},
@@ -294,7 +297,7 @@ body {
        },
        new Plant{
           Name = "Corn",
-          ScientificName = "Zea mays",
+          ScientificName = "{Zea mays}",
           Image = "images/Corn.webp",
           Attributes = new Dictionary<string, string>{
              {"Description", "Corn is a tall, annual plant that produces large, yellow or multicolored kernels on ears. It is widely grown for food, as well as for industrial uses like biofuel and animal feed."},
@@ -318,8 +321,8 @@ body {
        },
        new Plant{
           Name = "Cucumber",
-          ScientificName = "Cucumis sativus",
-          Image = "images/Cucumber.webp",
+          ScientificName = "{Cucumis sativus}",
+          Image = "images/Cucumbers.webp",
           Attributes = new Dictionary<string, string>{
              {"Description", "Cucumbers are crisp, green fruits that are commonly eaten fresh in salads or used for pickling. They have a mild flavor and high water content, making them a refreshing snack."},
              {"Care Level",  "Medium-maintenance"},
@@ -342,7 +345,7 @@ body {
        },
        new Plant{
           Name = "Eggplant",
-          ScientificName = "Solanum melongena",
+          ScientificName = "{Solanum melongena}",
           Image = "images/Eggplant.webp",
           Attributes = new Dictionary<string, string>{
              {"Description", "Eggplants, also known as aubergines, are dark purple, glossy fruits with a mild, slightly bitter taste. They are often used in Mediterranean and Asian dishes, such as baba ganoush, moussaka, and stir-fries."},
@@ -365,7 +368,7 @@ body {
        },
        new Plant{
           Name = "Green Beans",
-          ScientificName = "Phaseolus vulgaris",
+          ScientificName = "{Phaseolus vulgaris}",
           Image = "images/GreenBeans.webp",
           Attributes = new Dictionary<string, string>{
              {"Description", "Green beans, also known as string beans or snap beans, are tender, crisp vegetables that are commonly eaten fresh or cooked. They are rich in vitamins A, C, and K, as well as fiber, and can be steamed, sautéed, or used in salads."},
@@ -388,7 +391,7 @@ body {
        },
        new Plant{
           Name = "Lettuce",
-          ScientificName = "Lactuca sativa",
+          ScientificName = "{Lactuca sativa}",
           Image = "images/Lettuce.webp",
           Attributes = new Dictionary<string, string>{
              {"Description", "Lettuce is a leafy vegetable commonly used in salads, sandwiches, and wraps. It has a mild, crisp texture and comes in various varieties, including leaf, Romaine, and iceberg. Lettuce is low in calories and rich in vitamins A and K."},
@@ -411,8 +414,8 @@ body {
        },
        new Plant{
           Name = "Onion",
-          ScientificName = "Allium cepa",
-          Image = "images/Onion.webp",
+          ScientificName = "{Allium cepa}",
+          Image = "images/Onions.webp",
           Attributes = new Dictionary<string, string>{
              {"Description", "Onions are a staple vegetable used in many cuisines worldwide. They come in various types, including red, yellow, and white, and are known for their strong flavor, which can range from sweet to pungent. Onions are used fresh, cooked, or pickled."},
              {"Care Level",  "Medium-maintenance"},
@@ -434,7 +437,7 @@ body {
        },
        new Plant{
           Name = "Peas",
-          ScientificName = "Pisum sativum",
+          ScientificName = "{Pisum sativum}",
           Image = "images/Peas.webp",
           Attributes = new Dictionary<string, string>{
              {"Description", "Peas are a cool-season vegetable known for their sweet, tender pods and edible seeds. They come in several varieties, including shelling peas, snap peas, and snow peas. They are often used fresh, frozen, or in dishes like soups and salads."},
@@ -457,7 +460,7 @@ body {
        },
        new Plant{
           Name = "Peppers",
-          ScientificName = "Capsicum annuum",
+          ScientificName = "{Capsicum annuum}",
           Image = "images/Peppers.webp",
           Attributes = new Dictionary<string, string>{
              {"Description", "Peppers are a warm-season vegetable known for their sweet, tangy, or spicy flavors, depending on the variety. They come in many colors, including red, yellow, green, and orange. They are used in a wide variety of dishes, from salads to salsas."},
@@ -480,7 +483,7 @@ body {
        },
        new Plant{
           Name = "Potatoes",
-          ScientificName = "Solanum tuberosum",
+          ScientificName = "{Solanum tuberosum}",
           Image = "images/Potatoes.webp",
           Attributes = new Dictionary<string, string>{
              {"Description", "Potatoes are a starchy, tuberous vegetable that are a staple food in many cuisines worldwide. They come in a variety of colors, from white and yellow to red and purple. Potatoes are versatile in cooking and are commonly used for mashed potatoes, fries, and baked dishes."},
@@ -503,7 +506,7 @@ body {
        },
        new Plant{
           Name = "Pumpkins",
-          ScientificName = "Cucurbita pepo",
+          ScientificName = "{Cucurbita pepo}",
           Image = "images/Pumpkins.webp",
           Attributes = new Dictionary<string, string>{
              {"Description", "Pumpkins are large, round, orange fruits often associated with fall and Halloween. They are part of the gourd family and are used for baking, soups, and pies. Pumpkins are also grown for their seeds, which can be roasted and eaten as a snack."},
@@ -526,7 +529,7 @@ body {
        },
        new Plant{
           Name = "Radishes",
-          ScientificName = "Raphanus sativus",
+          ScientificName = "{Raphanus sativus}",
           Image = "images/Radishes.webp",
           Attributes = new Dictionary<string, string>{
              {"Description", "Radishes are small, crunchy root vegetables with a slightly spicy flavor. They come in various colors, including red, white, purple, and black, and are often eaten raw in salads or as a garnish."},
@@ -549,7 +552,7 @@ body {
        },
        new Plant{
           Name = "Squash",
-          ScientificName = "Cucurbita spp.",
+          ScientificName = "{Cucurbita spp.}",
           Image = "images/Squash.webp",
           Attributes = new Dictionary<string, string>{
              {"Description", "Squash is a versatile, fast-growing vegetable that comes in many varieties, such as summer and winter squash. It is typically grown for its tender, edible fruit and can be cooked in a variety of ways, including roasted, grilled, or in soups."},
@@ -572,7 +575,7 @@ body {
        },
        new Plant{
           Name = "Sunflower",
-          ScientificName = "Helianthus annuus",
+          ScientificName = "{Helianthus annuus}",
           Image = "images/Sunflower.webp",
           Attributes = new Dictionary<string, string>{
              {"Description", "Sunflowers are tall, vibrant flowers known for their large, bright yellow petals and edible seeds. They thrive in full sun and are often grown for their beauty or for harvesting seeds, which can be used in snacks, oil production, and bird feed."},
@@ -595,7 +598,7 @@ body {
        },
        new Plant {
           Name = "Tomato",
-          ScientificName = "Solanum lycopersicum",
+          ScientificName = "{Solanum lycopersicum}",
           Image = "images/Tomato.webp",
           Attributes = new Dictionary<string, string>{
              {"Description", "A juicy, red fruit often mistaken for a vegetable. It is a staple in salads, sauces, and sandwiches."},
@@ -617,7 +620,7 @@ body {
        },
        new Plant{
           Name = "Watermelon",
-          ScientificName = "Citrullus lanatus",
+          ScientificName = "{Citrullus lanatus}",
           Image = "images/Watermelon.webp",
           Attributes = new Dictionary<string, string>{
              {"Description", "Watermelon is a large, sweet fruit with a thick green rind and juicy, red or pink flesh. It is often enjoyed in the summer and is high in water content, making it a refreshing treat."},
@@ -640,7 +643,7 @@ body {
        },
        new Plant{
           Name = "Zucchini",
-          ScientificName = "Cucurbita pepo",
+          ScientificName = "{Cucurbita pepo}",
           Image = "images/Zucchini.webp",
           Attributes = new Dictionary<string, string>{
              {"Description", "Zucchini is a summer squash with dark green, smooth skin and tender flesh. It has a mild flavor and is versatile in cooking, often used in stir-fries, baked dishes, and as a raw snack."},
