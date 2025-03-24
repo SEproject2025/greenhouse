@@ -13,6 +13,7 @@ body {
    background-color: #CFE8A9; /* Soft pastel green */
    min-height: 100vh;
    margin: 0;
+   overflow: hidden; /* Prevents scrolling on the main page */
 }
 
 .plant-info-container {
@@ -23,7 +24,8 @@ body {
 
 /* Sidebar Styles */
 .plant-sidebar {
-    width: 500px;
+    width: 400px;
+    flex-shrink: 0; /* Prevents shrinking when flex space is tight */
     background: #eaeaea;
     padding: 10px;
     overflow-y: auto;
@@ -32,7 +34,7 @@ body {
 
 /* Custom Scrollbar */
 .plant-sidebar::-webkit-scrollbar {
-    width: 8px;
+    width: 10px;
 }
 .plant-sidebar::-webkit-scrollbar-track {
     background: #ddd;
@@ -74,6 +76,7 @@ body {
     flex-grow: 1;
     padding: 20px;
     overflow-y: auto;
+    max-height: 100vh;
 }
 
 /* Image & Title */
@@ -93,6 +96,7 @@ body {
 .plant-attributes {
     margin-top: 10px;
     font-size: 1.1em;
+    padding-bottom: 100px; /* Adjust as needed */
 }
 
     .attribute {
