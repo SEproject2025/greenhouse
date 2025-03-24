@@ -311,6 +311,17 @@
         height: 25px;
         object-fit: contain; /* Ensure it fits well inside the circle */
     }
+
+    /* Draggable Water Can Icon */
+    .watering-can {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 90px;
+        height: auto;
+        cursor: grab;
+        z-index: 999; /* ensure it's above tiles */
+    }
 </style>
 
 
@@ -320,6 +331,14 @@
 <h3 class="title">My Garden</h3>
 
 <AddPlantButton />
+
+<!-- Draggable Watering Can Image -->
+<img src="/plant_tasks/WateringCan.png" 
+      id="watering-can"
+     class="watering-can"
+     draggable="true"
+     ondragstart="handleDragStart(event)"
+     alt="Watering Can" />
 
 <div class="tiles-container">
     @if (plant == null || !plant.Any())
@@ -342,7 +361,9 @@
         {
             @if (p.IS_PRIVATE == "Y")
             {
-                <div class="tile @(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID] ? "green-fade" : "")">
+                <div class="tile @(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID] ? "green-fade" : "")"
+                     ondragover="event.preventDefault()"
+                     ondrop="handleDrop(event, @p.PLANT_ID)">
 
                     @if (!(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID]))
                     {
@@ -518,7 +539,10 @@ else
             _ = InvokeAsync(StateHasChanged); // Avoid UI thread blocking
         }
         await JSRuntime.InvokeVoidAsync("updateProgressCircles");
-
+        // Register DotnetObjectRefernce
+        // Exposes the Blazor component instance to JavaScript so it can be called from JS
+        await JSRuntime.InvokeVoidAsync("window.setDotNetHelper",
+        DotNetObjectReference.Create(this));
         
         
     }
@@ -663,6 +687,7 @@ else
         };
     }
 
+    // Method to calculate the progress of a task based on the days until the next task
     int CalculateTaskProgress(int? daysUntil, int? freq)
     {
         if (!freq.HasValue || freq.Value == 0) return 0;  // Prevent division by zero
@@ -677,6 +702,21 @@ else
         return 100;
     }
 
+    // Method to complete the watering task when the watering can is dropped
+    // into the plant tile
+    // This method is invoked from JavaScript
+    [JSInvokable]
+    public async Task CompleteWateringTask(int plantId)
+    {
+        var wateringTask = user_tasks.FirstOrDefault(t =>
+            t.PLANT_ID == plantId && t.TASK_NAME == "Watering");
+
+        if (wateringTask != null && !wateringTask.IS_COMPLETED)
+        {
+            // Reuse the existing CheckboxChecked logic
+            await CheckboxChecked(new ChangeEventArgs { Value = true }, wateringTask);
+        }
+    }
     
 }
 
@@ -695,5 +735,25 @@ else
     }
 
     document.addEventListener("DOMContentLoaded", updateProgressCircles);
+
+    // Called when the user starts dragging the watering can; stores a custom value
+    function handleDragStart(event) {
+        event.dataTransfer.setData("text/plain", "watering-can");
+    }
+
+    // Triggered when the watering can is dropped onto a tile
+    // Invokes the Blazor Method - CompleteWateringTask()
+    function handleDrop(event, plantId) {
+        event.preventDefault();
+        const dotNetHelper = window.dotNetHelperRef;
+        if (dotNetHelper) {
+            dotNetHelper.invokeMethodAsync("CompleteWateringTask", plantId);
+        }
+    }
+
+    // Registers a .NET helper reference for later JS-to-blazor calls
+    window.setDotNetHelper = function (dotNetHelper) {
+        window.dotNetHelperRef = dotNetHelper;
+    };
 </script>
 
