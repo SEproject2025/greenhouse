@@ -82,7 +82,7 @@ body {
 /* Image & Title */
 .plant-header {
     display: flex;
-    flex-direction: column;
+    <!--flex-direction: column;-->
     align-items: center;
 }
 .plant-image {
@@ -132,10 +132,16 @@ body {
         @if (SelectedPlant != null)
         {
             <div class="plant-header">
-                <img src="@SelectedPlant.Image" alt="@SelectedPlant.Name" class="plant-image" />
-                <h1>@SelectedPlant.Name</h1>
-                <h2><em>@SelectedPlant.ScientificName</em></h2>
+                <div>
+                    <img src="@SelectedPlant.Image" alt="@SelectedPlant.Name" class="plant-image" />
+                </div>
+
+                <div>
+                    <h1>@SelectedPlant.Name</h1>
+                    <h2><em>@SelectedPlant.ScientificName</em></h2>
+                </div>
             </div>
+
 
             <div class="plant-attributes">
                 @foreach (var attr in SelectedPlant.Attributes)
