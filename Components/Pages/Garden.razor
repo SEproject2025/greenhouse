@@ -331,6 +331,36 @@
         background-color: white;
         padding: 3px;
     }
+    /* New tool-key container that acts as a legend */
+    .tool-key {
+        position: fixed; /* changed from absolute */
+        top: 90px;
+        right: 20px;
+        background-color: #fff;
+        padding: 10px 15px;
+        border: 2px solid #4B8B3B;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: row;
+        gap: 15px;
+        z-index: 999;
+        box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Each tool + label bundle */
+    .tool-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Label underneath each icon */
+    .tool-label {
+        font-size: 12px;
+        color: #2C6E49;
+        margin-top: 5px;
+        font-weight: bold;
+    }
 
 </style>
 
@@ -342,53 +372,57 @@
 
 <AddPlantButton />
 
-<div class="tool-tray">
-    <!-- Draggable Watering Can -->
-    <img src="/plant_tasks/WateringCan.png"
-         id="watering-can"
-         class="tool-icon"
-         draggable="true"
-         title="Water"
-         ondragstart="handleDragStart(event)"
-         alt="Watering Can" />
+<div class="tool-key">
+    <div class="tool-item">
+        <img src="/plant_tasks/WateringCan.png"
+             id="watering-can"
+             class="tool-icon"
+             draggable="true"
+             ondragstart="handleDragStart(event)"
+             alt="Watering Can" />
+        <div class="tool-label">Water</div>
+    </div>
 
-    <!-- Draggable Pruning Tool -->
-    <img src="/plant_tasks/PruningTool.png"
-         id="pruning-tool"
-         class="tool-icon"
-         draggable="true"
-         title="Prune"
-         ondragstart="handlePruningDragStart(event)"
-         alt="Pruning Tool" />
+    <div class="tool-item">
+        <img src="/plant_tasks/PruningTool.png"
+             id="pruning-tool"
+             class="tool-icon"
+             draggable="true"
+             ondragstart="handlePruningDragStart(event)"
+             alt="Pruning Tool" />
+        <div class="tool-label">Prune</div>
+    </div>
 
-    <!-- Draggable Bug Spray -->
-    <img src="/plant_tasks/BugSpray.png"
-         id="bugspray-tool"
-         class="tool-icon"
-         draggable="true"
-         ondragstart="handlePestControlDragStart(event)"
-         title="Pest Control"
-         alt="Bug Spray" />
+    <div class="tool-item">
+        <img src="/plant_tasks/BugSpray.png"
+             id="bugspray-tool"
+             class="tool-icon"
+             draggable="true"
+             ondragstart="handlePestControlDragStart(event)"
+             alt="Bug Spray" />
+        <div class="tool-label">Pest Control</div>
+    </div>
 
-    <!-- Draggable Gloves -->
-    <img src="/plant_tasks/Gloves.png"
-         id="gloves-tool"
-         class="tool-icon"
-         draggable="true"
-         title="Pick Weeds"
-         ondragstart="handleWeedingDragStart(event)"
-         alt="Gloves" />
+    <div class="tool-item">
+        <img src="/plant_tasks/Gloves.png"
+             id="gloves-tool"
+             class="tool-icon"
+             draggable="true"
+             ondragstart="handleWeedingDragStart(event)"
+             alt="Gloves" />
+        <div class="tool-label">Weed</div>
+    </div>
 
-    <!-- Draggable Shovel Tool -->
-    <img src="/plant_tasks/Shovel.png"
-         id="shovel-tool"
-         class="tool-icon"
-         draggable="true"
-         title="Delete Plant"
-         ondragstart="handleShovelDragStart(event)"
-         alt="Shovel Tool" />
+    <div class="tool-item">
+        <img src="/plant_tasks/Shovel.png"
+             id="shovel-tool"
+             class="tool-icon"
+             draggable="true"
+             ondragstart="handleShovelDragStart(event)"
+             alt="Shovel Tool" />
+        <div class="tool-label">Delete</div>
+    </div>
 </div>
-
 <div class="tiles-container">
     @if (plant == null || !plant.Any())
     {
