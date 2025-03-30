@@ -378,6 +378,14 @@
          ondragstart="handleWeedingDragStart(event)"
          ondragend="handleDragEnd(event)"
          alt="Gloves" />
+    <!-- Draggable Shovel Tool -->
+    <img src="/plant_tasks/Shovel.png"
+         id="shovel-tool"
+         class="tool-icon"
+         draggable="true"
+         ondragstart="handleShovelDragStart(event)"
+         ondragend="handleDragEnd(event)"
+         alt="Shovel Tool" />
 </div>
 
 <div class="tiles-container">
@@ -743,7 +751,7 @@ else
     }
 
     // Method to complete the watering task when the watering can is dropped
-    // into the plant tile
+    // on the plant tile
     // This method is invoked from JavaScript
     [JSInvokable]
     public async Task CompleteWateringTask(int plantId)
@@ -759,7 +767,7 @@ else
     }
 
     // Method to complete the pruning task when the pruning tool is dropped
-    // into the plant tile
+    // on the plant tile
     [JSInvokable]
     public async Task CompletePruningTask(int plantId)
     {
@@ -773,7 +781,7 @@ else
     }
 
     // Method to complete the pest control task when the spray is dropped
-    // into the plant tile
+    // on the plant tile
     [JSInvokable]
     public async Task CompletePestControlTask(int plantId)
     {
@@ -787,7 +795,7 @@ else
     }
 
     // Method to complete the weeding task when the gloves are dropped
-    // into the plant tile
+    // on the plant tile
     [JSInvokable]
     public async Task CompleteWeedingTask(int plantId)
     {
@@ -798,6 +806,18 @@ else
         {
             await CheckboxChecked(new ChangeEventArgs { Value = true }, task);
         }
+    }
+
+    // Method to delete a plant when the shovel is dropped on the plant tile
+    [JSInvokable]
+    public async Task DeletePlantByDrop(int plantId)
+    {
+        await PlantService.DeletePlant(plantId);
+        plant = await PlantService.GetUserPlants(uuid);
+        user_tasks = await PlantService.GetAllUserTasks(uuid);
+        UpdatePlantFade();
+        UpdateOverdueCount();
+        StateHasChanged();
     }
     
 }

@@ -55,6 +55,22 @@ function handleWeedingDragStart(event)
 }
 
 //***************************************************************************************
+// Called when the user starts dragging the shovel
+//***************************************************************************************
+function handleShovelDragStart(event)
+{
+    event.dataTransfer.setData("text", "shovel");
+
+    const dragImage = new Image();
+    dragImage.src = "/plant_tasks/Shovel.png";
+    dragImage.style.width = "90px";
+    dragImage.style.position = "absolute";
+    dragImage.style.top = "-1000px";
+    document.body.appendChild(dragImage);
+    event.dataTransfer.setDragImage(dragImage, 45, 45);
+}
+
+//***************************************************************************************
 // Central drop handler that delegates to the correct tool function
 //***************************************************************************************
 function handleGenericDrop(event, plantId) {
@@ -73,6 +89,9 @@ function handleGenericDrop(event, plantId) {
             break;
         case "weeding":
             handleWeedingDrop(plantId);
+            break;
+        case "shovel":
+            handleShovelDrop(plantId);
             break;
     }
 }
@@ -105,6 +124,16 @@ function handleWeedingDrop(plantId) {
     const dotNetHelper = window.dotNetHelperRef;
     if (dotNetHelper) {
         dotNetHelper.invokeMethodAsync("CompleteWeedingTask", plantId);
+    }
+}
+
+//***************************************************************************************
+// Drop handler for the shovel tool
+//***************************************************************************************
+function handleShovelDrop(plantId) {
+    const dotNetHelper = window.dotNetHelperRef;
+    if (dotNetHelper) {
+        dotNetHelper.invokeMethodAsync("DeletePlantByDrop", plantId);
     }
 }
 
