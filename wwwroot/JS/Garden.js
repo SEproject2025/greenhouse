@@ -17,57 +17,97 @@ function updateProgressCircles() {
 document.addEventListener("DOMContentLoaded", updateProgressCircles);
 
 //***************************************************************************************
-// Called when the user starts dragging the watering can; stores a custom value
+// Called when the user starts dragging the watering can
 //***************************************************************************************
 function handleDragStart(event) {
-    event.dataTransfer.setData("text/plain", "watering-can");
-
-    // Change the image to PourWateringCan.png while dragging
-    const img = document.getElementById("watering-can");
-    if (img) {
-        img.src = "/plant_tasks/PourWateringCan.png";
-        }
+    event.dataTransfer.setData("text", "watering");
+    const dragImage = new Image();
+    dragImage.src = "/plant_tasks/PourWateringCan.png";
+    dragImage.style.width = "90px";
+    dragImage.style.position = "absolute";
+    dragImage.style.top = "-1000px";
+    document.body.appendChild(dragImage);
+    event.dataTransfer.setDragImage(dragImage, 45, 45);
 }
 
 //***************************************************************************************
-// Called when the user starts dragging the watering can
+// Called when the user starts dragging the pruning tool
 //***************************************************************************************
-function handleDragStart(event)
+function handlePruningDragStart(event)
 {
-    // Set a custom data type and value to identify what is being dragged
-    event.dataTransfer.setData("text/plain", "watering-can");
-
-    // Create a new image element that will be shown under the mouse pointer while dragging
-    const dragImage = new Image();
-    dragImage.src = "/plant_tasks/PourWateringCan.png";
-
-    // Inline styling (drag image size) to match the original watering can size
-    dragImage.style.width = "90px";
-    dragImage.style.height = "auto";
-
-    // Prevent visual flickering by positioning the image offscreen
-    dragImage.style.position = "absolute";
-    dragImage.style.top = "-1000px";
-
-    // Append the image to the body so styling can be applied before it's used
-    document.body.appendChild(dragImage); // Needed in some browsers to apply styling
-
-    // Use the new image as the drag preview with centered offset
-    event.dataTransfer.setDragImage(dragImage, 45, 45); // Centered on pointer
-    }
+    event.dataTransfer.setData("text", "pruning");
+}
 
 //***************************************************************************************
-// Triggered when the watering can is dropped onto a tile
-// Invokes the Blazor Method - CompleteWateringTask()
+// Called when the user starts dragging the bug spray
 //***************************************************************************************
-function handleDrop(event, plantId)
+function handlePestControlDragStart(event)
 {
+    event.dataTransfer.setData("text", "pestcontrol");
+}
+
+//***************************************************************************************
+// Called when the user starts dragging the gloves
+//***************************************************************************************
+function handleWeedingDragStart(event)
+{
+    event.dataTransfer.setData("text", "weeding");
+}
+
+//***************************************************************************************
+// Central drop handler that delegates to the correct tool function
+//***************************************************************************************
+function handleGenericDrop(event, plantId) {
     event.preventDefault();
+    const tool = event.dataTransfer.getData("text");
+
+    switch (tool) {
+        case "watering":
+            handleWateringDrop(plantId);
+            break;
+        case "pruning":
+            handlePruningDrop(plantId);
+            break;
+        case "pestcontrol":
+            handlePestControlDrop(plantId);
+            break;
+        case "weeding":
+            handleWeedingDrop(plantId);
+            break;
+    }
+}
+
+//***************************************************************************************
+// Separated drop handlers for each tool
+//***************************************************************************************
+function handleWateringDrop(plantId) {
     const dotNetHelper = window.dotNetHelperRef;
     if (dotNetHelper) {
         dotNetHelper.invokeMethodAsync("CompleteWateringTask", plantId);
-        }
+    }
 }
+
+function handlePruningDrop(plantId) {
+    const dotNetHelper = window.dotNetHelperRef;
+    if (dotNetHelper) {
+        dotNetHelper.invokeMethodAsync("CompletePruningTask", plantId);
+    }
+}
+
+function handlePestControlDrop(plantId) {
+    const dotNetHelper = window.dotNetHelperRef;
+    if (dotNetHelper) {
+        dotNetHelper.invokeMethodAsync("CompletePestControlTask", plantId);
+    }
+}
+
+function handleWeedingDrop(plantId) {
+    const dotNetHelper = window.dotNetHelperRef;
+    if (dotNetHelper) {
+        dotNetHelper.invokeMethodAsync("CompleteWeedingTask", plantId);
+    }
+}
+
 
 //***************************************************************************************
 // Registers a .NET helper reference for later JS-to-blazor calls

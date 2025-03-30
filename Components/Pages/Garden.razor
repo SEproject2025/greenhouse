@@ -311,17 +311,27 @@
         height: 25px;
         object-fit: contain; /* Ensure it fits well inside the circle */
     }
-
-    /* Draggable Water Can Icon */
-    .watering-can {
+    /* Container for the draggable tool icons */
+    .tool-tray {
         position: absolute;
         top: 20px;
         right: 20px;
-        width: 90px;
+        display: flex;
+        gap: 20px; /* spacing between tools */
+        z-index: 999;
+    }
+
+    /* Shared styling for all tool icons */
+    .tool-icon {
+        width: 60px;
         height: auto;
         cursor: grab;
-        z-index: 999; /* ensure it's above tiles */
+        border: 2px solid black;
+        border-radius: 10px;
+        background-color: white;
+        padding: 3px;
     }
+
 </style>
 
 
@@ -332,14 +342,43 @@
 
 <AddPlantButton />
 
-<!-- Draggable Watering Can Image -->
-<img src="/plant_tasks/WateringCan.png"
-     id="watering-can"
-     class="watering-can"
-     draggable="true"
-     ondragstart="handleDragStart(event)"
-     ondragend="handleDragEnd(event)"
-     alt="Watering Can" />
+<div class="tool-tray">
+    <!-- Draggable Watering Can -->
+    <img src="/plant_tasks/WateringCan.png"
+         id="watering-can"
+         class="tool-icon"
+         draggable="true"
+         ondragstart="handleDragStart(event)"
+         ondragend="handleDragEnd(event)"
+         alt="Watering Can" />
+
+    <!-- Draggable Pruning Tool -->
+    <img src="/plant_tasks/PruningTool.png"
+         id="pruning-tool"
+         class="tool-icon"
+         draggable="true"
+         ondragstart="handlePruningDragStart(event)"
+         ondragend="handleDragEnd(event)"
+         alt="Pruning Tool" />
+
+    <!-- Draggable Bug Spray -->
+    <img src="/plant_tasks/BugSpray.png"
+         id="bugspray-tool"
+         class="tool-icon"
+         draggable="true"
+         ondragstart="handlePestControlDragStart(event)"
+         ondragend="handleDragEnd(event)"
+         alt="Bug Spray" />
+
+    <!-- Draggable Gloves -->
+    <img src="/plant_tasks/Gloves.png"
+         id="gloves-tool"
+         class="tool-icon"
+         draggable="true"
+         ondragstart="handleWeedingDragStart(event)"
+         ondragend="handleDragEnd(event)"
+         alt="Gloves" />
+</div>
 
 <div class="tiles-container">
     @if (plant == null || !plant.Any())
@@ -364,7 +403,7 @@
             {
                 <div class="tile @(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID] ? "green-fade" : "")"
                      ondragover="event.preventDefault()"
-                     ondrop="handleDrop(event, @p.PLANT_ID)">
+                     ondrop="handleGenericDrop(event, @p.PLANT_ID)">
 
                     @if (!(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID]))
                     {
@@ -716,6 +755,48 @@ else
         {
             // Reuse the existing CheckboxChecked logic
             await CheckboxChecked(new ChangeEventArgs { Value = true }, wateringTask);
+        }
+    }
+
+    // Method to complete the pruning task when the pruning tool is dropped
+    // into the plant tile
+    [JSInvokable]
+    public async Task CompletePruningTask(int plantId)
+    {
+        var task = user_tasks.FirstOrDefault(t =>
+            t.PLANT_ID == plantId && t.TASK_NAME == "Pruning");
+
+        if (task != null && !task.IS_COMPLETED)
+        {
+            await CheckboxChecked(new ChangeEventArgs { Value = true }, task);
+        }
+    }
+
+    // Method to complete the pest control task when the spray is dropped
+    // into the plant tile
+    [JSInvokable]
+    public async Task CompletePestControlTask(int plantId)
+    {
+        var task = user_tasks.FirstOrDefault(t =>
+            t.PLANT_ID == plantId && t.TASK_NAME == "Pest Control");
+
+        if (task != null && !task.IS_COMPLETED)
+        {
+            await CheckboxChecked(new ChangeEventArgs { Value = true }, task);
+        }
+    }
+
+    // Method to complete the weeding task when the gloves are dropped
+    // into the plant tile
+    [JSInvokable]
+    public async Task CompleteWeedingTask(int plantId)
+    {
+        var task = user_tasks.FirstOrDefault(t =>
+            t.PLANT_ID == plantId && t.TASK_NAME == "Weeding");
+
+        if (task != null && !task.IS_COMPLETED)
+        {
+            await CheckboxChecked(new ChangeEventArgs { Value = true }, task);
         }
     }
     
