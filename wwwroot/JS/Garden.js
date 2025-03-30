@@ -21,13 +21,6 @@ document.addEventListener("DOMContentLoaded", updateProgressCircles);
 //***************************************************************************************
 function handleDragStart(event) {
     event.dataTransfer.setData("text", "watering");
-    const dragImage = new Image();
-    dragImage.src = "/plant_tasks/PourWateringCan.png";
-    dragImage.style.width = "90px";
-    dragImage.style.position = "absolute";
-    dragImage.style.top = "-1000px";
-    document.body.appendChild(dragImage);
-    event.dataTransfer.setDragImage(dragImage, 45, 45);
 }
 
 //***************************************************************************************
@@ -61,13 +54,6 @@ function handleShovelDragStart(event)
 {
     event.dataTransfer.setData("text", "shovel");
 
-    const dragImage = new Image();
-    dragImage.src = "/plant_tasks/Shovel.png";
-    dragImage.style.width = "90px";
-    dragImage.style.position = "absolute";
-    dragImage.style.top = "-1000px";
-    document.body.appendChild(dragImage);
-    event.dataTransfer.setDragImage(dragImage, 45, 45);
 }
 
 //***************************************************************************************
