@@ -7,31 +7,18 @@
 *                                CSS/STYLING SECTION
 ************************************************************************-->
 <style>
-    :root {
-        --primary-color: #4CAF50;
-        --primary-light: #7AC142;
-        --secondary-color: #388E3C;
-        --accent-color: #8BC34A;
-        --light-color: #F1F8E9;
-        --dark-color: #1B5E20;
-        --gray-color: #bdbdbd;
-        --shadow: 0 4px 6px rgba(0,0,0,0.1);
-        --card-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
+    /* Base styles */
     body {
-        font-family: var(--font-main);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background-color: #f8f9fa;
         color: #333;
         line-height: 1.6;
     }
 
+    /* HERO SECTION */
     .hero-section {
         height: 80vh;
-        background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), 
-                    url('/background_photos/Leafy.jpg') 
-                    center/cover no-repeat;
+        background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/background_photos/Leafy.jpg') center/cover no-repeat;
         color: white;
         display: flex;
         flex-direction: column;
@@ -44,6 +31,7 @@
     .hero-title {
         font-size: 3.5rem;
         margin-bottom: 1rem;
+        font-family: 'Georgia', serif;
     }
 
     .hero-subtitle {
@@ -51,34 +39,47 @@
         margin-bottom: 2rem;
     }
 
-    .hero-buttons {
+    .hero-button-container {
         display: flex;
         gap: 20px;
         justify-content: center;
     }
 
-    .btn-hero {
-        padding: 12px 24px;
-        font-size: 1.1rem;
-        border-radius: 30px;
+    .login-button {
+        background-color: #6BBF59;
+        color: #FFFFFF;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 25px;
+        font-size: 16px;
         cursor: pointer;
-        transition: all 0.3s ease;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        display: inline-flex;
-        align-items: center;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease;
+        font-family: 'Georgia', serif;
     }
 
-    .btn-hero-primary {
-        background-color: var(--primary-color);
-        color: white;
-    }
+        .login-button:hover {
+            background-color: #5AA74E;
+        }
 
-    .btn-hero-secondary {
+    .register-button {
         background-color: white;
-        color: var(--dark-color);
+        color: #1B5E20;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 25px;
+        font-size: 16px;
+        cursor: pointer;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease;
+        font-family: 'Georgia', serif;
     }
 
+        .register-button:hover {
+            background-color: #e0f2e9;
+        }
+
+    /* FEATURES SECTION */
     .features-section {
         padding: 5rem 0;
         background-color: white;
@@ -96,35 +97,70 @@
         padding: 2rem;
         border-radius: 10px;
         background-color: white;
-        box-shadow: 0 8px 16px rgba(76, 175, 80, 0.4); /* Green shadow */
-        border: 2px solid rgba(76, 175, 80, 0.7); /* Thin green outline */
+        box-shadow: 0 8px 16px rgba(76, 175, 80, 0.4);
+        border: 2px solid rgba(76, 175, 80, 0.7);
         transition: all 0.3s ease;
+        color: #2C6E49;
+        font-family: 'Georgia', serif;
     }
 
         .feature-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 12px 20px rgba(76, 175, 80, 0.6); /* Stronger green shadow on hover */
-            border: 2px solid rgba(76, 175, 80, 1); /* Darker green outline on hover */
+            box-shadow: 0 12px 20px rgba(76, 175, 80, 0.6);
+            border-color: rgba(76, 175, 80, 1);
         }
 
+    /* TESTIMONIAL SECTION */
     .testimonial-section {
         padding: 5rem 0;
-        background-color: var(--light-color);
-        text-align: center; /* Centers the heading */
+        background-color: white;
+        text-align: center;
     }
 
     .testimonial-card {
         background-color: white;
         padding: 2rem;
+        margin: 2rem auto;
+        max-width: 500px;
         border-radius: 10px;
-        box-shadow: var(--shadow);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        color: #2C6E49;
+        font-family: 'Georgia', serif;
+        border: 2px solid rgba(76, 175, 80, 0.7);
+        transition: all 0.3s ease;
     }
 
+    /* READY TO START GROWING  */
     .cta-section {
         padding: 5rem 0;
-        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        background: #CFE8A9;  /* Light Green*/
         color: white;
         text-align: center;
+        color: #2C6E49;
+        font-family: 'Georgia', serif;
+    }
+
+    .cta-button {
+        background-color: white;
+        color: #1B5E20;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 25px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        font-family: 'Georgia', serif;
+    }
+
+        .cta-button:hover {
+            background-color: #d4eede;
+        }
+
+    /* Styling for the 2 headers  */
+    .header-text{
+        color: #2C6E49;
+        font-family: 'Georgia', serif;
+        font-weight: 600;
     }
 </style>
 
@@ -134,14 +170,14 @@
 <div class="hero-section">
     <h1 class="hero-title">Keep Your Plants Thriving</h1>
     <p class="hero-subtitle">Track care, monitor growth, and become a better plant parent</p>
-    <div class="hero-buttons">
-        <a class="btn-hero btn-hero-primary" href="Account/Login">Login</a>
-        <a class="btn-hero btn-hero-secondary" href="Account/Register">Register</a>
+    <div class="hero-button-container">
+        <a class="login-button" href="Account/Login">LOGIN</a>
+        <a class="register-button" href="Account/Register">REGISTER</a>
     </div>
 </div>
 
 <section class="features-section">
-    <h2>Why Use Evera</h2>
+    <h2 class="header-text">Why Use Evera</h2>
     <div class="features-grid">
         <div class="feature-card">
             <img src="/background_photos/care_schedule.jpg" alt="Care Schedule" width="80">
@@ -162,7 +198,7 @@
 </section>
 
 <section class="testimonial-section">
-    <h2>What Our Users Say</h2>
+    <h2 class="header-text">What Our Users Say</h2>
     <div class="testimonial-card">
         <p>"Since using Evera, my plants are thriving! The care history feature is so helpful!"</p>
         <h4>- Alex Johnson</h4>
@@ -177,7 +213,7 @@
 <section class="cta-section">
     <h2>Ready to Start Growing?</h2>
     <p>Track your plants today and watch them flourish.</p>
-    <button class="btn-hero btn-hero-secondary" id="scrollToTopBtn">Get Started Now</button>
+    <button class="cta-button" id="scrollToTopBtn">Get Started Now</button>
 </section>
 
 <!--***********************************************************************
