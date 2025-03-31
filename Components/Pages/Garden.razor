@@ -225,6 +225,32 @@
         border-radius: 10px;
         margin-top: 0px;
     }
+    /* Container to hold the health icon and label */
+    .health-status-container {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        text-align: center;
+    }
+
+    /* Smaller health image */
+    .plant-health-image {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        display: block;
+        margin: 0 auto;
+    }
+
+    /* Smaller label under image */
+    .plant-health-label {
+        font-size: 12px;
+        font-family: 'Gloria Hallelujah', cursive;
+        color: #66B266;
+        margin-top: 2px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1), 0px 0px 5px rgba(75, 139, 59, 0.5);
+    }
+
 
     .task-icon {
         width: 30px; /* Adjust icon size */
@@ -441,29 +467,29 @@
                                 alt="@p.PLANT_NAME"
                                 style="width: 75px; height: 80px; border-radius: 10px; margin-top: 0px;" />
                             }
-                            <td style="font-family: 'Gloria Hallelujah', cursive; font-size: 18px; color: #66B266; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1), 0px 0px 5px rgba(75, 139, 59, 0.5); ">
-                                Status:
-                            </td>
-                            @if (plantOverdueCounts.ContainsKey(p.PLANT_ID))
-                            {
-                                var overdue_counter = plantOverdueCounts[p.PLANT_ID];
-                                @if (overdue_counter == 0)
+                            <div class="health-status-container">
+                                @if (plantOverdueCounts.ContainsKey(p.PLANT_ID))
                                 {
-                                    <img src="/plant_health_images/Healthy.png" alt="Additional Image" class="additional-image" />
+                                    var overdue_counter = plantOverdueCounts[p.PLANT_ID];
+                                    if (overdue_counter == 0)
+                                    {
+                                        <img src="/plant_health_images/Healthy.png" alt="Healthy" class="plant-health-image" />
+                                    }
+                                    else if (overdue_counter > 0 && overdue_counter <= 7)
+                                    {
+                                        <img src="/plant_health_images/Ok.png" alt="Ok" class="plant-health-image" />
+                                    }
+                                    else if (overdue_counter > 7 && overdue_counter <= 14)
+                                    {
+                                        <img src="/plant_health_images/Unhealthy.png" alt="Unhealthy" class="plant-health-image" />
+                                    }
+                                    else if (overdue_counter > 14)
+                                    {
+                                        <img src="/plant_health_images/Dying.png" alt="Dying" class="plant-health-image" />
+                                    }
+                                    <div class="plant-health-label">Status</div>
                                 }
-                                else if (overdue_counter > 0 && overdue_counter <= 7)
-                                {
-                                    <img src="/plant_health_images/Ok.png" alt="Additional Image" class="additional-image" />
-                                }
-                                else if (overdue_counter > 7 && overdue_counter <= 14)
-                                {
-                                    <img src="/plant_health_images/Unhealthy.png" alt="Additional Image" class="additional-image" />
-                                }
-                                else if (overdue_counter > 14)
-                                {
-                                    <img src="/plant_health_images/Dying.png" alt="Additional Image" class="additional-image" />
-                                }
-                            }
+                            </div>
                         </div>
                     }
 
