@@ -378,9 +378,32 @@
 <!--***********************************************************************
 *	                             HTML SECTION                             *
 ************************************************************************-->
-<h3 class="title">My Garden</h3>
+<div class="page-header">
 
-<AddPlantButton />
+    <!-- Title -->
+    <div class="page-title">
+        <h3 class="title">My Garden</h3>
+    </div>
+
+    <!-- Buttons -->
+    <div class="page-controls">
+        <AddPlantButton />
+        <button @onclick="GoToNextDay" class="btn btn-primary next-day-btn">Next Day &gt;&gt;</button>
+    </div>
+
+    <!-- Date -->
+    <div class="page-date">
+        @if (R_CurrentDay == DateTime.MinValue)
+        {
+            <p>Loading...</p>
+        }
+        else
+        {
+            <p>@R_CurrentDay.ToString("MMMM dd, yyyy")</p>
+        }
+    </div>
+
+</div>
 
 <div class="tool-key">
     <div class="tool-item">
@@ -556,20 +579,6 @@
         }
     }
 </div>
-
-<!-- Button to advance the day -->
-<button @onclick="GoToNextDay" class="btn btn-primary">Next Day &gt;&gt;</button>
-
-<!-- Display the current day -->
-@if (R_CurrentDay == DateTime.MinValue)
-{
-    <p>Loading...</p>
-}
-else
-{
-    <p>@R_CurrentDay.ToString("MMMM dd, yyy")</p>
-}
-
 
 <!--***********************************************************************
 *	                             CODE SECTION                             *
