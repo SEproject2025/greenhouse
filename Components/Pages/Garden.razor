@@ -372,6 +372,49 @@
         font-weight: bold;
     }
 
+    .notification-dot {
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 18px;
+        height: 18px;
+        background-color: red;
+        border-radius: 50%;
+        box-shadow: 0 0 0 rgba(255, 0, 0, 0.7);
+        animation: pulse 1.5s infinite;
+        z-index: 9999;
+    }
+
+    @@keyframes pulse {
+        0% {
+            box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
+        }
+
+        ;
+
+        70% {
+            box-shadow: 0 0 0 10px rgba(255, 0, 0, 0);
+        }
+
+        ;
+
+        100% {
+            box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
+        }
+
+        ;
+    }
+
+    .box {
+        height: 385px;
+        width: 310px;
+        background-color: #CFE8A9;
+        display: inline-block;
+        position: relative;
+        border-radius: 15px;
+        padding: 20px 10px 10px; /* Added top padding */
+    }
+
 </style>
 
 
@@ -476,106 +519,110 @@
         @foreach (var p in plant)
         {
             @if (p.IS_PRIVATE == "Y")
+{
+    <div class="box">
+        <div class="tile @(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID] ? "green-fade" : "")"
+             ondragover="event.preventDefault()"
+             ondrop="handleGenericDrop(event, @p.PLANT_ID)">
+        <div class="notification-dot"></div
+
+    
+            @if (!(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID]))
             {
-                <div class="tile @(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID] ? "green-fade" : "")"
-                     ondragover="event.preventDefault()"
-                     ondrop="handleGenericDrop(event, @p.PLANT_ID)">
 
-                    @if (!(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID]))
+                <span class="plant-name">@p.PLANT_NAME</span>
+                <div class="image-container">
+                    @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
                     {
-
-                        <span class="plant-name">@p.PLANT_NAME</span>
-                        <div class="image-container">
-                            @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
-                            {
-                                <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)"
-                                alt="@p.PLANT_NAME"
-                                style="width: 75px; height: 80px; border-radius: 10px; margin-top: 0px;" />
-                            }
-                            <div class="health-status-container">
-                                @if (plantOverdueCounts.ContainsKey(p.PLANT_ID))
-                                {
-                                    var overdue_counter = plantOverdueCounts[p.PLANT_ID];
-                                    if (overdue_counter == 0)
-                                    {
-                                        <img src="/plant_health_images/Healthy.png" alt="Healthy" class="plant-health-image" />
-                                    }
-                                    else if (overdue_counter > 0 && overdue_counter <= 7)
-                                    {
-                                        <img src="/plant_health_images/Ok.png" alt="Ok" class="plant-health-image" />
-                                    }
-                                    else if (overdue_counter > 7 && overdue_counter <= 14)
-                                    {
-                                        <img src="/plant_health_images/Unhealthy.png" alt="Unhealthy" class="plant-health-image" />
-                                    }
-                                    else if (overdue_counter > 14)
-                                    {
-                                        <img src="/plant_health_images/Dying.png" alt="Dying" class="plant-health-image" />
-                                    }
-                                    <div class="plant-health-label">Status</div>
-                                }
-                            </div>
-                        </div>
+                        <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)"
+                        alt="@p.PLANT_NAME"
+                        style="width: 75px; height: 80px; border-radius: 10px; margin-top: 0px;" />
                     }
-
-                    <!-- Circular Progress Bar Container - Positioned Above Tasks -->
-                    <!-- Wrap Progress Bars Inside a Container to Prevent Showing on Green-Fade -->
-                    <div class="progress-bar-wrapper">
-                        <div class="progress-bar-container">
-                            @foreach (var t in user_tasks.Where(task => task.PLANT_ID == p.PLANT_ID))
-                            {
-                                <div class="progress-item">
-                                    <div class="circular-progress" id="progress-@t.TASK_ID"
-                                    data-percentage="@CalculateTaskProgress(t.DAYS_UNTIL, t.FREQ)">
-                                        <div class="inner-circle">
-                                            <img src="@GetTaskIcon(t.TASK_NAME)" alt="@t.TASK_NAME icon" class="progress-icon" />
-                                        </div>                       
-                                    </div>                                
-                                </div>                                
-                            }
-                        </div>
-                    </div>
-                    <p> _______________________________ </p>
-                    <!-- Task List Container - Below Progress Bars -->
-                    <div class="task-list">
-                        @foreach (var t in user_tasks)
+                    <div class="health-status-container">
+                        @if (plantOverdueCounts.ContainsKey(p.PLANT_ID))
                         {
-                            @if (p.PLANT_ID == t.PLANT_ID && (t.DAYS_UNTIL == 0 || (t.DONE_DATE == R_CurrentDay || t.DONE_DATE == null)))
+                            var overdue_counter = plantOverdueCounts[p.PLANT_ID];
+                            if (overdue_counter == 0)
                             {
-                                <div class="task-container">
-                                    <img src="@GetTaskIcon(t.TASK_NAME)" alt="@t.TASK_NAME icon" class="task-icon" />
-                                    <label 
-                                        for="@t.TASK_NAME-@p.PLANT_ID" 
-                                        class="@(t.OVERDUE > 0 ? "task-label-overdue" : "task-label")">@t.TASK_NAME</label>
-                                    <input 
-                                        type="checkbox"
-                                        id="@t.TASK_NAME-@p.PLANT_ID"
-                                        name="@t.TASK_NAME-@p.PLANT_ID"
-                                        checked='@t.IS_COMPLETED'
-                                        @onchange="(e) => CheckboxChecked(e, t)"
-                                        disabled="@(t.IS_COMPLETED ? "disabled" : null)"
-                                        class="task-checkbox" />
-                                </div>
+                                <img src="/plant_health_images/Healthy.png" alt="Healthy" class="plant-health-image" />
                             }
+                            else if (overdue_counter > 0 && overdue_counter <= 7)
+                            {
+                                <img src="/plant_health_images/Ok.png" alt="Ok" class="plant-health-image" />
+                            }
+                            else if (overdue_counter > 7 && overdue_counter <= 14)
+                            {
+                                <img src="/plant_health_images/Unhealthy.png" alt="Unhealthy" class="plant-health-image" />
+                            }
+                            else if (overdue_counter > 14)
+                            {
+                                <img src="/plant_health_images/Dying.png" alt="Dying" class="plant-health-image" />
+                            }
+                            <div class="plant-health-label">Status</div>
                         }
                     </div>
-
-                    <!-- Image of the plant (only visible when green) -->
-                    @if (plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID])
-                    {
-                        @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
-                        {
-                            <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)"
-                            alt="@p.PLANT_NAME" />
-                        }
-                        else
-                        {
-                            <img src="/images/Default.webp"
-                            alt="Default Plant Image" />
-                        }
-                    }
                 </div>
             }
+
+            <!-- Circular Progress Bar Container - Positioned Above Tasks -->
+            <!-- Wrap Progress Bars Inside a Container to Prevent Showing on Green-Fade -->
+            <div class="progress-bar-wrapper">
+                <div class="progress-bar-container">
+                    @foreach (var t in user_tasks.Where(task => task.PLANT_ID == p.PLANT_ID))
+                    {
+                        <div class="progress-item">
+                            <div class="circular-progress" id="progress-@t.TASK_ID"
+                            data-percentage="@CalculateTaskProgress(t.DAYS_UNTIL, t.FREQ)">
+                                <div class="inner-circle">
+                                    <img src="@GetTaskIcon(t.TASK_NAME)" alt="@t.TASK_NAME icon" class="progress-icon" />
+                                </div>                       
+                            </div>                                
+                        </div>                                
+                    }
+                </div>
+            </div>
+            <p> _______________________________ </p>
+            <!-- Task List Container - Below Progress Bars -->
+            <div class="task-list">
+                @foreach (var t in user_tasks)
+                {
+                    @if (p.PLANT_ID == t.PLANT_ID && (t.DAYS_UNTIL == 0 || (t.DONE_DATE == R_CurrentDay || t.DONE_DATE == null)))
+                    {
+                        <div class="task-container">
+                            <img src="@GetTaskIcon(t.TASK_NAME)" alt="@t.TASK_NAME icon" class="task-icon" />
+                            <label 
+                                for="@t.TASK_NAME-@p.PLANT_ID" 
+                                class="@(t.OVERDUE > 0 ? "task-label-overdue" : "task-label")">@t.TASK_NAME</label>
+                            <input 
+                                type="checkbox"
+                                id="@t.TASK_NAME-@p.PLANT_ID"
+                                name="@t.TASK_NAME-@p.PLANT_ID"
+                                checked='@t.IS_COMPLETED'
+                                @onchange="(e) => CheckboxChecked(e, t)"
+                                disabled="@(t.IS_COMPLETED ? "disabled" : null)"
+                                class="task-checkbox" />
+                        </div>
+                    }
+                }
+            </div>
+
+            <!-- Image of the plant (only visible when green) -->
+            @if (plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID])
+            {
+                @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
+                {
+                    <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)"
+                    alt="@p.PLANT_NAME" />
+                }
+                else
+                {
+                    <img src="/images/Default.webp"
+                    alt="Default Plant Image" />
+                }
+            }
+        </div>
+    </div>
+}
         }
     }
 </div>
