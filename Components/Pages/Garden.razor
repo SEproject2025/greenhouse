@@ -42,16 +42,19 @@
         }
 
     .plant-name {
-        left: 100px !important; /* Moves the name slightly to the right */
-        top: 10px !important; /* Moves the name slightly down */
-        font-size: 20px !important;
+        font-size: 20px;
         font-weight: bold;
         font-family: Arial, sans-serif;
         color: black;
+        width: 280px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: center;
+        white-space: nowrap;
     }
 
     .plant-image{
-        top: 5px important;
+        top: 5px !important;
         width: 75px;
         height: 80px;
         border-radius: 10px;
@@ -223,6 +226,8 @@
 
     /* Styling for the image container */
     .image-container {
+        position: relative;
+        top: 25px;
         display: flex; /* Use flexbox to arrange images side by side */
         align-items: center; /* Vertically center the images */
         gap: 15px; /* Space between the images */
@@ -346,9 +351,9 @@
 
                     @if (!(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID]))
                     {
-                        <button @onclick="() => DeletePlant(p.PLANT_ID)" class="delete-button"></button>
+                      //  <button @onclick="() => DeletePlant(p.PLANT_ID)" class="delete-button"></button>
 
-                        <span class="plant-name">@p.PLANT_NAME</span>
+                        <div class="plant-name" title="@p.PLANT_NAME">@p.PLANT_NAME</div>
                         <div class="image-container">
                             @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
                             {

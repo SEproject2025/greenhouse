@@ -132,6 +132,11 @@
         font-size: 14px;
         font-weight: bold;
         color: #2C6E49;
+        width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
     }    
 
     /* Calendar Styling */
@@ -146,7 +151,7 @@
     .weather-container {
         background: white;
         border-radius: 15px;
-        width: 300px;
+        width: 100%;
         text-align: center;
 
         /*
@@ -191,7 +196,13 @@
                             {
                                 <img src="data:image/png;base64,@Convert.ToBase64String(plant.IMAGE_DATA)" alt="@plant.PLANT_NAME" />
                             }
-                            <div class="plant-name">@plant.PLANT_NAME</div>
+                            <div>
+                                <div class="plant-name" title="GeeksforGeeks: A computer science
+              portal for geeks">
+                                    @plant.PLANT_NAME
+                                </div>
+                            </div>
+                            
                         </div>
                     }
                 }
