@@ -372,6 +372,14 @@
         font-weight: bold;
     }
 
+    .Buttons {
+        position: absolute;
+        top: 50px;
+        left: 50px;
+        display: flex;
+        gap: 10px; /* Adds spacing between buttons */
+    }
+
 </style>
 
 
@@ -379,20 +387,9 @@
 *	                             HTML SECTION                             *
 ************************************************************************-->
 <div class="page-header">
-
     <!-- Title -->
     <div class="page-title">
-        <h3 class="title">My Garden</h3>
-    </div>
-
-    <!-- Buttons -->
-    <div class="page-controls">
-        <AddPlantButton />
-        <button @onclick="GoToNextDay" class="btn btn-primary next-day-btn">Next Day &gt;&gt;</button>
-    </div>
-
-    <!-- Date -->
-    <div class="page-date">
+        <h3 class="title">My Garden
         @if (R_CurrentDay == DateTime.MinValue)
         {
             <p>Loading...</p>
@@ -401,8 +398,13 @@
         {
             <p>@R_CurrentDay.ToString("MMMM dd, yyyy")</p>
         }
+        </h3>
     </div>
+</div>
 
+<div class="Buttons">
+    <AddPlantButton />
+    <button @onclick="GoToNextDay" class="btn btn-primary next-day-btn">Finish Day</button>
 </div>
 
 <div class="tool-key">
@@ -456,6 +458,7 @@
         <div class="tool-label">Delete</div>
     </div>
 </div>
+
 <div class="tiles-container">
     @if (plant == null || !plant.Any())
     {
