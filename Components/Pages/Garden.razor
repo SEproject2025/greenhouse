@@ -60,24 +60,6 @@
         border-radius: 10px;
     }
 
-    /* Delete button as a shovel icon in the top-left corner of the tile    */
-    .delete-button {
-        position: absolute;
-        top: 10px ;
-        right: 10px; /* Changed from left to right                        */
-        width: 30px;
-        height: 30px;
-        background: url('/images/shovel-icon.png') no-repeat center center;
-        background-size: contain;
-        border: none;
-        cursor: pointer;
-        outline: none;
-    }
-
-        .delete-button:hover {
-            opacity: 0.8;
-        }
-
     /* Styling for the green fade effect when the Next Day button is clicked */
     .tile.green-fade {
         background-color: #B0E57C;
@@ -215,6 +197,8 @@
     .task-label-overdue {
         font-size: 20px; /* Increase task text size */
         color: red;
+        font-weight: bold;
+        
     }
 
     .task-container input[type="checkbox"] {
@@ -248,6 +232,32 @@
         border-radius: 10px;
         margin-top: 0px;
     }
+    /* Container to hold the health icon and label */
+    .health-status-container {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        text-align: center;
+    }
+
+    /* Smaller health image */
+    .plant-health-image {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        display: block;
+        margin: 0 auto;
+    }
+
+    /* Smaller label under image */
+    .plant-health-label {
+        font-size: 12px;
+        font-family: 'Gloria Hallelujah', cursive;
+        color: #66B266;
+        margin-top: 2px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1), 0px 0px 5px rgba(75, 139, 59, 0.5);
+    }
+
 
     .task-icon {
         width: 30px; /* Adjust icon size */
@@ -316,15 +326,143 @@
         height: 25px;
         object-fit: contain; /* Ensure it fits well inside the circle */
     }
+    /* Container for the draggable tool icons */
+    .tool-tray {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        display: flex;
+        gap: 20px; /* spacing between tools */
+        z-index: 999;
+    }
+
+    /* Shared styling for all tool icons */
+    .tool-icon {
+        width: 60px;
+        height: auto;
+        cursor: grab;
+        border: 2px solid black;
+        border-radius: 10px;
+        background-color: white;
+        padding: 3px;
+    }
+    /* New tool-key container that acts as a legend */
+    .tool-key {
+        position: fixed; /* changed from absolute */
+        top: 90px;
+        right: 20px;
+        background-color: #fff;
+        padding: 10px 15px;
+        border: 2px solid #4B8B3B;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: row;
+        gap: 15px;
+        z-index: 999;
+        box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Each tool + label bundle */
+    .tool-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Label underneath each icon */
+    .tool-label {
+        font-size: 12px;
+        color: #2C6E49;
+        margin-top: 5px;
+        font-weight: bold;
+    }
+
+    .Buttons {
+        position: absolute;
+        top: 50px;
+        left: 50px;
+        display: flex;
+        gap: 10px; /* Adds spacing between buttons */
+    }
+
 </style>
 
 
 <!--***********************************************************************
 *	                             HTML SECTION                             *
 ************************************************************************-->
-<h3 class="title">My Garden</h3>
+<div class="page-header">
+    <!-- Title -->
+    <div class="page-title">
+        <h3 class="title">My Garden
+        @if (R_CurrentDay == DateTime.MinValue)
+        {
+            <p>Loading...</p>
+        }
+        else
+        {
+            <p>@R_CurrentDay.ToString("MMMM dd, yyyy")</p>
+        }
+        </h3>
+    </div>
+</div>
 
-<AddPlantButton />
+<div class="Buttons">
+    <AddPlantButton />
+    <button @onclick="GoToNextDay" class="btn btn-primary next-day-btn">Finish Day</button>
+</div>
+
+<div class="tool-key">
+    <div class="tool-item">
+        <img src="/plant_tasks/WateringCan.png"
+             id="watering-can"
+             class="tool-icon"
+             draggable="true"
+             ondragstart="handleDragStart(event)"
+             alt="Watering Can" />
+        <div class="tool-label">Water</div>
+    </div>
+
+    <div class="tool-item">
+        <img src="/plant_tasks/PruningTool.png"
+             id="pruning-tool"
+             class="tool-icon"
+             draggable="true"
+             ondragstart="handlePruningDragStart(event)"
+             alt="Pruning Tool" />
+        <div class="tool-label">Prune</div>
+    </div>
+
+    <div class="tool-item">
+        <img src="/plant_tasks/BugSpray.png"
+             id="bugspray-tool"
+             class="tool-icon"
+             draggable="true"
+             ondragstart="handlePestControlDragStart(event)"
+             alt="Bug Spray" />
+        <div class="tool-label">Pest Control</div>
+    </div>
+
+    <div class="tool-item">
+        <img src="/plant_tasks/Gloves.png"
+             id="gloves-tool"
+             class="tool-icon"
+             draggable="true"
+             ondragstart="handleWeedingDragStart(event)"
+             alt="Gloves" />
+        <div class="tool-label">Weed</div>
+    </div>
+
+    <div class="tool-item">
+        <img src="/plant_tasks/Shovel.png"
+             id="shovel-tool"
+             class="tool-icon"
+             draggable="true"
+             ondragstart="handleShovelDragStart(event)"
+             alt="Shovel Tool" />
+        <div class="tool-label">Delete</div>
+    </div>
+</div>
 
 <div class="tiles-container">
     @if (plant == null || !plant.Any())
@@ -347,12 +485,12 @@
         {
             @if (p.IS_PRIVATE == "Y")
             {
-                <div class="tile @(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID] ? "green-fade" : "")">
+                <div class="tile @(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID] ? "green-fade" : "")"
+                     ondragover="event.preventDefault()"
+                     ondrop="handleGenericDrop(event, @p.PLANT_ID)">
 
                     @if (!(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID]))
                     {
-                      //  <button @onclick="() => DeletePlant(p.PLANT_ID)" class="delete-button"></button>
-
                         <div class="plant-name" title="@p.PLANT_NAME">@p.PLANT_NAME</div>
                         <div class="image-container">
                             @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
@@ -361,29 +499,29 @@
                                 alt="@p.PLANT_NAME"
                                 style="width: 75px; height: 80px; border-radius: 10px; margin-top: 0px;" />
                             }
-                            <td style="font-family: 'Gloria Hallelujah', cursive; font-size: 18px; color: #66B266; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1), 0px 0px 5px rgba(75, 139, 59, 0.5); ">
-                                Status:
-                            </td>
-                            @if (plantOverdueCounts.ContainsKey(p.PLANT_ID))
-                            {
-                                var overdue_counter = plantOverdueCounts[p.PLANT_ID];
-                                @if (overdue_counter == 0)
+                            <div class="health-status-container">
+                                @if (plantOverdueCounts.ContainsKey(p.PLANT_ID))
                                 {
-                                    <img src="/plant_health_images/Healthy.png" alt="Additional Image" class="additional-image" />
+                                    var overdue_counter = plantOverdueCounts[p.PLANT_ID];
+                                    if (overdue_counter == 0)
+                                    {
+                                        <img src="/plant_health_images/Healthy.png" alt="Healthy" class="plant-health-image" />
+                                    }
+                                    else if (overdue_counter > 0 && overdue_counter <= 7)
+                                    {
+                                        <img src="/plant_health_images/Ok.png" alt="Ok" class="plant-health-image" />
+                                    }
+                                    else if (overdue_counter > 7 && overdue_counter <= 14)
+                                    {
+                                        <img src="/plant_health_images/Unhealthy.png" alt="Unhealthy" class="plant-health-image" />
+                                    }
+                                    else if (overdue_counter > 14)
+                                    {
+                                        <img src="/plant_health_images/Dying.png" alt="Dying" class="plant-health-image" />
+                                    }
+                                    <div class="plant-health-label">Status</div>
                                 }
-                                else if (overdue_counter > 0 && overdue_counter <= 7)
-                                {
-                                    <img src="/plant_health_images/Ok.png" alt="Additional Image" class="additional-image" />
-                                }
-                                else if (overdue_counter > 7 && overdue_counter <= 14)
-                                {
-                                    <img src="/plant_health_images/Unhealthy.png" alt="Additional Image" class="additional-image" />
-                                }
-                                else if (overdue_counter > 14)
-                                {
-                                    <img src="/plant_health_images/Dying.png" alt="Additional Image" class="additional-image" />
-                                }
-                            }
+                            </div>
                         </div>
                     }
 
@@ -449,20 +587,6 @@
     }
 </div>
 
-<!-- Button to advance the day -->
-<button @onclick="GoToNextDay" class="btn btn-primary">Next Day &gt;&gt;</button>
-
-<!-- Display the current day -->
-@if (R_CurrentDay == DateTime.MinValue)
-{
-    <p>Loading...</p>
-}
-else
-{
-    <p>@R_CurrentDay.ToString("MMMM dd, yyy")</p>
-}
-
-
 <!--***********************************************************************
 *	                             CODE SECTION                             *
 ************************************************************************-->
@@ -523,7 +647,10 @@ else
             _ = InvokeAsync(StateHasChanged); // Avoid UI thread blocking
         }
         await JSRuntime.InvokeVoidAsync("updateProgressCircles");
-
+        // Register DotnetObjectRefernce
+        // Exposes the Blazor component instance to JavaScript so it can be called from JS
+        await JSRuntime.InvokeVoidAsync("window.setDotNetHelper",
+        DotNetObjectReference.Create(this));
         
         
     }
@@ -668,6 +795,7 @@ else
         };
     }
 
+    // Method to calculate the progress of a task based on the days until the next task
     int CalculateTaskProgress(int? daysUntil, int? freq)
     {
         if (!freq.HasValue || freq.Value == 0) return 0;  // Prevent division by zero
@@ -682,23 +810,78 @@ else
         return 100;
     }
 
+    // Method to complete the watering task when the watering can is dropped
+    // on the plant tile
+    // This method is invoked from JavaScript
+    [JSInvokable]
+    public async Task CompleteWateringTask(int plantId)
+    {
+        var wateringTask = user_tasks.FirstOrDefault(t =>
+            t.PLANT_ID == plantId && t.TASK_NAME == "Watering");
+
+        if (wateringTask != null && !wateringTask.IS_COMPLETED)
+        {
+            // Reuse the existing CheckboxChecked logic
+            await CheckboxChecked(new ChangeEventArgs { Value = true }, wateringTask);
+        }
+    }
+
+    // Method to complete the pruning task when the pruning tool is dropped
+    // on the plant tile
+    [JSInvokable]
+    public async Task CompletePruningTask(int plantId)
+    {
+        var task = user_tasks.FirstOrDefault(t =>
+            t.PLANT_ID == plantId && t.TASK_NAME == "Pruning");
+
+        if (task != null && !task.IS_COMPLETED)
+        {
+            await CheckboxChecked(new ChangeEventArgs { Value = true }, task);
+        }
+    }
+
+    // Method to complete the pest control task when the spray is dropped
+    // on the plant tile
+    [JSInvokable]
+    public async Task CompletePestControlTask(int plantId)
+    {
+        var task = user_tasks.FirstOrDefault(t =>
+            t.PLANT_ID == plantId && t.TASK_NAME == "Pest Control");
+
+        if (task != null && !task.IS_COMPLETED)
+        {
+            await CheckboxChecked(new ChangeEventArgs { Value = true }, task);
+        }
+    }
+
+    // Method to complete the weeding task when the gloves are dropped
+    // on the plant tile
+    [JSInvokable]
+    public async Task CompleteWeedingTask(int plantId)
+    {
+        var task = user_tasks.FirstOrDefault(t =>
+            t.PLANT_ID == plantId && t.TASK_NAME == "Weeding");
+
+        if (task != null && !task.IS_COMPLETED)
+        {
+            await CheckboxChecked(new ChangeEventArgs { Value = true }, task);
+        }
+    }
+
+    // Method to delete a plant when the shovel is dropped on the plant tile
+    [JSInvokable]
+    public async Task DeletePlantByDrop(int plantId)
+    {
+        await PlantService.DeletePlant(plantId);
+        plant = await PlantService.GetUserPlants(uuid);
+        user_tasks = await PlantService.GetAllUserTasks(uuid);
+        UpdatePlantFade();
+        UpdateOverdueCount();
+        StateHasChanged();
+    }
     
 }
 
-<!-- JavaScript for the circle progress bars -->                     
-<script>
-    function updateProgressCircles() {
-        document.querySelectorAll(".circular-progress").forEach((progressBar) => {
-            let value = parseInt(progressBar.getAttribute("data-percentage"));
-
-            // Ensure value is between 0 and 100
-            value = Math.max(0, Math.min(value, 100));
-
-            // Apply the conic-gradient for progress
-            progressBar.style.background = `conic-gradient(green ${value * 3.6}deg, lightgray ${value * 3.6}deg)`;
-        });
-    }
-
-    document.addEventListener("DOMContentLoaded", updateProgressCircles);
-</script>
+<!-- JavaScript for the circle progress bars -->  
+<script src="js/garden.js"></script>
 

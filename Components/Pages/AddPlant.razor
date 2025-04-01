@@ -332,9 +332,9 @@ else if (showPrefilledForm)
     <EditForm Model="plant" OnSubmit="PrefillHandleSubmit" FormName="editPlant">
 
         <!-- Dropdown to select an existing public plant -->
-        <label>Select a Public Plant</label>
+        <label>Select a Prefilled Plant</label>
         <InputSelect @bind-Value="selectedPublicPlantId">
-            <option value="">-- Select a public plant --</option>
+            <option value="">-- Select a prefilled plant --</option>
             @if (publicPlants != null)
             {
                 @foreach (var publicPlant in publicPlants)
