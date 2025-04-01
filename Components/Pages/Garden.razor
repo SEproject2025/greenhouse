@@ -42,16 +42,19 @@
         }
 
     .plant-name {
-        left: 100px !important; /* Moves the name slightly to the right */
-        top: 10px !important; /* Moves the name slightly down */
-        font-size: 20px !important;
+        font-size: 20px;
         font-weight: bold;
         font-family: Arial, sans-serif;
         color: black;
+        width: 280px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: center;
+        white-space: nowrap;
     }
 
     .plant-image{
-        top: 5px important;
+        top: 5px !important;
         width: 75px;
         height: 80px;
         border-radius: 10px;
@@ -130,12 +133,12 @@
     .tile {
         height: 375px;
         width: 300px;
-        background-color: #ffffff;
+        background-color: #ffffff; 
         border: 2px solid black;
-        display: inline-block;
-        position: relative;
+        display: flex;
+        flex-direction: column;
         border-radius: 15px;
-        padding: 20px 10px 10px; /* Added top padding */
+        padding: 15px 10px 10px; /* Added top padding */
         box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2), -5px -5px 15px rgba(255, 255, 255, 0.1);
         transition: transform 0.2s, box-shadow 0.2s;
     }
@@ -207,6 +210,8 @@
 
     /* Styling for the image container */
     .image-container {
+        position: relative;
+        top: 5px;
         display: flex; /* Use flexbox to arrange images side by side */
         align-items: center; /* Vertically center the images */
         gap: 15px; /* Space between the images */
@@ -486,8 +491,7 @@
 
                     @if (!(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID]))
                     {
-
-                        <span class="plant-name">@p.PLANT_NAME</span>
+                        <div class="plant-name" title="@p.PLANT_NAME">@p.PLANT_NAME</div>
                         <div class="image-container">
                             @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
                             {

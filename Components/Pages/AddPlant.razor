@@ -227,7 +227,10 @@
 
         <!-- Input field for plant name -->
         <label>Plant Name</label>
-        <InputText @bind-Value="plant.PLANT_NAME"></InputText>
+        <InputText 
+            MaxLength="32"
+            @bind-Value="plant.PLANT_NAME">
+        </InputText>
 
         <!-- Dropdown list for avalible plants -->
         <label>Select a Plant Image</label>
