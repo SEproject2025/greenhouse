@@ -151,12 +151,12 @@
     .tile {
         height: 375px;
         width: 300px;
-        background-color: #ffffff;
+        background-color: #ffffff; 
         border: 2px solid black;
-        display: inline-block;
-        position: relative;
+        display: flex;
+        flex-direction: column;
         border-radius: 15px;
-        padding: 20px 10px 10px; /* Added top padding */
+        padding: 15px 10px 10px; /* Added top padding */
         box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2), -5px -5px 15px rgba(255, 255, 255, 0.1);
         transition: transform 0.2s, box-shadow 0.2s;
     }
@@ -227,7 +227,7 @@
     /* Styling for the image container */
     .image-container {
         position: relative;
-        top: 25px;
+        top: 5px;
         display: flex; /* Use flexbox to arrange images side by side */
         align-items: center; /* Vertically center the images */
         gap: 15px; /* Space between the images */
