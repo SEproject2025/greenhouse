@@ -775,8 +775,11 @@
         t.DONE_DATE = R_CurrentDay;
         await PlantService.UpdateTask(t);
 
-        // Update the fade state of plants after a task is checked
-        UpdatePlantFade();
+        // Immediately refresh overdue count for this plant
+        plantOverdueCounts[t.PLANT_ID] = GetOverdueForPlant(t.PLANT_ID);
+
+        // Also check if this affects the green-fade trigger
+        plantGreenStates[t.PLANT_ID] = AllTasksFinished(t.PLANT_ID);
         StateHasChanged();
     }
 
