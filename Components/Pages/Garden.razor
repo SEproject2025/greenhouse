@@ -98,7 +98,7 @@
 
     /* Container to hold the health icon and label */
     .health-status-container {
-        position: fixed; 
+        position: absolute; 
         margin-left: 225px;
         text-align: right;
     }
@@ -151,7 +151,7 @@
     }
 
     .plant-image {
-        top: 5px;
+        top: .5px;
         width: 125px;
         height: 124px;
         border-radius: 50%;
@@ -407,6 +407,25 @@
         font-weight: bold;
     }
 
+    .pulsing-dot {
+        position: relative;
+        top: 8px;
+        left: 8px;
+        width: 16px;
+        height: 16px;
+        background-color: red;
+        border-radius: 50%;
+        z-index: 10;
+        box-shadow: 0 0 0 rgba(255, 0, 0, 0.7);
+        animation: pulse 1.5s infinite;
+    }
+
+    @@keyframes pulse {
+        0% {transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);}
+        70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(255, 0, 0, 0);}
+        100% {transform: scale(0.95);box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
+    }
+
 </style>
 
 
@@ -505,6 +524,12 @@
             <div class="tile @(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID] ? "green-fade" : "")"
             ondragover="event.preventDefault()"
             ondrop="handleGenericDrop(event, @p.PLANT_ID)">
+
+                @if (plantOverdueCounts.ContainsKey(p.PLANT_ID) && plantOverdueCounts[p.PLANT_ID] > 0)
+                {
+                    <div class="pulsing-dot"></div>
+                }
+
 
                 @if (!(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID])) // Plant is not finished for the day
                 {
