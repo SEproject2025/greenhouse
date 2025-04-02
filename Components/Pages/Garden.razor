@@ -409,17 +409,21 @@
     }
 
     .pulsing-dot {
-        position: relative;
+        position: absolute; /* Make sure it's not inside the flex flow */
         top: 8px;
         left: 8px;
         width: 16px;
         height: 16px;
+        min-width: 16px;
+        min-height: 16px;
         background-color: red;
         border-radius: 50%;
         z-index: 10;
         box-shadow: 0 0 0 rgba(255, 0, 0, 0.7);
         animation: pulse 1.5s infinite;
+        pointer-events: auto; /* Prevents it from interfering with hover/clicks */
     }
+
 
     @@keyframes pulse {
         0% {transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);}
@@ -526,9 +530,13 @@
             ondragover="event.preventDefault()"
             ondrop="handleGenericDrop(event, @p.PLANT_ID)">
 
-                @if (plantOverdueCounts.ContainsKey(p.PLANT_ID) && plantOverdueCounts[p.PLANT_ID] > 0)
+                @if (
+                   plantOverdueCounts.ContainsKey(p.PLANT_ID) &&
+                   plantOverdueCounts[p.PLANT_ID] > 0 &&
+                   !(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID])
+                )
                 {
-                    <div class="pulsing-dot"></div>
+                    <div class="pulsing-dot" title="You have an overdue task"></div>
                 }
 
 
