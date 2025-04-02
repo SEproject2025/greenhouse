@@ -98,10 +98,9 @@
 
     /* Container to hold the health icon and label */
     .health-status-container {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        text-align: center;
+        position: fixed; 
+        margin-left: 225px;
+        text-align: right;
     }
 
     /* Styling for the image container */
@@ -169,7 +168,7 @@
         padding-right: 5px;
         min-height: 30px;
         min-width: 120px;
-        max-width: 200px;
+        max-width: 275px;
         overflow: hidden;
         text-overflow: ellipsis;
         text-align: center;
@@ -178,7 +177,7 @@
         white-space: nowrap;
         background-color: #f7f3e8;
         border: 1px solid #2C6E49;
-        display: flex;
+        display: block;
         position: relative;
         top: -15px;
         border-radius: 10px;
@@ -254,7 +253,7 @@
     }
 
     .tile {
-        height: 400px;
+        height: 450px;
         width: 300px;
         background-color: #f7f3e8;
         border: 3px solid #2C6E49;
@@ -509,17 +508,6 @@
 
                 @if (!(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID])) // Plant is not finished for the day
                 {
-
-
-                    @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
-                    {
-                        <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)"
-                        alt="@p.PLANT_NAME"
-                        class="plant-image" />
-                    }
-
-                    <div class="plant-name" title="@p.PLANT_NAME">@p.PLANT_NAME</div>
-
                     <div class="health-status-container">
                         @if (plantOverdueCounts.ContainsKey(p.PLANT_ID))
                         {
@@ -543,6 +531,17 @@
                             <div class="plant-health-label">Status</div>
                         }
                     </div>
+
+                    @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
+                    {
+                        <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)"
+                        alt="@p.PLANT_NAME"
+                        class="plant-image" />
+                    }
+
+                    <div class="plant-name" title="@p.PLANT_NAME">@p.PLANT_NAME</div>
+
+                    
 
                     <!-- Circular Progress Bar Container - Positioned Above Tasks -->
                     <!-- Wrap Progress Bars Inside a Container to Prevent Showing on Green-Fade -->
