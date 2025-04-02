@@ -23,7 +23,7 @@
     }
 
     body {
-        background-color: #CFE8A9; /* Soft pastel green */
+        background: url('/background_photos/WaterColor.png') center/cover no-repeat;
         min-height: 100vh;
         margin: 0;
         font-family: 'Merriweather', serif;
@@ -38,7 +38,7 @@
     }
 
     button.btn {
-        background-color: #6BBF59;
+        background-color: #CFE8A9;
         color: #FFFFFF;
         border: none;
         padding: 12px 20px;
@@ -51,7 +51,24 @@
     }
 
         button.btn:hover {
-            background-color: #5AA74E;
+            background-color: #CFE8A9;
+        }
+
+    button.btn2 {
+        background-color: #CFE8A9;
+        color: #FFFFFF;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 25px;
+        font-size: 16px;
+        margin: 10px 5px;
+        cursor: pointer;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease;
+    }
+
+        button.btn2:hover {
+            background-color: #CFE8A9;
         }
 
     .circular-progress {
@@ -136,8 +153,8 @@
 
     .plant-image {
         top: 5px;
-        width: 75px;
-        height: 80px;
+        width: 125px;
+        height: 124px;
         border-radius: 50%;
         border: 2px solid black;
         align-self: center;
@@ -148,14 +165,26 @@
         font-weight: bold;
         font-family: Arial, sans-serif;
         color: black;
-        width: 280px;
+        padding-left: 5px;
+        padding-right: 5px;
         min-height: 30px;
+        min-width: 120px;
+        max-width: 200px;
         overflow: hidden;
         text-overflow: ellipsis;
         text-align: center;
+        justify-content: center;
+        align-self: center;
         white-space: nowrap;
+        background-color: #f7f3e8;
+        border: 1px solid #2C6E49;
+        display: flex;
+        position: relative;
+        top: -15px;
+        border-radius: 10px;
+        box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.5), -5px -5px 15px rgba(255, 255, 255, 0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
     }
-
 
     .progress-bar-container {
         display: flex;
@@ -227,8 +256,8 @@
     .tile {
         height: 400px;
         width: 300px;
-        background-color: #ffffff;
-        border: 2px solid black;
+        background-color: #f7f3e8;
+        border: 3px solid #2C6E49;
         display: flex;
         flex-direction: column;
         align-content: center;
@@ -475,12 +504,12 @@
         @foreach (var p in plant)
         {
             <div class="tile @(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID] ? "green-fade" : "")"
-                 ondragover="event.preventDefault()"
-                 ondrop="handleGenericDrop(event, @p.PLANT_ID)">
+            ondragover="event.preventDefault()"
+            ondrop="handleGenericDrop(event, @p.PLANT_ID)">
 
                 @if (!(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID])) // Plant is not finished for the day
                 {
-                    
+
 
                     @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
                     {
@@ -542,31 +571,30 @@
                                 <div class="task-container">
                                     <img   src="@GetTaskIcon(t.TASK_NAME)" alt="@t.TASK_NAME icon" class="task-icon" />
                                     <label for="@t.TASK_NAME-@p.PLANT_ID" 
-                                           class="@(t.OVERDUE > 0 ? "task-label-overdue" : "task-label")">@t.TASK_NAME</label>
+                                    class="@(t.OVERDUE > 0 ? "task-label-overdue" : "task-label")">@t.TASK_NAME</label>
                                     <input type="checkbox"
-                                           class="task-checkbox"
-                                           id="@t.TASK_NAME-@p.PLANT_ID"
-                                           name="@t.TASK_NAME-@p.PLANT_ID"
-                                           checked='@t.IS_COMPLETED'
-                                           @onchange="(e) => CheckboxChecked(e, t)"
-                                           disabled="@(t.IS_COMPLETED ? "disabled" : null)"/>
+                                    class="task-checkbox"
+                                    id="@t.TASK_NAME-@p.PLANT_ID"
+                                    name="@t.TASK_NAME-@p.PLANT_ID"
+                                    checked='@t.IS_COMPLETED'
+                                    @onchange="(e) => CheckboxChecked(e, t)"
+                                    disabled="@(t.IS_COMPLETED ? "disabled" : null)"/>
                                 </div>
                             }
                         }
                     </div>
                 }
-                <!-- Image of the plant (only visible when green) -->
-                @if (plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID])
+                else
                 {
                     @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
                     {
                         <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)"
-                        alt="@p.PLANT_NAME" />
+                             alt="@p.PLANT_NAME" />
                     }
                     else
                     {
                         <img src="/images/Default.webp"
-                        alt="Default Plant Image" />
+                             alt="Default Plant Image" />
                     }
                 }
             </div>
