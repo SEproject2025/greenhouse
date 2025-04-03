@@ -8,7 +8,7 @@
 
 @using Microsoft.AspNetCore.Authorization
 @using System.Security.Claims
-@using Shared  <!-- Import Shared Components -->
+
 
 <!--***********************************************************************
 *	                             CSS/STYLING SECTION                      *
@@ -19,6 +19,7 @@
 
     /* Apply the serif font globally */
     body {
+        background: url('/background_photos/WaterColor.png') center/cover no-repeat;
         background-color: #CFE8A9; /* Soft pastel green */
         min-height: 100vh;
         margin: 0;
@@ -89,7 +90,7 @@
     /* Floating Plant Effect */
     .plant-card {
         position: relative;
-        background: white;
+        background: #f7f3e8;
         padding: 15px;
         border-radius: 15px;
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
@@ -132,6 +133,11 @@
         font-size: 14px;
         font-weight: bold;
         color: #2C6E49;
+        width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
     }    
 
     /* Calendar Styling */
@@ -146,7 +152,7 @@
     .weather-container {
         background: white;
         border-radius: 15px;
-        width: 300px;
+        width: 100%;
         text-align: center;
 
         /*
@@ -191,7 +197,13 @@
                             {
                                 <img src="data:image/png;base64,@Convert.ToBase64String(plant.IMAGE_DATA)" alt="@plant.PLANT_NAME" />
                             }
-                            <div class="plant-name">@plant.PLANT_NAME</div>
+                            <div>
+                                <div class="plant-name" title="GeeksforGeeks: A computer science
+              portal for geeks">
+                                    @plant.PLANT_NAME
+                                </div>
+                            </div>
+                            
                         </div>
                     }
                 }

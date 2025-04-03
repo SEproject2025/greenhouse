@@ -98,7 +98,6 @@
 </style>
 
 
-
 <!--***********************************************************************
 *                                HTML SECTION
 ************************************************************************-->
@@ -131,14 +130,29 @@
 					<ValidationMessage For="() => Input.Email" class="text-danger" />
 				</div>
 				<div class="form-floating mb-3">
-					<InputText type="password" @bind-Value="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+					<InputText type="password" id="register_input" @bind-Value="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
 					<label for="password">Password</label>
 					<ValidationMessage For="() => Input.Password" class="text-danger" />
 				</div>
 				<div class="form-floating mb-3">
-					<InputText type="password" @bind-Value="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+					<InputText type="password" id="register_input2" @bind-Value="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
 					<label for="confirm-password">Confirm Password</label>
 					<ValidationMessage For="() => Input.ConfirmPassword" class="text-danger" />
+				</div>
+				<div style="padding-bottom: 10px; accent-color: #08590b">
+					<input type="checkbox"
+						   id="hide"
+						   onclick="
+                      if (document.getElementById('register_input') .type == 'password')
+                      {
+                         document.getElementById('register_input') .type = 'text';
+                         document.getElementById('register_input2').type = 'text';
+                      }
+                      else
+                      {
+                         document.getElementById('register_input') .type = 'password';
+                         document.getElementById('register_input2').type = 'password';
+                      }"> Show Password
 				</div>
 				<button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
 				<div class="mt-3">
@@ -149,6 +163,30 @@
 			</EditForm>
 		</section>
 	</div>
+
+	<!--<input
+		type="button"
+		id="show"
+		value='Show Password'
+		onclick=
+		   "document.getElementById('register_input') .type = 'text';
+			document.getElementById('register_input2').type = 'text';
+			document.getElementById('show') .style.visibility = 'hidden';
+			document.getElementById('hide') .style.visibility = 'visible';">
+
+	<input
+		type="button"
+		id="hide"
+		value='Hide Password'
+		onclick=
+		   "document.getElementById('register_input') .type = 'password';
+			document.getElementById('register_input2').type = 'password';
+			document.getElementById('show') .style.visibility = 'visible';
+			document.getElementById('hide') .style.visibility = 'hidden';"> -->
+
+
+
+
 </div>
 
 <!--***********************************************************************
@@ -245,5 +283,5 @@
 		[Display(Name = "Confirm password")]
 		[Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
 		public string ConfirmPassword { get; set; } = "";
-	} 
+	}
 }
