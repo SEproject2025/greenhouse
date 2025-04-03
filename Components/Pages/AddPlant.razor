@@ -227,7 +227,10 @@
 
         <!-- Input field for plant name -->
         <label>Plant Name</label>
-        <InputText @bind-Value="plant.PLANT_NAME"></InputText>
+        <InputText 
+            MaxLength="32"
+            @bind-Value="plant.PLANT_NAME">
+        </InputText>
 
         <!-- Dropdown list for avalible plants -->
         <label>Select a Plant Image</label>
@@ -316,7 +319,10 @@
 
 
         <!-- Submit button to save the plant details -->
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button 
+            type="submit" 
+            class="btn btn-primary" 
+            disabled="@submit_disabled">Submit</button>
     </EditForm>
 }
 // Display the form for selecting a prefilled plant 
@@ -326,9 +332,9 @@ else if (showPrefilledForm)
     <EditForm Model="plant" OnSubmit="PrefillHandleSubmit" FormName="editPlant">
 
         <!-- Dropdown to select an existing public plant -->
-        <label>Select a Public Plant</label>
+        <label>Select a Prefilled Plant</label>
         <InputSelect @bind-Value="selectedPublicPlantId">
-            <option value="">-- Select a public plant --</option>
+            <option value="">-- Select a prefilled plant --</option>
             @if (publicPlants != null)
             {
                 @foreach (var publicPlant in publicPlants)
@@ -339,8 +345,15 @@ else if (showPrefilledForm)
         </InputSelect>
 
         <!-- Buttons to submit or edit the selected plant -->
-        <button type="submit" class="btn btn-primary">Submit</button>
-        <button type="button" class="btn btn-secondary" @onclick="EditSelectedPlant">Edit</button>
+        <button 
+            type="submit" 
+            class="btn btn-primary" 
+            disabled="@submit_disabled">Submit</button>
+        <button 
+            type="button" 
+            class="btn btn-secondary"
+            disabled="@submit_disabled"
+            @onclick="EditSelectedPlant">Edit</button>
     </EditForm>
 }
 
@@ -377,6 +390,8 @@ else if (showPrefilledForm)
 
     private string uuid = null!;
 
+    private bool submit_disabled = true;
+
     // ******************************************************************************
     // Fetch public plants and get user details
     // ******************************************************************************
@@ -387,6 +402,8 @@ else if (showPrefilledForm)
         {
             NavigationManager.NavigateTo("/");
         }
+        publicPlants = await PlantService.GetAllPublicPlants();
+        submit_disabled = false;
     }
 
     // ******************************************************************************
@@ -518,6 +535,7 @@ else if (showPrefilledForm)
     // ******************************************************************************
     async Task CustomHandleSubmit()
     {
+        submit_disabled = true;
         // Get the user's unique ID
         plant.USER_ID = uuid;
 
@@ -525,6 +543,14 @@ else if (showPrefilledForm)
         if (selectedPlant != null && selectedPlant.IMAGE_DATA != null)
         {
             plant.IMAGE_DATA = selectedPlant.IMAGE_DATA;
+        }
+        else
+        {
+            var defaultImagePath = Path.Combine("wwwroot", "images", "Default.webp");
+            if (File.Exists(defaultImagePath))
+            {
+                plant.IMAGE_DATA = await File.ReadAllBytesAsync(defaultImagePath);
+            }
         }
 
         // Check if the plant is an edit (already exists)
@@ -601,6 +627,7 @@ else if (showPrefilledForm)
     // ******************************************************************************
     async Task PrefillHandleSubmit()
     {
+        submit_disabled = true;
         // Get the user's unique ID
         plant.USER_ID = uuid;
 

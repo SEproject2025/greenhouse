@@ -14,6 +14,104 @@
 ************************************************************************-->
 <style type="text/css">
 
+    /* Styling for the additional image */
+    .additional-image {
+        width: 75px; /* Set the desired size for the additional image */
+        height: 80px;
+        border-radius: 10px;
+        margin-top: 0px;
+    }
+
+    body {
+        background: url('/background_photos/WaterColor.png') center/cover no-repeat;
+        min-height: 100vh;
+        margin: 0;
+        font-family: 'Merriweather', serif;
+    }
+
+    .Buttons {
+        position: absolute;
+        top: 50px;
+        left: 50px;
+        display: flex;
+        gap: 10px; /* Adds spacing between buttons */
+    }
+
+    button.btn {
+        background-color: #CFE8A9;
+        color: #FFFFFF;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 25px;
+        font-size: 16px;
+        margin: 10px 5px;
+        cursor: pointer;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease;
+    }
+
+        button.btn:hover {
+            background-color: #CFE8A9;
+        }
+
+    button.btn2 {
+        background-color: #CFE8A9;
+        color: #FFFFFF;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 25px;
+        font-size: 16px;
+        margin: 10px 5px;
+        cursor: pointer;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease;
+    }
+
+        button.btn2:hover {
+            background-color: #CFE8A9;
+        }
+
+    .circular-progress {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        background: conic-gradient(green 0deg, lightgray 0deg);
+    }
+
+        /* Inner Circle */
+        .circular-progress .inner-circle {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+    /* Container to hold the health icon and label */
+    .health-status-container {
+        position: absolute; 
+        margin-left: 225px;
+        text-align: right;
+    }
+
+    /* Styling for the image container */
+    .image-container {
+        position: relative;
+        top: 5px;
+        display: flex; /* Use flexbox to arrange images side by side */
+        align-items: center; /* Vertically center the images */
+        gap: 15px; /* Space between the images */
+    }
+
     /* Styling for the green box                                         */
     .main {
         margin: 50px auto;
@@ -25,48 +123,218 @@
         box-shadow: 10px 10px 8px #888888;
     }
 
-
-        /* Inner Container for the grid                                       */
+        /* Inner Container for the grid */
         .main .inner {
             display: flex;
             flex-wrap: wrap; /* Allows items to wrap to the next line */
-            justify-content: center; /* Centers items horizontally            */
-            gap: 20px; /* Space between tiles                   */
+            justify-content: center; /* Centers items horizontally */
+            gap: 20px; /* Space between tiles */
             padding: 10px;
         }
 
-    .plant-name {
-        left: 100px !important; /* Moves the name slightly to the right */
-        top: 10px !important; /* Moves the name slightly down */
-        font-size: 20px !important;
-        font-weight: bold;
-        font-family: Arial, sans-serif;
-        color: black;
+    /* Smaller health image */
+    .plant-health-image {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        display: block;
+        margin: 0 auto;
+    }
+
+    /* Smaller label under image */
+    .plant-health-label {
+        font-size: 12px;
+        font-family: 'Gloria Hallelujah', cursive;
+        color: #66B266;
+        margin-top: 2px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1), 0px 0px 5px rgba(75, 139, 59, 0.5);
     }
 
     .plant-image {
-        top: 5px important;
-        width: 75px;
-        height: 80px;
+        top: .5px;
+        width: 125px;
+        height: 124px;
+        border-radius: 50%;
+        border: px solid black;
+        align-self: center;
+    }
+
+    .plant-name {
+        font-size: 20px;
+        font-weight: bold;
+        font-family: Arial, sans-serif;
+        color: black;
+        padding-left: 5px;
+        padding-right: 5px;
+        min-height: 30px;
+        min-width: 120px;
+        max-width: 275px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: center;
+        justify-content: center;
+        align-self: center;
+        white-space: nowrap;
+        background-color: #f7f3e8;
+        border: 1px solid #2C6E49;
+        display: block;
+        position: relative;
+        top: -15px;
         border-radius: 10px;
+        box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.5), -5px -5px 15px rgba(255, 255, 255, 0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
     }
 
-    /* Delete button as a shovel icon in the top-left corner of the tile    */
-    .delete-button {
-        position: absolute;
-        top: 10px;
-        right: 10px; /* Changed from left to right                        */
-        width: 30px;
+    .progress-bar-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px; /* Add spacing between circles */
+        margin-top: 10px; /* Space above tasks */
+    }
+
+    .progress-icon {
+        width: 25px; /* Adjust icon size */
+        height: 25px;
+        object-fit: contain; /* Ensure it fits well inside the circle */
+    }
+
+    .progress-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .progress-label {
+        font-size: 12px !important; /* Adjust size */
+        margin-top: 38px; /* Less spacing between progress bar and text */
+        color: black;
+        text-align: center;
+        white-space: nowrap; /* Prevents text from wrapping */
+    }
+
+    .pulsing-dot {
+        position: absolute; /* Make sure it's not inside the flex flow */
+        top: -13px;
+        left: -13px;
+        width: 25px;
+        height: 25px;
+        min-width: 16px;
+        min-height: 16px;
+        background-color: red;
+        border-radius: 50%;
+        z-index: 10;
+        box-shadow: 0 0 0 rgba(255, 0, 0, 0.7);
+        animation: pulse 1.5s infinite;
+        pointer-events: auto; /* Prevents it from interfering with hover/clicks */
+    }
+
+
+    @@keyframes pulse {
+        0% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
+        }
+
+        70% {
+            transform: scale(1.1);
+            box-shadow: 0 0 0 10px rgba(255, 0, 0, 0);
+        }
+
+        100% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
+        }
+    }
+
+    .task-container {
+        display: flex;
+        align-items: center; /* Aligns items vertically */
+        justify-content: space-between; /* Pushes the label and checkbox apart */
+        width: 100%; /* Makes sure container spans the full width */
+        padding-right: 10px; /* Adds spacing to keep the checkbox away from the edge */
+        margin-top: 10px; /* Adds vertical space between tasks */
+        /* padding-bottom: 6px; /* Slight extra padding to separate tasks visually */
+    }
+
+        .task-container input[type="checkbox"] {
+            margin-left: auto; /* Moves checkbox to the right */
+            transform: scale(1.2); /* Slightly enlarges checkbox for better visibility */
+            width: 15px;
+            height: 15px;
+        }
+
+    .task-icon {
+        width: 30px; /* Adjust icon size */
         height: 30px;
-        background: url('/images/shovel-icon.png') no-repeat center center;
-        background-size: contain;
-        border: none;
-        cursor: pointer;
-        outline: none;
+        margin-right: 8px;
+        vertical-align: middle;
+        border: 2px solid black; /* Adds black circular border */
+        border-radius: 60%; /* Makes it a perfect circle */
+        padding: 3px; /* Ensures proper spacing inside the circle */
+        background-color: white; /* Optional: Adds contrast */
     }
 
-        .delete-button:hover {
-            opacity: 0.8;
+    .task-label {
+        font-size: 20px; /* Increase task text size */
+        /* font-weight: bold; */
+    }
+
+    .task-label-overdue {
+        font-size: 20px; /* Increase task text size */
+        color: red;
+        font-weight: bold;
+    }
+
+    .tile {
+        height: 450px;
+        width: 300px;
+        background-color: #f7f3e8;
+        border: 3px solid #2C6E49;
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        border-radius: 15px;
+        padding: 15px 10px 10px; /* Added top padding */
+        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2), -5px -5px 15px rgba(255, 255, 255, 0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
+        position: relative;
+    }
+
+        .tile:hover {
+            transform: scale(1.05);
+            box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.3), -8px -8px 20px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Styling for the plant name - targets spans inside the tiles       */
+        /*********************************************************************/
+        .tile span {
+            position: absolute; /* Keep it at the top */
+            top: 10px; /* Adjust to be near the top */
+            left: 15px; /* Adjust left padding */
+            color: black;
+            font-size: 18px;
+            font-family: Arial, sans-serif;
+            font-weight: bold; /* Make it stand out */
+        }
+
+        /* Styling for formatting checkbox - targets checkbox input          */
+        /*********************************************************************/
+        .tile input[type="checkbox"] {
+            /* Not sure why ChatGPT had me put this here but I'm afraid to remove it */
+        }
+
+        /* Styling for the checkbox label - targets labels                   */
+        /*********************************************************************/
+        .tile label {
+            position: static; /* absolute; */
+            display: block;
+            margin-top: 5px;
+            top: 58%;
+            left: 40px;
+            /*  color: black; */
+            font-family: Arial, sans-serif;
+            font-size: 14px;
         }
 
     /* Styling for the green fade effect when the Next Day button is clicked */
@@ -102,33 +370,9 @@
         /* Hides the content of the tile when it's green */
         .tile.green-fade span,
         .tile.green-fade input[type="checkbox"],
-        .tile.green-fade label {
+        .tile.green-fade label
+        .tile.green-fade .progress-bar-wrapper {
             display: none;
-        }
-
-    .title {
-        font-size: 36px;
-        color: #2C6E49;
-        text-align: center;
-        margin-bottom: 20px;
-        font-family: 'Georgia', serif;
-    }
-
-    button.btn {
-        background-color: #6BBF59;
-        color: #FFFFFF;
-        border: none;
-        padding: 12px 20px;
-        border-radius: 25px;
-        font-size: 16px;
-        margin: 10px 5px;
-        cursor: pointer;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-        transition: background-color 0.3s ease;
-    }
-
-        button.btn:hover {
-            background-color: #5AA74E;
         }
 
     .tiles-container {
@@ -139,238 +383,210 @@
         padding: 30px;
     }
 
-    .tile {
-        height: 375px;
-        width: 300px;
-        background-color: #d2d9d5;
+    .title {
+        font-size: 36px;
+        color: #2C6E49;
+        text-align: center;
+        margin-bottom: 20px;
+        font-family: 'Georgia', serif;
+    }
+
+    /* Container for the draggable tool icons */
+    .tool-tray {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        display: flex;
+        gap: 20px; /* spacing between tools */
+        z-index: 999;
+    }
+
+    /* Shared styling for all tool icons */
+    .tool-icon {
+        width: 60px;
+        height: auto;
+        cursor: grab;
         border: 2px solid black;
-        display: inline-block;
-        position: relative;
-        border-radius: 15px;
-        padding: 20px 10px 10px; /* Added top padding */
-        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2), -5px -5px 15px rgba(255, 255, 255, 0.1);
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-        .tile:hover {
-            transform: scale(1.05);
-            box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.3), -8px -8px 20px rgba(255, 255, 255, 0.2);
-        }
-
-        /* Styling for the plant name - targets spans inside the tiles       */
-        /*********************************************************************/
-        .tile span {
-            position: absolute; /* Keep it at the top */
-            top: 10px; /* Adjust to be near the top */
-            left: 15px; /* Adjust left padding */
-            color: black;
-            font-size: 18px;
-            font-family: Arial, sans-serif;
-            font-weight: bold; /* Make it stand out */
-        }
-
-        /* Styling for formatting checkbox - targets checkbox input          */
-        /*********************************************************************/
-        .tile input[type="checkbox"] {
-            /* Not sure why ChatGPT had me put this here but I'm afraid to remove it */
-        }
-
-        /* Styling for the checkbox label - targets labels                   */
-        /*********************************************************************/
-        .tile label {
-            position: static; /* absolute; */
-            display: block;
-            margin-top: 5px;
-            top: 58%;
-            left: 40px;
-            color: black;
-            font-family: Arial, sans-serif;
-            font-size: 14px;
-        }
-
-    .task-container {
-        display: flex;
-        align-items: center; /* Aligns items vertically */
-        justify-content: space-between; /* Pushes the label and checkbox apart */
-        width: 100%; /* Makes sure container spans the full width */
-        padding-right: 10px; /* Adds spacing to keep the checkbox away from the edge */
-        margin-top: 10px; /* Adds vertical space between tasks */
-        /* padding-bottom: 6px; /* Slight extra padding to separate tasks visually */
-    }
-
-    .task-label {
-        font-size: 20px; /* Increase task text size */
-        /* font-weight: bold; */
-    }
-
-    .task-container input[type="checkbox"] {
-        margin-left: auto; /* Moves checkbox to the right */
-        transform: scale(1.2); /* Slightly enlarges checkbox for better visibility */
-        width: 15px;
-        height: 15px;
-    }
-
-    /* Styling for the image container */
-    .image-container {
-        display: flex; /* Use flexbox to arrange images side by side */
-        align-items: center; /* Vertically center the images */
-        gap: 15px; /* Space between the images */
-    }
-
-    /* Styling for the plant image */
-    .plant-image {
-        width: 75px;
-        height: 80px;
         border-radius: 10px;
-        margin-top: 0px;
+        background-color: #f7f3e8;
+        padding: 3px;
     }
-
-    /* Styling for the additional image */
-    .additional-image {
-        width: 75px; /* Set the desired size for the additional image */
-        height: 80px;
+    /* New tool-key container that acts as a legend */
+    .tool-key {
+        position: fixed; /* changed from absolute */
+        top: 90px;
+        right: 20px;
+        background-color: #f7f3e8;
+        padding: 10px 15px;
+        border: 2px solid #2C6E49;
         border-radius: 10px;
-        margin-top: 0px;
-    }
-
-    .task-icon {
-        width: 30px; /* Adjust icon size */
-        height: 30px;
-        margin-right: 8px;
-        vertical-align: middle;
-        border: 2px solid black; /* Adds black circular border */
-        border-radius: 60%; /* Makes it a perfect circle */
-        padding: 3px; /* Ensures proper spacing inside the circle */
-        background-color: white; /* Optional: Adds contrast */
-    }
-
-    .progress-bar-container {
         display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 10px; /* Add spacing between circles */
-        margin-top: 10px; /* Space above tasks */
+        flex-direction: row;
+        gap: 15px;
+        z-index: 999;
+        box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.2);
     }
 
-    .progress-item {
+    /* Each tool + label bundle */
+    .tool-item {
         display: flex;
         flex-direction: column;
         align-items: center;
     }
 
-    .progress-label {
-        font-size: 12px !important; /* Adjust size */
-        margin-top: 38px; /* Less spacing between progress bar and text */
-        color: black;
-        text-align: center;
-        white-space: nowrap; /* Prevents text from wrapping */
-    }
-
-    .circular-progress {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: relative;
-        background: conic-gradient(green 0deg, lightgray 0deg);
-    }
-
-    /* Hide Progress Bars When Green Fade is Active */
-    .tile.green-fade .progress-bar-wrapper {
-        display: none;
-    }
-
-    /* Inner Circle */
-    .circular-progress .inner-circle {
-        position: absolute;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background-color: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    /* Label underneath each icon */
+    .tool-label {
         font-size: 12px;
+        color: #2C6E49;
+        margin-top: 5px;
         font-weight: bold;
     }
 
-    .progress-icon {
-        width: 25px; /* Adjust icon size */
-        height: 25px;
-        object-fit: contain; /* Ensure it fits well inside the circle */
-    }
 </style>
 
 
 <!--***********************************************************************
 *	                             HTML SECTION                             *
 ************************************************************************-->
-<h3 class="title">My Garden</h3>
+<div class="page-header">
+    <!-- Title -->
+    <div class="page-title">
+        <h3 class="title">My Garden
+        @if (R_CurrentDay == DateTime.MinValue)
+            {
+                <p>Loading...</p>
+            }
+            else
+            {
+                <p>@R_CurrentDay.ToString("MMMM dd, yyyy")</p>
+            }
+        </h3>
+    </div>
+</div>
 
-<AddPlantButton />
+<div class="Buttons">
+    <AddPlantButton />
+    <button @onclick="GoToNextDay" class="btn btn-primary next-day-btn">Finish Day</button>
+</div>
+
+<div class="tool-key">
+    <div class="tool-item">
+        <img src="/plant_tasks/WateringCan.png"
+        id="watering-can"
+        class="tool-icon"
+        draggable="true"
+        ondragstart="handleDragStart(event)"
+        alt="Watering Can" />
+        <div class="tool-label">Water</div>
+    </div>
+
+    <div class="tool-item">
+        <img src="/plant_tasks/PruningTool.png"
+        id="pruning-tool"
+        class="tool-icon"
+        draggable="true"
+        ondragstart="handlePruningDragStart(event)"
+        alt="Pruning Tool" />
+        <div class="tool-label">Prune</div>
+    </div>
+
+    <div class="tool-item">
+        <img src="/plant_tasks/BugSpray.png"
+        id="bugspray-tool"
+        class="tool-icon"
+        draggable="true"
+        ondragstart="handlePestControlDragStart(event)"
+        alt="Bug Spray" />
+        <div class="tool-label">Pest Control</div>
+    </div>
+
+    <div class="tool-item">
+        <img src="/plant_tasks/Gloves.png"
+        id="gloves-tool"
+        class="tool-icon"
+        draggable="true"
+        ondragstart="handleWeedingDragStart(event)"
+        alt="Gloves" />
+        <div class="tool-label">Weed</div>
+    </div>
+
+    <div class="tool-item">
+        <img src="/plant_tasks/Shovel.png"
+        id="shovel-tool"
+        class="tool-icon"
+        draggable="true"
+        ondragstart="handleShovelDragStart(event)"
+        alt="Shovel Tool" />
+        <div class="tool-label">Delete</div>
+    </div>
+</div>
 
 <div class="tiles-container">
-    @if (plant == null || !plant.Any())
+    @if (plant == null) // Plant list is currently loading
     {
-        @if (plant == null)
-        {
-            <div style="text-align: center;">
-                <p> Loading . . .</p>
-                <div class="loader"></div> <!-- Loader animation -->
-            </div>
-        }
-        else
-        {
-            <p>You have no plants</p>
-        }
+        <div style="text-align: center;">
+            <p> Loading . . .</p>
+            <div class="loader"></div> 
+        </div>
     }
-    else
+    else if (!plant.Any()) // User has no plants
+    {
+        <p>You have no plants</p>
+    }
+    else // User has plants
     {
         @foreach (var p in plant)
         {
-            @if (p.IS_PRIVATE == "Y")
-            {
-                <div class="tile @(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID] ? "green-fade" : "")">
+            <div class="tile @(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID] ? "green-fade" : "")"
+            ondragover="event.preventDefault()"
+            ondrop="handleGenericDrop(event, @p.PLANT_ID)">
 
-                    @if (!(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID]))
+                @if (
+                   plantOverdueCounts.ContainsKey(p.PLANT_ID) &&
+                   plantOverdueCounts[p.PLANT_ID] > 0 &&
+                   !(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID])
+                )
+                {
+                    <div class="pulsing-dot" title="You have an overdue task"></div>
+                }
+
+
+                @if (!(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID])) // Plant is not finished for the day
+                {
+                    <div class="health-status-container">
+                        @if (plantOverdueCounts.ContainsKey(p.PLANT_ID))
+                        {
+                            var overdue_counter = plantOverdueCounts[p.PLANT_ID];
+                            if (overdue_counter == 0)
+                            {
+                                <img src="/plant_health_images/Healthy.png" alt="Healthy" class="plant-health-image" />
+                            }
+                            else if (overdue_counter > 0 && overdue_counter <= 7)
+                            {
+                                <img src="/plant_health_images/Ok.png" alt="Ok" class="plant-health-image" />
+                            }
+                            else if (overdue_counter > 7 && overdue_counter <= 14)
+                            {
+                                <img src="/plant_health_images/Unhealthy.png" alt="Unhealthy" class="plant-health-image" />
+                            }
+                            else if (overdue_counter > 14)
+                            {
+                                <img src="/plant_health_images/Dying.png" alt="Dying" class="plant-health-image" />
+                            }
+                            <div class="plant-health-label">Status</div>
+                        }
+                    </div>
+
+                    @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
                     {
-                        <button @onclick="() => DeletePlant(p.PLANT_ID)" class="delete-button"></button>
-
-                        <span class="plant-name">@p.PLANT_NAME</span>
-                        <div class="image-container">
-                            @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
-                            {
-                                <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)"
-                                     alt="@p.PLANT_NAME"
-                                     style="width: 75px; height: 80px; border-radius: 10px; margin-top: 0px;" />
-                            }
-                            <td style="font-family: 'Gloria Hallelujah', cursive; font-size: 18px; color: #66B266; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1), 0px 0px 5px rgba(75, 139, 59, 0.5); ">
-                                Status:
-                            </td>
-                            @if (plantOverdueCounts.ContainsKey(p.PLANT_ID))
-                            {
-                                var overdue_counter = plantOverdueCounts[p.PLANT_ID];
-                                @if (overdue_counter == 0)
-                                {
-                                    <img src="/plant_health_images/Healthy.png" alt="Additional Image" class="additional-image" />
-                                }
-                                else if (overdue_counter > 0 && overdue_counter <= 7)
-                                {
-                                    <img src="/plant_health_images/Ok.png" alt="Additional Image" class="additional-image" />
-                                }
-                                else if (overdue_counter > 7 && overdue_counter <= 14)
-                                {
-                                    <img src="/plant_health_images/Unhealthy.png" alt="Additional Image" class="additional-image" />
-                                }
-                                else if (overdue_counter > 14)
-                                {
-                                    <img src="/plant_health_images/Dying.png" alt="Additional Image" class="additional-image" />
-                                }
-                            }
-                        </div>
+                        <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)"
+                        alt="@p.PLANT_NAME"
+                        class="plant-image" />
                     }
+
+                    <div class="plant-name" title="@p.PLANT_NAME">@p.PLANT_NAME</div>
+
+                    
 
                     <!-- Circular Progress Bar Container - Positioned Above Tasks -->
                     <!-- Wrap Progress Bars Inside a Container to Prevent Showing on Green-Fade -->
@@ -389,7 +605,7 @@
                             }
                         </div>
                     </div>
-                    <p> _______________________________ </p>
+                    <p style="align-self: center"> _______________________________ </p>
                     <!-- Task List Container - Below Progress Bars -->
                     <div class="task-list">
                         @foreach (var t in user_tasks)
@@ -397,80 +613,56 @@
                             @if (p.PLANT_ID == t.PLANT_ID && (t.DAYS_UNTIL == 0 || (t.DONE_DATE == R_CurrentDay || t.DONE_DATE == null)))
                             {
                                 <div class="task-container">
-                                    <img src="@GetTaskIcon(t.TASK_NAME)" alt="@t.TASK_NAME icon" class="task-icon" />
-                                    <label for="@t.TASK_NAME-@p.PLANT_ID" class="task-label">@t.TASK_NAME</label>
+                                    <img   src="@GetTaskIcon(t.TASK_NAME)" alt="@t.TASK_NAME icon" class="task-icon" />
+                                    <label for="@t.TASK_NAME-@p.PLANT_ID" 
+                                    class="@(t.OVERDUE > 0 ? "task-label-overdue" : "task-label")">@t.TASK_NAME</label>
                                     <input type="checkbox"
+                                           class="task-checkbox"
                                            id="@t.TASK_NAME-@p.PLANT_ID"
                                            name="@t.TASK_NAME-@p.PLANT_ID"
                                            checked='@t.IS_COMPLETED'
                                            @onchange="(e) => CheckboxChecked(e, t, p)"
                                            @ref="t.CheckboxRef"
-                                           disabled="@(t.IS_COMPLETED ? "disabled" : null)"
-                                           class="task-checkbox" />
+                                           disabled="@(t.IS_COMPLETED ? "disabled" : null)" />
                                 </div>
                             }
                         }
                     </div>
-
-                    <!-- Image of the plant (only visible when green) -->
-                    @if (plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID])
+                }
+                else
+                {
+                    @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
                     {
-                        @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
-                        {
-                            <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)"
-                                 alt="@p.PLANT_NAME" />
-                        }
-                        else
-                        {
-                            <img src="/images/Default.webp"
-                                 alt="Default Plant Image" />
-                        }
+                        <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)"
+                             alt="@p.PLANT_NAME" />
                     }
-                </div>
-            }
+                    else
+                    {
+                        <img src="/images/Default.webp"
+                             alt="Default Plant Image" />
+                    }
+                }
+            </div>
         }
     }
 </div>
-
-<!-- Button to advance the day -->
-<button @onclick="GoToNextDay" class="btn btn-primary">Next Day &gt;&gt;</button>
-
-<!-- Display the current day -->
-@if (R_CurrentDay == DateTime.MinValue)
-{
-    <p>Loading...</p>
-}
-else
-{
-    <p>@R_CurrentDay.ToString("MMMM dd, yyy")</p>
-}
-
 
 <!--***********************************************************************
 *	                             CODE SECTION                             *
 ************************************************************************-->
 @code {
 
-    List<Plants>? plant = null;
-
-
+    List<Plants>?   plant = null;
     List<PlantTask> user_tasks = new List<PlantTask>();  // The list of currently active tasks
-                                                         // Tracks the current simulated day
-    private DateTime CurrentDay { get; set; } = DateTime.Now.Date;
+
     private DateTime R_CurrentDay { get; set; }
+    private string   uuid = null!;
 
     // Dictionary to track which plants should fade to green
     private Dictionary<int, bool> plantGreenStates = new();
-
-    private string uuid = null!;
-
-    private Dictionary<int, int> plantOverdueCounts = new Dictionary<int, int>();
-
+    private Dictionary<int, int>  plantOverdueCounts = new Dictionary<int, int>();
     private int tasks_finished_counter;
-
     private int overdue_counter;
-
-    private int counter;
 
     private bool hasLoaded = false;
 
@@ -496,6 +688,9 @@ else
             plant = await plantTask;
             user_tasks = await tasksTask;
 
+            // Gets the user's relative current day
+            R_CurrentDay = await UserServices.GetRelativeCurrentDay(uuid);
+
             UpdatePlantFade();
             UpdateOverdueCount();
 
@@ -503,9 +698,10 @@ else
             _ = InvokeAsync(StateHasChanged); // Avoid UI thread blocking
         }
         await JSRuntime.InvokeVoidAsync("updateProgressCircles");
-
-        // Gets the user's relative current day
-        R_CurrentDay = await UserServices.GetRelativeCurrentDay(uuid);
+        // Register DotnetObjectRefernce
+        // Exposes the Blazor component instance to JavaScript so it can be called from JS
+        await JSRuntime.InvokeVoidAsync("window.setDotNetHelper",
+        DotNetObjectReference.Create(this));
     }
 
     async Task DeletePlant(int PLANT_ID)
@@ -606,6 +802,8 @@ else
         // Update the fade state of plants after a task is checked
         UpdatePlantFade();
 
+        UpdateOverdueCount();
+
         StateHasChanged();
     }
 
@@ -661,6 +859,7 @@ else
         };
     }
 
+    // Method to calculate the progress of a task based on the days until the next task
     int CalculateTaskProgress(int? daysUntil, int? freq)
     {
         if (!freq.HasValue || freq.Value == 0) return 0;  // Prevent division by zero
@@ -685,46 +884,84 @@ else
         JSRuntime.InvokeVoidAsync("rainbowConfetti");
     }
 
-    /*  foreach (var p in plant)
-      {
-          bool wasGreen = plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID];
-          bool isGreen = AllTasksFinished(p.PLANT_ID);
 
-          // Update the plant's green state
-          // plantGreenStates[p.PLANT_ID] = isGreen;
+    // Method to complete the watering task when the watering can is dropped
+    // on the plant tile
+    // This method is invoked from JavaScript
+    [JSInvokable]
+    public async Task CompleteWateringTask(int plantId)
+    {
+        var wateringTask = user_tasks.FirstOrDefault(t =>
+            t.PLANT_ID == plantId && t.TASK_NAME == "Watering");
 
-          // If the plant just turned green, trigger the confetti effect
-          if (isGreen && !wasGreen)
-          {
-              // Call JavaScript function to trigger confetti
-
-              JSRuntime.InvokeVoidAsync("console.log", "Confetti function called from Blazor");
-              JSRuntime.InvokeVoidAsync("triggerConfetti");
-          }
-      }*/
-
-    // _ = InvokeAsync(StateHasChanged);
-
-
-}
-
-<!-- JavaScript for the circle progress bars -->
-<script>function updateProgressCircles() {
-        document.querySelectorAll(".circular-progress").forEach((progressBar) => {
-            let value = parseInt(progressBar.getAttribute("data-percentage"));
-
-            // Ensure value is between 0 and 100
-            value = Math.max(0, Math.min(value, 100));
-
-            // Apply the conic-gradient for progress
-            progressBar.style.background = `conic-gradient(green ${value * 3.6}deg, lightgray ${value * 3.6}deg)`;
-        });
+        if (wateringTask != null && !wateringTask.IS_COMPLETED)
+        {
+            // Reuse the existing CheckboxChecked logic
+            await CheckboxChecked(new ChangeEventArgs { Value = true }, wateringTask);
+        }
     }
 
-    document.addEventListener("DOMContentLoaded", updateProgressCircles);</script>
+    // Method to complete the pruning task when the pruning tool is dropped
+    // on the plant tile
+    [JSInvokable]
+    public async Task CompletePruningTask(int plantId)
+    {
+        var task = user_tasks.FirstOrDefault(t =>
+            t.PLANT_ID == plantId && t.TASK_NAME == "Pruning");
+
+        if (task != null && !task.IS_COMPLETED)
+        {
+            await CheckboxChecked(new ChangeEventArgs { Value = true }, task);
+        }
+    }
+
+    // Method to complete the pest control task when the spray is dropped
+    // on the plant tile
+    [JSInvokable]
+    public async Task CompletePestControlTask(int plantId)
+    {
+        var task = user_tasks.FirstOrDefault(t =>
+            t.PLANT_ID == plantId && t.TASK_NAME == "Pest Control");
+
+        if (task != null && !task.IS_COMPLETED)
+        {
+            await CheckboxChecked(new ChangeEventArgs { Value = true }, task);
+        }
+    }
+
+    // Method to complete the weeding task when the gloves are dropped
+    // on the plant tile
+    [JSInvokable]
+    public async Task CompleteWeedingTask(int plantId)
+    {
+        var task = user_tasks.FirstOrDefault(t =>
+            t.PLANT_ID == plantId && t.TASK_NAME == "Weeding");
+
+        if (task != null && !task.IS_COMPLETED)
+        {
+            await CheckboxChecked(new ChangeEventArgs { Value = true }, task);
+        }
+    }
+
+    // Method to delete a plant when the shovel is dropped on the plant tile
+    [JSInvokable]
+    public async Task DeletePlantByDrop(int plantId)
+    {
+        await PlantService.DeletePlant(plantId);
+        plant = await PlantService.GetUserPlants(uuid);
+        user_tasks = await PlantService.GetAllUserTasks(uuid);
+        UpdatePlantFade();
+        UpdateOverdueCount();
+        StateHasChanged();
+    }
+    
+}
+
+<!-- JavaScript for the circle progress bars -->  
+<script src="js/garden.js"></script>
 
 <!-- Load the confetti library -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-
+      
 <!-- Load your custom confetti.js (Ensure it's in the wwwroot folder) -->
 <script src="confetti.js"></script>

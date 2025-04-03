@@ -6,80 +6,80 @@
 <style>
     <!-- the outer square -->
     .calendar-container {
-        background: white;
-        padding: 10px;    <!-- Outer square-->
-        border-radius: 15px; <!-- rounded edges -->
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        width: 100%;
-        /*max-width: 700px;*/
-        text-align: center;
+    background: white;
+    padding: 10px;    <!-- Outer square-->
+    border-radius: 15px; <!-- rounded edges -->
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    /*max-width: 700px;*/
+    text-align: center;
     }
 
     <!-- The title -->
     .calendar-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
     }
 
     <!-- The title text -->
     .calendar-header h3 {
-        color: #2C6E49;
-        font-size: 20px;
+    color: #2C6E49;
+    font-size: 20px;
     }
 
     .calendar-nav {
-        display: flex;
-        gap: 10px;
+    display: flex;
+    gap: 10px;
     }
 
     .calendar-nav button {
-        background-color: #6BBF59;
-        color: white;
-        border: none;
-        padding: 8px 12px;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
+    background-color: #6BBF59;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
     }
 
     .calendar-nav button:hover {
-        background-color: #5AA74E;
+    background-color: #5AA74E;
     }
 
     .calendar-grid {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 3px;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 3px;
     }
 
     <!-- The day tiles themselves -->
     .calendar-day {
-        background: #F8FFF8;
-        padding: 8px;
-        border-radius: 10px;
-        text-align: center;
-        font-size: 10px;
-        font-weight: bold;
-        color: #4F7942;
-        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    background: #F8FFF8;
+    padding: 8px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 10px;
+    font-weight: bold;
+    color: #4F7942;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
     }
 
-        .calendar-day.current {
-            background-color: #6BBF59;
-            color: white;
-            font-weight: bold;
-        }
+    .calendar-day.current {
+    background-color: #6BBF59;
+    color: white;
+    font-weight: bold;
+    }
 
     .day-names {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 10px;  /* Spacing between day names */
-        font-weight: bold;
-        text-align: center;
-        margin-bottom: 10px;
-        color: #2C6E49;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;  /* Spacing between day names */
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
+    color: #2C6E49;
     }
 </style>
 
@@ -107,13 +107,20 @@
 <!--                                CODE                                  -->
 <!--**********************************************************************-->
 @code {
-    private int currentYear = DateTime.Now.Year;
-    private int currentMonth = DateTime.Now.Month;
+    [Parameter]
+    public DateTime SelectedDate { get; set; } // Default to today
+
+    private int currentYear;
+    private int currentMonth;
+    private int currentDay;
     private string currentMonthName => CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(currentMonth);
     private List<CalendarDay> calendarDays = new();
 
     protected override void OnInitialized()
     {
+        currentYear = SelectedDate.Year;
+        currentMonth = SelectedDate.Month;
+        currentDay = SelectedDate.Day;
         GenerateCalendar();
     }
 
@@ -122,13 +129,19 @@
         calendarDays.Clear();
         var firstDay = new DateTime(currentYear, currentMonth, 1);
         var daysInMonth = DateTime.DaysInMonth(currentYear, currentMonth);
+        var firstDayOfWeek = (int)firstDay.DayOfWeek; // Get the weekday (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
 
+        // Add empty slots for alignment
+        for (int i = 0; i < firstDayOfWeek; i++)
+        {
+            calendarDays.Add(new CalendarDay { Day = null }); // Use 0 for empty placeholders
+        }
         for (int i = 1; i <= daysInMonth; i++)
         {
             calendarDays.Add(new CalendarDay
                 {
                     Day = i,
-                    IsCurrent = (currentYear == DateTime.Now.Year && currentMonth == DateTime.Now.Month && i == DateTime.Now.Day)
+                    IsCurrent = (currentYear == SelectedDate.Year && currentMonth == SelectedDate.Month && i == SelectedDate.Day)
                 });
         }
     }
@@ -163,7 +176,7 @@
 
     private class CalendarDay
     {
-        public int Day { get; set; }
+        public int? Day { get; set; }
         public bool IsCurrent { get; set; }
     }
 }

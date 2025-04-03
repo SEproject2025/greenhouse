@@ -19,6 +19,7 @@
 
     /* Apply the serif font globally */
     body {
+        background: url('/background_photos/WaterColor.png') center/cover no-repeat;
         background-color: #CFE8A9; /* Soft pastel green */
         min-height: 100vh;
         margin: 0;
@@ -89,7 +90,7 @@
     /* Floating Plant Effect */
     .plant-card {
         position: relative;
-        background: white;
+        background: #f7f3e8;
         padding: 15px;
         border-radius: 15px;
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
@@ -132,6 +133,11 @@
         font-size: 14px;
         font-weight: bold;
         color: #2C6E49;
+        width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
     }    
 
     /* Calendar Styling */
@@ -146,17 +152,17 @@
     .weather-container {
         background: white;
         border-radius: 15px;
-        width: 300px;
+        width: 100%;
         text-align: center;
-        
+
         /*
-        
+
         padding: 20px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         text-align: center;
-        
+
         width: 307px;
-        
+
         height: 250px; 
         overflow: hidden;
         display: flex;
@@ -191,7 +197,13 @@
                             {
                                 <img src="data:image/png;base64,@Convert.ToBase64String(plant.IMAGE_DATA)" alt="@plant.PLANT_NAME" />
                             }
-                            <div class="plant-name">@plant.PLANT_NAME</div>
+                            <div>
+                                <div class="plant-name" title="GeeksforGeeks: A computer science
+              portal for geeks">
+                                    @plant.PLANT_NAME
+                                </div>
+                            </div>
+                            
                         </div>
                     }
                 }
@@ -201,9 +213,12 @@
 
     <!-- Right Panel: Weather Widget on Top, Calendar Below -->
     <div class="right-panel">
-        <div class="calendar-container">
-            <Calendar />
-        </div>
+        @if (relative_user_date != default)
+        {
+            <div class="calendar-container">
+                <Calendar SelectedDate="new DateTime(relative_user_date.Year, relative_user_date.Month, relative_user_date.Day)" />
+            </div>
+        }
 
         <div class="weather-container">
             <Weather />
@@ -214,23 +229,23 @@
 <!-- Weather Widget Script -->
 <script>
     window.renderTomorrowWidget = () => {
-        if (window.__TOMORROW__) {
-            window.__TOMORROW__.renderWidget();
-        }
+    if (window.__TOMORROW__) {
+    window.__TOMORROW__.renderWidget();
+    }
     };
 
     (function(d, s, id) {
-        if (d.getElementById(id)) {
-            if (window.__TOMORROW__) {
-                window.__TOMORROW__.renderWidget();
-            }
-            return;
-        }
-        const fjs = d.getElementsByTagName(s)[0];
-        const js = d.createElement(s);
-        js.id = id;
-        js.src = "https://www.tomorrow.io/v1/widget/sdk/sdk.bundle.min.js";
-        fjs.parentNode.insertBefore(js, fjs);
+    if (d.getElementById(id)) {
+    if (window.__TOMORROW__) {
+    window.__TOMORROW__.renderWidget();
+    }
+    return;
+    }
+    const fjs = d.getElementsByTagName(s)[0];
+    const js = d.createElement(s);
+    js.id = id;
+    js.src = "https://www.tomorrow.io/v1/widget/sdk/sdk.bundle.min.js";
+    fjs.parentNode.insertBefore(js, fjs);
     })(document, 'script', 'tomorrow-sdk');
 </script>
 
@@ -239,10 +254,12 @@
 ************************************************************************-->
 @code {
     private List<Plants> userPlants = new();
-      
+
     private string uuid = null!; 
-                               
+
     private bool hasLoaded = false;
+
+    private DateTime relative_user_date;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -256,6 +273,7 @@
 
             hasLoaded = true;
             userPlants = await PlantService.GetUserPlants(uuid);
+            relative_user_date = await UserServices.GetRelativeCurrentDay(uuid);
             StateHasChanged(); // Force UI update after fetching plants
         }
     }
