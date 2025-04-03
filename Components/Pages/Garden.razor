@@ -777,6 +777,22 @@
         {
             ActivateCheckboxConfetti(t.CheckboxRef);
         }
+        else if(t.TASK_NAME == "Watering")
+        {
+            ActivateWaterConfetti(t.CheckboxRef);
+        }
+        else if (t.TASK_NAME == "Weeding")
+        {
+            ActivateWeedConfetti(t.CheckboxRef);
+        }
+        else if (t.TASK_NAME == "Pest Control")
+        {
+            ActivatePestConfetti(t.CheckboxRef);
+        }
+        else if (t.TASK_NAME == "Pruning")
+        {
+            ActivatePruneConfetti(t.CheckboxRef);
+        }
 
         if (AllTasksFinished(p.PLANT_ID))
         {
@@ -868,6 +884,27 @@
         JSRuntime.InvokeVoidAsync("rainbowConfetti");
     }
 
+    private void ActivateWaterConfetti(ElementReference checkbox)
+    {
+        JSRuntime.InvokeVoidAsync("waterConfetti", checkbox);
+    }
+
+    private void ActivateWeedConfetti(ElementReference checkbox)
+    {
+        JSRuntime.InvokeVoidAsync("weedConfetti", checkbox);
+    }
+
+    private void ActivatePestConfetti(ElementReference checkbox)
+    {
+        JSRuntime.InvokeVoidAsync("pestConfetti", checkbox);
+    }
+
+    private void ActivatePruneConfetti(ElementReference checkbox)
+    {
+        JSRuntime.InvokeVoidAsync("pruneConfetti", checkbox);
+    }
+
+
 
     // Method to complete the watering task when the watering can is dropped
     // on the plant tile
@@ -938,7 +975,7 @@
         UpdateOverdueCount();
         StateHasChanged();
     }
-    
+
 }
 
 <!-- JavaScript for the circle progress bars -->  
