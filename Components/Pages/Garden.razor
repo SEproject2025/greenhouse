@@ -542,10 +542,10 @@
             ondrop="handleGenericDrop(event, @p.PLANT_ID)">
 
                 @if (
-                   plantOverdueCounts.ContainsKey(p.PLANT_ID) &&
-                   plantOverdueCounts[p.PLANT_ID] > 0 &&
-                   !(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID])
-                )
+                  plantOverdueCounts.ContainsKey(p.PLANT_ID) &&
+                  plantOverdueCounts[p.PLANT_ID] > 0 &&
+                  !(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID])
+               )
                 {
                     <div class="pulsing-dot" title="You have an overdue task"></div>
                 }
@@ -586,7 +586,7 @@
 
                     <div class="plant-name" title="@p.PLANT_NAME">@p.PLANT_NAME</div>
 
-                    
+
 
                     <!-- Circular Progress Bar Container - Positioned Above Tasks -->
                     <!-- Wrap Progress Bars Inside a Container to Prevent Showing on Green-Fade -->
@@ -596,7 +596,7 @@
                             {
                                 <div class="progress-item">
                                     <div class="circular-progress" id="progress-@t.TASK_ID"
-                                         data-percentage="@CalculateTaskProgress(t.DAYS_UNTIL, t.FREQ)">
+                                    data-percentage="@CalculateTaskProgress(t.DAYS_UNTIL, t.FREQ)">
                                         <div class="inner-circle">
                                             <img src="@GetTaskIcon(t.TASK_NAME)" alt="@t.TASK_NAME icon" class="progress-icon" />
                                         </div>
@@ -617,13 +617,13 @@
                                     <label for="@t.TASK_NAME-@p.PLANT_ID" 
                                     class="@(t.OVERDUE > 0 ? "task-label-overdue" : "task-label")">@t.TASK_NAME</label>
                                     <input type="checkbox"
-                                           class="task-checkbox"
-                                           id="@t.TASK_NAME-@p.PLANT_ID"
-                                           name="@t.TASK_NAME-@p.PLANT_ID"
-                                           checked='@t.IS_COMPLETED'
-                                           @onchange="(e) => CheckboxChecked(e, t, p)"
-                                           @ref="t.CheckboxRef"
-                                           disabled="@(t.IS_COMPLETED ? "disabled" : null)" />
+                                    class="task-checkbox"
+                                    id="@t.TASK_NAME-@p.PLANT_ID"
+                                    name="@t.TASK_NAME-@p.PLANT_ID"
+                                    checked='@t.IS_COMPLETED'
+                                    @onchange="(e) => CheckboxChecked(e, t, p)"
+                                    @ref="t.CheckboxRef"
+                                    disabled="@(t.IS_COMPLETED ? "disabled" : null)" />
                                 </div>
                             }
                         }
@@ -634,12 +634,12 @@
                     @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
                     {
                         <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)"
-                             alt="@p.PLANT_NAME" />
+                        alt="@p.PLANT_NAME" />
                     }
                     else
                     {
                         <img src="/images/Default.webp"
-                             alt="Default Plant Image" />
+                        alt="Default Plant Image" />
                     }
                 }
             </div>
@@ -665,6 +665,8 @@
     private int overdue_counter;
 
     private bool hasLoaded = false;
+
+    public Plants PlaceholderPlant = null!;
 
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -897,7 +899,7 @@
         if (wateringTask != null && !wateringTask.IS_COMPLETED)
         {
             // Reuse the existing CheckboxChecked logic
-            await CheckboxChecked(new ChangeEventArgs { Value = true }, wateringTask);
+            await CheckboxChecked(new ChangeEventArgs { Value = true }, wateringTask, PlaceholderPlant);
         }
     }
 
@@ -911,7 +913,7 @@
 
         if (task != null && !task.IS_COMPLETED)
         {
-            await CheckboxChecked(new ChangeEventArgs { Value = true }, task);
+            await CheckboxChecked(new ChangeEventArgs { Value = true }, task, PlaceholderPlant);
         }
     }
 
@@ -925,7 +927,7 @@
 
         if (task != null && !task.IS_COMPLETED)
         {
-            await CheckboxChecked(new ChangeEventArgs { Value = true }, task);
+            await CheckboxChecked(new ChangeEventArgs { Value = true }, task, PlaceholderPlant);
         }
     }
 
@@ -939,7 +941,7 @@
 
         if (task != null && !task.IS_COMPLETED)
         {
-            await CheckboxChecked(new ChangeEventArgs { Value = true }, task);
+            await CheckboxChecked(new ChangeEventArgs { Value = true }, task, PlaceholderPlant);
         }
     }
 
