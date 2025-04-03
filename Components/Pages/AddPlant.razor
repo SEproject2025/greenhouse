@@ -385,7 +385,6 @@ else if (showPrefilledForm)
     // Plant model
     Plants plant { get; set; } = new Plants { PLANT_NAME = string.Empty };
 
-    private IBrowserFile? selectedFile;               // Stores the selected file for upload
     private const long MaxFileSize = 2 * 1024 * 1024; // Maximum file size (2MB)
 
     private string uuid = null!;

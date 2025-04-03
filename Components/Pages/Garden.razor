@@ -52,23 +52,7 @@
 
         button.btn:hover {
             background-color: #CFE8A9;
-        }
-
-    button.btn2 {
-        background-color: #CFE8A9;
-        color: #FFFFFF;
-        border: none;
-        padding: 12px 20px;
-        border-radius: 25px;
-        font-size: 16px;
-        margin: 10px 5px;
-        cursor: pointer;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-        transition: background-color 0.3s ease;
-    }
-
-        button.btn2:hover {
-            background-color: #CFE8A9;
+            color: #FFFFFF;
         }
 
     .circular-progress {
@@ -155,7 +139,7 @@
         width: 125px;
         height: 124px;
         border-radius: 50%;
-        border: px solid black;
+        border: 3px solid black;
         align-self: center;
     }
 
@@ -228,7 +212,6 @@
         animation: pulse 1.5s infinite;
         pointer-events: auto; /* Prevents it from interfering with hover/clicks */
     }
-
 
     @@keyframes pulse {
         0% {
@@ -542,10 +525,10 @@
             ondrop="handleGenericDrop(event, @p.PLANT_ID)">
 
                 @if (
-                  plantOverdueCounts.ContainsKey(p.PLANT_ID) &&
-                  plantOverdueCounts[p.PLANT_ID] > 0 &&
-                  !(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID])
-               )
+                 plantOverdueCounts.ContainsKey(p.PLANT_ID) &&
+                 plantOverdueCounts[p.PLANT_ID] > 0 &&
+                 !(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID])
+              )
                 {
                     <div class="pulsing-dot" title="You have an overdue task"></div>
                 }
@@ -662,11 +645,10 @@
     private Dictionary<int, bool> plantGreenStates = new();
     private Dictionary<int, int>  plantOverdueCounts = new Dictionary<int, int>();
     private int tasks_finished_counter;
-    private int overdue_counter;
 
     private bool hasLoaded = false;
 
-    public Plants PlaceholderPlant = null!;
+    public Plants PlaceholderPlant = new Plants {PLANT_NAME="PlaceholderPlant"};
 
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -761,7 +743,7 @@
         // **Delay for 1 second before flipping tiles**
         // await Task.Delay(2000);
 
-        foreach (var p in plant)
+        foreach (var p in plant!)
         {
             plantGreenStates[p.PLANT_ID] = AllTasksFinished(p.PLANT_ID);
         }
@@ -769,7 +751,7 @@
 
     private void UpdateOverdueCount()
     {
-        foreach (var p in plant)
+        foreach (var p in plant!)
         {
             plantOverdueCounts[p.PLANT_ID] = GetOverdueForPlant(p.PLANT_ID);
         }
@@ -960,7 +942,7 @@
 }
 
 <!-- JavaScript for the circle progress bars -->  
-<script src="js/garden.js"></script>
+<script src="js/garden.js" defer></script>
 
 <!-- Load the confetti library -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
