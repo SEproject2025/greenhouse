@@ -213,6 +213,40 @@
         white-space: nowrap; /* Prevents text from wrapping */
     }
 
+    .pulsing-dot {
+        position: absolute; /* Make sure it's not inside the flex flow */
+        top: -13px;
+        left: -13px;
+        width: 25px;
+        height: 25px;
+        min-width: 16px;
+        min-height: 16px;
+        background-color: red;
+        border-radius: 50%;
+        z-index: 10;
+        box-shadow: 0 0 0 rgba(255, 0, 0, 0.7);
+        animation: pulse 1.5s infinite;
+        pointer-events: auto; /* Prevents it from interfering with hover/clicks */
+    }
+
+
+    @@keyframes pulse {
+        0% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
+        }
+
+        70% {
+            transform: scale(1.1);
+            box-shadow: 0 0 0 10px rgba(255, 0, 0, 0);
+        }
+
+        100% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
+        }
+    }
+
     .task-container {
         display: flex;
         align-items: center; /* Aligns items vertically */
@@ -406,29 +440,6 @@
         color: #2C6E49;
         margin-top: 5px;
         font-weight: bold;
-    }
-
-    .pulsing-dot {
-        position: absolute; /* Make sure it's not inside the flex flow */
-        top: -13px;
-        left: -13px;
-        width: 25px;
-        height: 25px;
-        min-width: 16px;
-        min-height: 16px;
-        background-color: red;
-        border-radius: 50%;
-        z-index: 10;
-        box-shadow: 0 0 0 rgba(255, 0, 0, 0.7);
-        animation: pulse 1.5s infinite;
-        pointer-events: auto; /* Prevents it from interfering with hover/clicks */
-    }
-
-
-    @@keyframes pulse {
-        0% {transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);}
-        70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(255, 0, 0, 0);}
-        100% {transform: scale(0.95);box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
     }
 
 </style>
