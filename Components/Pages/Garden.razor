@@ -596,12 +596,12 @@
                             {
                                 <div class="progress-item">
                                     <div class="circular-progress" id="progress-@t.TASK_ID"
-                                    data-percentage="@CalculateTaskProgress(t.DAYS_UNTIL, t.FREQ)">
+                                         data-percentage="@CalculateTaskProgress(t.DAYS_UNTIL, t.FREQ)">
                                         <div class="inner-circle">
                                             <img src="@GetTaskIcon(t.TASK_NAME)" alt="@t.TASK_NAME icon" class="progress-icon" />
-                                        </div>                       
-                                    </div>                                
-                                </div>                                
+                                        </div>
+                                    </div>
+                                </div>
                             }
                         </div>
                     </div>
@@ -617,12 +617,13 @@
                                     <label for="@t.TASK_NAME-@p.PLANT_ID" 
                                     class="@(t.OVERDUE > 0 ? "task-label-overdue" : "task-label")">@t.TASK_NAME</label>
                                     <input type="checkbox"
-                                    class="task-checkbox"
-                                    id="@t.TASK_NAME-@p.PLANT_ID"
-                                    name="@t.TASK_NAME-@p.PLANT_ID"
-                                    checked='@t.IS_COMPLETED'
-                                    @onchange="(e) => CheckboxChecked(e, t)"
-                                    disabled="@(t.IS_COMPLETED ? "disabled" : null)"/>
+                                           class="task-checkbox"
+                                           id="@t.TASK_NAME-@p.PLANT_ID"
+                                           name="@t.TASK_NAME-@p.PLANT_ID"
+                                           checked='@t.IS_COMPLETED'
+                                           @onchange="(e) => CheckboxChecked(e, t, p)"
+                                           @ref="t.CheckboxRef"
+                                           disabled="@(t.IS_COMPLETED ? "disabled" : null)" />
                                 </div>
                             }
                         }
@@ -671,7 +672,7 @@
         if (firstRender && !hasLoaded) // Ensures it only runs once
         {
             uuid = await UserServices.GetUserID(await AuthenticationStateProvider.GetAuthenticationStateAsync());
-            if(uuid == "_NULL_USER_")
+            if (uuid == "_NULL_USER_")
             {
                 NavigationManager.NavigateTo("/", forceLoad: true);
                 return;
@@ -762,8 +763,6 @@
         {
             plantGreenStates[p.PLANT_ID] = AllTasksFinished(p.PLANT_ID);
         }
-
-        // _ = InvokeAsync(StateHasChanged);
     }
 
     private void UpdateOverdueCount()
@@ -774,23 +773,37 @@
         }
     }
 
-    // Alters the local copy of the data and the database to reflect the user's action
-    async Task CheckboxChecked(ChangeEventArgs e, PlantTask t)
+    /* Alters the local copy of the data and the database to reflect the user's action */
+    async Task CheckboxChecked(ChangeEventArgs e, PlantTask t, Plants p)
     {
+        bool is_overdue = false;
+
         t.IS_COMPLETED = true;
         t.DAYS_UNTIL = t.FREQ;
         if (t.OVERDUE != 0)
         {
             t.OVERDUE = 0;
+            is_overdue = true;
         }
         t.DONE_DATE = R_CurrentDay;
         await PlantService.UpdateTask(t);
 
-        // Immediately refresh overdue count for this plant
-        plantOverdueCounts[t.PLANT_ID] = GetOverdueForPlant(t.PLANT_ID);
+        // Pass checkbox reference to confetti function
+        if (is_overdue)
+        {
+            ActivateCheckboxConfetti(t.CheckboxRef);
+        }
 
-        // Also check if this affects the green-fade trigger
-        plantGreenStates[t.PLANT_ID] = AllTasksFinished(t.PLANT_ID);
+        if (AllTasksFinished(p.PLANT_ID))
+        {
+            ActivateRainbowConfetti();
+        }
+
+        // Update the fade state of plants after a task is checked
+        UpdatePlantFade();
+
+        UpdateOverdueCount();
+
         StateHasChanged();
     }
 
@@ -860,6 +873,17 @@
         if (daysValue <= (3 * freqValue) / 4) return 75;
         return 100;
     }
+
+    private void ActivateCheckboxConfetti(ElementReference checkbox)
+    {
+        JSRuntime.InvokeVoidAsync("triggerConfettiFromCheckbox", checkbox);
+    }
+
+    private void ActivateRainbowConfetti()
+    {
+        JSRuntime.InvokeVoidAsync("rainbowConfetti");
+    }
+
 
     // Method to complete the watering task when the watering can is dropped
     // on the plant tile
@@ -936,3 +960,8 @@
 <!-- JavaScript for the circle progress bars -->  
 <script src="js/garden.js"></script>
 
+<!-- Load the confetti library -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+      
+<!-- Load your custom confetti.js (Ensure it's in the wwwroot folder) -->
+<script src="confetti.js"></script>
