@@ -57,6 +57,9 @@ builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSe
 builder.Services.AddScoped<IPlantService, PlantService>();
 builder.Services.AddScoped<IUserServices, UserServices>();
 
+builder.Services.AddServerSideBlazor()
+    .AddCircuitOptions(options => { options.DetailedErrors = true; });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
