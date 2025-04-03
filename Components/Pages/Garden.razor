@@ -44,7 +44,7 @@
         color: black;
     }
 
-    .plant-image{
+    .plant-image {
         top: 5px important;
         width: 75px;
         height: 80px;
@@ -195,12 +195,12 @@
         width: 100%; /* Makes sure container spans the full width */
         padding-right: 10px; /* Adds spacing to keep the checkbox away from the edge */
         margin-top: 10px; /* Adds vertical space between tasks */
-       /* padding-bottom: 6px; /* Slight extra padding to separate tasks visually */
+        /* padding-bottom: 6px; /* Slight extra padding to separate tasks visually */
     }
 
     .task-label {
         font-size: 20px; /* Increase task text size */
-       /* font-weight: bold; */
+        /* font-weight: bold; */
     }
 
     .task-container input[type="checkbox"] {
@@ -295,8 +295,9 @@
         font-size: 12px;
         font-weight: bold;
     }
+
     .progress-icon {
-        width: 25px;  /* Adjust icon size */
+        width: 25px; /* Adjust icon size */
         height: 25px;
         object-fit: contain; /* Ensure it fits well inside the circle */
     }
@@ -342,8 +343,8 @@
                             @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
                             {
                                 <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)"
-                                alt="@p.PLANT_NAME"
-                                style="width: 75px; height: 80px; border-radius: 10px; margin-top: 0px;" />
+                                     alt="@p.PLANT_NAME"
+                                     style="width: 75px; height: 80px; border-radius: 10px; margin-top: 0px;" />
                             }
                             <td style="font-family: 'Gloria Hallelujah', cursive; font-size: 18px; color: #66B266; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1), 0px 0px 5px rgba(75, 139, 59, 0.5); ">
                                 Status:
@@ -379,12 +380,12 @@
                             {
                                 <div class="progress-item">
                                     <div class="circular-progress" id="progress-@t.TASK_ID"
-                                    data-percentage="@CalculateTaskProgress(t.DAYS_UNTIL, t.FREQ)">
+                                         data-percentage="@CalculateTaskProgress(t.DAYS_UNTIL, t.FREQ)">
                                         <div class="inner-circle">
                                             <img src="@GetTaskIcon(t.TASK_NAME)" alt="@t.TASK_NAME icon" class="progress-icon" />
-                                        </div>                       
-                                    </div>                                
-                                </div>                                
+                                        </div>
+                                    </div>
+                                </div>
                             }
                         </div>
                     </div>
@@ -399,12 +400,13 @@
                                     <img src="@GetTaskIcon(t.TASK_NAME)" alt="@t.TASK_NAME icon" class="task-icon" />
                                     <label for="@t.TASK_NAME-@p.PLANT_ID" class="task-label">@t.TASK_NAME</label>
                                     <input type="checkbox"
-                                    id="@t.TASK_NAME-@p.PLANT_ID"
-                                    name="@t.TASK_NAME-@p.PLANT_ID"
-                                    checked='@t.IS_COMPLETED'
-                                    @onchange="(e) => CheckboxChecked(e, t)"
-                                    disabled="@(t.IS_COMPLETED ? "disabled" : null)"
-                                    class="task-checkbox" />
+                                           id="@t.TASK_NAME-@p.PLANT_ID"
+                                           name="@t.TASK_NAME-@p.PLANT_ID"
+                                           checked='@t.IS_COMPLETED'
+                                           @onchange="(e) => CheckboxChecked(e, t, p)"
+                                           @ref="t.CheckboxRef"
+                                           disabled="@(t.IS_COMPLETED ? "disabled" : null)"
+                                           class="task-checkbox" />
                                 </div>
                             }
                         }
@@ -416,12 +418,12 @@
                         @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
                         {
                             <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)"
-                            alt="@p.PLANT_NAME" />
+                                 alt="@p.PLANT_NAME" />
                         }
                         else
                         {
                             <img src="/images/Default.webp"
-                            alt="Default Plant Image" />
+                                 alt="Default Plant Image" />
                         }
                     }
                 </div>
@@ -454,7 +456,7 @@ else
 
     List<PlantTask> user_tasks = new List<PlantTask>();  // The list of currently active tasks
                                                          // Tracks the current simulated day
-    private DateTime  CurrentDay { get; set; } = DateTime.Now.Date;
+    private DateTime CurrentDay { get; set; } = DateTime.Now.Date;
     private DateTime R_CurrentDay { get; set; }
 
     // Dictionary to track which plants should fade to green
@@ -478,24 +480,24 @@ else
         if (firstRender && !hasLoaded) // Ensures it only runs once
         {
             uuid = await UserServices.GetUserID(await AuthenticationStateProvider.GetAuthenticationStateAsync());
-            if(uuid == "_NULL_USER_")
+            if (uuid == "_NULL_USER_")
             {
                 NavigationManager.NavigateTo("/", forceLoad: true);
                 return;
             }
 
-                // Fetch user's plants and tasks
-                var plantTask = PlantService.GetUserPlants(uuid);
-                var tasksTask = PlantService.GetAllUserTasks(uuid);
+            // Fetch user's plants and tasks
+            var plantTask = PlantService.GetUserPlants(uuid);
+            var tasksTask = PlantService.GetAllUserTasks(uuid);
 
-                // Gets the current user's plants and tasks
-                await Task.WhenAll(plantTask, tasksTask);
+            // Gets the current user's plants and tasks
+            await Task.WhenAll(plantTask, tasksTask);
 
-                plant = await plantTask;
-                user_tasks = await tasksTask;
+            plant = await plantTask;
+            user_tasks = await tasksTask;
 
-                UpdatePlantFade();
-                UpdateOverdueCount();
+            UpdatePlantFade();
+            UpdateOverdueCount();
 
             hasLoaded = true;
             _ = InvokeAsync(StateHasChanged); // Avoid UI thread blocking
@@ -565,8 +567,6 @@ else
         {
             plantGreenStates[p.PLANT_ID] = AllTasksFinished(p.PLANT_ID);
         }
-
-        // _ = InvokeAsync(StateHasChanged);
     }
 
     private void UpdateOverdueCount()
@@ -578,19 +578,34 @@ else
     }
 
     /* Alters the local copy of the data and the database to reflect the user's action */
-    async Task CheckboxChecked(ChangeEventArgs e, PlantTask t)
+    async Task CheckboxChecked(ChangeEventArgs e, PlantTask t, Plants p)
     {
+        bool is_overdue = false;
+
         t.IS_COMPLETED = true;
         t.DAYS_UNTIL = t.FREQ;
         if (t.OVERDUE != 0)
         {
             t.OVERDUE = 0;
+            is_overdue = true;
         }
         t.DONE_DATE = R_CurrentDay;
         await PlantService.UpdateTask(t);
 
+        // Pass checkbox reference to confetti function
+        if (is_overdue)
+        {
+            ActivateCheckboxConfetti(t.CheckboxRef);
+        }
+
+        if (AllTasksFinished(p.PLANT_ID))
+        {
+            ActivateRainbowConfetti();
+        }
+
         // Update the fade state of plants after a task is checked
         UpdatePlantFade();
+
         StateHasChanged();
     }
 
@@ -660,12 +675,41 @@ else
         return 100;
     }
 
-    
+    private void ActivateCheckboxConfetti(ElementReference checkbox)
+    {
+        JSRuntime.InvokeVoidAsync("triggerConfettiFromCheckbox", checkbox);
+    }
+
+    private void ActivateRainbowConfetti()
+    {
+        JSRuntime.InvokeVoidAsync("rainbowConfetti");
+    }
+
+    /*  foreach (var p in plant)
+      {
+          bool wasGreen = plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID];
+          bool isGreen = AllTasksFinished(p.PLANT_ID);
+
+          // Update the plant's green state
+          // plantGreenStates[p.PLANT_ID] = isGreen;
+
+          // If the plant just turned green, trigger the confetti effect
+          if (isGreen && !wasGreen)
+          {
+              // Call JavaScript function to trigger confetti
+
+              JSRuntime.InvokeVoidAsync("console.log", "Confetti function called from Blazor");
+              JSRuntime.InvokeVoidAsync("triggerConfetti");
+          }
+      }*/
+
+    // _ = InvokeAsync(StateHasChanged);
+
+
 }
 
-<!-- JavaScript for the circle progress bars -->                     
-<script>
-    function updateProgressCircles() {
+<!-- JavaScript for the circle progress bars -->
+<script>function updateProgressCircles() {
         document.querySelectorAll(".circular-progress").forEach((progressBar) => {
             let value = parseInt(progressBar.getAttribute("data-percentage"));
 
@@ -677,6 +721,10 @@ else
         });
     }
 
-    document.addEventListener("DOMContentLoaded", updateProgressCircles);
-</script>
+    document.addEventListener("DOMContentLoaded", updateProgressCircles);</script>
 
+<!-- Load the confetti library -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+<!-- Load your custom confetti.js (Ensure it's in the wwwroot folder) -->
+<script src="confetti.js"></script>

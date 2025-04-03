@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Components;
 
 namespace greenhouse.Entities
 {
@@ -19,5 +20,8 @@ namespace greenhouse.Entities
 
         // Navigation Property
         public Plants? Plant { get; set; }
+
+        [NotMapped] // Tell EF to ignore this property
+        public ElementReference CheckboxRef { get; set; }
     }
 }
