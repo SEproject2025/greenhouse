@@ -683,6 +683,7 @@
 
             hasLoaded = true;
             _ = InvokeAsync(StateHasChanged); // Avoid UI thread blocking
+
         }
         await JSRuntime.InvokeVoidAsync("updateProgressCircles");
         // Register DotnetObjectRefernce
