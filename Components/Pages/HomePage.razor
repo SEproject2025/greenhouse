@@ -74,9 +74,9 @@
         text-align: center;
     }
 
-    .plant-insights h2 {
-        color: #2C6E49; 
-    }
+        .plant-insights h2 {
+            color: #2C6E49;
+        }
 
     /* Grid layout for plant images */
     .card-container {
@@ -137,8 +137,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-
-    }    
+    }
 
     /* Calendar Styling */
     .calendar-container {
@@ -154,20 +153,19 @@
         border-radius: 15px;
         width: 100%;
         text-align: center;
-
         /*
 
-        padding: 20px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        text-align: center;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
 
-        width: 307px;
+            width: 307px;
 
-        height: 250px; 
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between; */
+            height: 250px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; */
     }
 
 </style>
@@ -185,7 +183,10 @@
             <div class="card-container">
                 @if (userPlants == null || userPlants.Count == 0)
                 {
-                    <p>You haven't added any plants yet.</p>
+                    <div>
+                        <p>You haven't added any plants yet.</p>
+                        <p>Try adding some in your <a href="/Garden">Garden</a>!</p>
+                    </div>
                 }
                 else
                 {
@@ -203,7 +204,7 @@
                                     @plant.PLANT_NAME
                                 </div>
                             </div>
-                            
+
                         </div>
                     }
                 }
@@ -255,7 +256,7 @@
 @code {
     private List<Plants> userPlants = new();
 
-    private string uuid = null!; 
+    private string uuid = null!;
 
     private bool hasLoaded = false;
 
