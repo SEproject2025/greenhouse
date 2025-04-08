@@ -528,10 +528,10 @@
             ondrop="handleGenericDrop(event, @p.PLANT_ID)">
 
                 @if (
-                 plantOverdueCounts.ContainsKey(p.PLANT_ID) &&
-                 plantOverdueCounts[p.PLANT_ID] > 0 &&
-                 !(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID])
-              )
+                plantOverdueCounts.ContainsKey(p.PLANT_ID) &&
+                plantOverdueCounts[p.PLANT_ID] > 0 &&
+                !(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID])
+             )
                 {
                     <div class="pulsing-dot" title="You have an overdue task"></div>
                 }
@@ -546,30 +546,30 @@
                             if (overdue_counter == 0)
                             {
                                 <img src="/plant_health_images/Healthy.png" 
-                                     alt="Healthy" 
-                                     title="Your plant is healthy!"
-                                     class="plant-health-image" />
+                                alt="Healthy" 
+                                title="Your plant is healthy!"
+                                class="plant-health-image" />
                             }
                             else if (overdue_counter > 0 && overdue_counter <= 7)
                             {
                                 <img src="/plant_health_images/Ok.png" 
-                                     alt="Ok"
-                                     title="Your plant is OK!"
-                                     class="plant-health-image" />
+                                alt="Ok"
+                                title="Your plant is OK!"
+                                class="plant-health-image" />
                             }
                             else if (overdue_counter > 7 && overdue_counter <= 14)
                             {
                                 <img src="/plant_health_images/Unhealthy.png" 
-                                     alt="Unhealthy"
-                                     title="Your plant is unhealthy!"
-                                     class="plant-health-image" />
+                                alt="Unhealthy"
+                                title="Your plant is unhealthy!"
+                                class="plant-health-image" />
                             }
                             else if (overdue_counter > 14)
                             {
                                 <img src="/plant_health_images/Dying.png" 
-                                     alt="Dying"
-                                     title="Your plant is dying!"
-                                     class="plant-health-image" />
+                                alt="Dying"
+                                title="Your plant is dying!"
+                                class="plant-health-image" />
                             }
                             <div class="plant-health-label">Status</div>
                         }
@@ -613,15 +613,15 @@
                                 <div class="task-container">
                                     <img   src="@GetTaskIcon(t.TASK_NAME)" alt="@t.TASK_NAME icon" class="task-icon" />
                                     <label for="@t.TASK_NAME-@p.PLANT_ID" 
-                                           class="@(t.OVERDUE > 0 ? "task-label-overdue" : "task-label")">@t.TASK_NAME</label>
+                                    class="@(t.OVERDUE > 0 ? "task-label-overdue" : "task-label")">@t.TASK_NAME</label>
                                     <input type="checkbox"
-                                           class="task-checkbox"
-                                           id="@t.TASK_NAME-@p.PLANT_ID"
-                                           name="@t.TASK_NAME-@p.PLANT_ID"
-                                           checked='@t.IS_COMPLETED'
-                                           @onchange="(e) => CheckboxChecked(e, t, p)"
-                                           @ref="t.CheckboxRef"
-                                           disabled="@(t.IS_COMPLETED ? "disabled" : null)" />
+                                    class="task-checkbox"
+                                    id="@t.TASK_NAME-@p.PLANT_ID"
+                                    name="@t.TASK_NAME-@p.PLANT_ID"
+                                    checked='@t.IS_COMPLETED'
+                                    @onchange="(e) => CheckboxChecked(e, t, p)"
+                                    @ref="t.CheckboxRef"
+                                    disabled="@(t.IS_COMPLETED ? "disabled" : null)" />
                                 </div>
                             }
                         }
@@ -996,12 +996,16 @@
     [JSInvokable]
     public async Task DeletePlantByDrop(int plantId)
     {
-        await PlantService.DeletePlant(plantId);
-        plant = await PlantService.GetUserPlants(uuid);
-        user_tasks = await PlantService.GetAllUserTasks(uuid);
-        UpdatePlantFade();
-        UpdateOverdueCount();
-        StateHasChanged();
+        bool confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete this plant?");
+        if (confirmed)
+        {
+            await PlantService.DeletePlant(plantId);
+            plant = await PlantService.GetUserPlants(uuid);
+            user_tasks = await PlantService.GetAllUserTasks(uuid);
+            UpdatePlantFade();
+            UpdateOverdueCount();
+            StateHasChanged();
+        }
     }
 
 }
