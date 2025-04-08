@@ -613,15 +613,15 @@
                                 <div class="task-container">
                                     <img   src="@GetTaskIcon(t.TASK_NAME)" alt="@t.TASK_NAME icon" class="task-icon" />
                                     <label for="@t.TASK_NAME-@p.PLANT_ID" 
-                                    class="@(t.OVERDUE > 0 ? "task-label-overdue" : "task-label")">@t.TASK_NAME</label>
+                                           class="@(t.OVERDUE > 0 ? "task-label-overdue" : "task-label")">@t.TASK_NAME</label>
                                     <input type="checkbox"
-                                    class="task-checkbox"
-                                    id="@t.TASK_NAME-@p.PLANT_ID"
-                                    name="@t.TASK_NAME-@p.PLANT_ID"
-                                    checked='@t.IS_COMPLETED'
-                                    @onchange="(e) => CheckboxChecked(e, t, p)"
-                                    @ref="t.CheckboxRef"
-                                    disabled="@(t.IS_COMPLETED ? "disabled" : null)" />
+                                           class="task-checkbox"
+                                           id="@t.TASK_NAME-@p.PLANT_ID"
+                                           name="@t.TASK_NAME-@p.PLANT_ID"
+                                           checked='@t.IS_COMPLETED'
+                                           @onchange="(e) => CheckboxChecked(e, t, p)"
+                                           @ref="t.CheckboxRef"
+                                           disabled="@(t.IS_COMPLETED ? "disabled" : null)" />
                                 </div>
                             }
                         }
