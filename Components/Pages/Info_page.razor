@@ -96,7 +96,7 @@ body {
 
 /* Attributes List */
 .plant-attributes {
-    margin-top: 10px;
+    margin-top: 20px;
     font-size: 1.1em;
     padding-bottom: 100px; /* Adjust as needed */
 }
@@ -148,7 +148,7 @@ body {
                 @foreach (var attr in SelectedPlant.Attributes)
                 {
                     <div class="attribute">
-                        <strong>@attr.Key:</strong> @attr.Value
+                        <strong>@attr.Key: &nbsp;</strong> @attr.Value
                     </div>
                 }
             </div>
