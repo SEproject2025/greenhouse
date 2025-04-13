@@ -514,7 +514,10 @@
     }
     else if (!plant.Any()) // User has no plants
     {
-        <p>You have no plants</p>
+        <div style="text-align: center">
+            <p style="color: #2C6E49; margin-bottom: 5px !important">You have no plants</p>
+            <p style="color: #2C6E49;">Click the Add Plant button to get started!</p>
+        </div>
     }
     else // User has plants
     {
@@ -745,7 +748,7 @@
 
         foreach (var p in plant!)
         {
-            plantGreenStates[p.PLANT_ID] = AllTasksFinished(p.PLANT_ID);
+            plantGreenStates[p.PLANT_ID] = AllPlantTasksFinished(p.PLANT_ID);
         }
     }
 
@@ -794,7 +797,7 @@
             ActivatePruneConfetti(t.CheckboxRef);
         }
 
-        if (AllTasksFinished(p.PLANT_ID))
+        if (AllUserTasksFinished())
         {
             ActivateRainbowConfetti();
         }
@@ -807,8 +810,21 @@
         StateHasChanged();
     }
 
+    private bool AllUserTasksFinished()
+    {
+        var counter = 0;
+        @foreach (var p in plant!)
+        {
+            @if (AllPlantTasksFinished(p.PLANT_ID))
+            {
+                counter++;
+            }
+        }
+        return (counter == plant.Count);
+    }
+
     // Checks if all tasks for a given plant id are completed at a given time
-    private bool AllTasksFinished(int plant_id)
+    private bool AllPlantTasksFinished(int plant_id)
     {
         tasks_finished_counter = 0;
         @foreach (var t in user_tasks)
