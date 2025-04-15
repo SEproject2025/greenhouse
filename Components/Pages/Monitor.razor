@@ -1,0 +1,76 @@
+﻿@page "/Monitor"
+@inject IPlantService PlantService
+
+<!--***********************************************************************
+*	                             CSS/STYLING SECTION                      *
+************************************************************************-->
+
+<style>
+    .plant-monitor-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .plant-monitor-table th,
+    .plant-monitor-table td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .plant-monitor-table th {
+        background-color: #f0f0f0;
+    }
+</style>
+
+
+<!--***********************************************************************
+*	                             HTML SECTION                             *
+************************************************************************-->
+<h3>Monitoring the Data</h3>
+
+@if (allPlants == null)
+{
+    <p>Loading plants...</p>
+}
+else if (!allPlants.Any())
+{
+    <p>No plants have been added yet.</p>
+}
+else
+{
+    <table class="plant-monitor-table">
+        <thead>
+            <tr>
+                <th>Plant ID</th>
+                <th>Plant Name</th>
+                <th>User ID</th>
+                <th>Is Private</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var plant in allPlants)
+            {
+                <tr>
+                    <td>@plant.PLANT_ID</td>
+                    <td>@plant.PLANT_NAME</td>
+                    <td>@plant.USER_ID</td>
+                    <td>@plant.IS_PRIVATE</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<!--***********************************************************************
+*	                             CODE SECTION                             *
+************************************************************************-->
+@code {
+    private List<Plants>? allPlants;
+
+    protected override async Task OnInitializedAsync()
+    {
+        allPlants = await PlantService.GetAllPlants();
+    }
+}
