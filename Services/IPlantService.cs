@@ -40,5 +40,9 @@ namespace greenhouse.Services
         // Update an existing task's details in the database
         Task<bool> UpdateTask(PlantTask task);
 
+        Task<List<(Plants Plant, string Email)>> GetAllPrivatePlantsWithEmail();
+
+
+
     }
 }

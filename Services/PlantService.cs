@@ -174,5 +174,21 @@ namespace greenhouse.Services
             await dbContext.SaveChangesAsync();
             return true;
         }
+
+        // ******************************************************************************
+        // Gets all the private plants in the database
+        // ******************************************************************************
+        public async Task<List<(Plants Plant, string Email)>> GetAllPrivatePlantsWithEmail()
+        {
+            using var dbContext = _dbContextFactory.CreateDbContext();
+            return await dbContext.Plant
+                .Where(p => p.IS_PRIVATE == "Y")
+                .Join(dbContext.Users,
+                      plant => plant.USER_ID,
+                      user => user.Id,
+                      (plant, user) => new ValueTuple<Plants, string>(plant, user.Email))
+                .ToListAsync();
+        }
+
     }
 }

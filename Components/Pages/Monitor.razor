@@ -1,10 +1,6 @@
 ﻿@page "/Monitor"
 @inject IPlantService PlantService
 
-<!--***********************************************************************
-*	                             CSS/STYLING SECTION                      *
-************************************************************************-->
-
 <style>
     .plant-monitor-table {
         width: 100%;
@@ -24,19 +20,15 @@
     }
 </style>
 
+<h3>Monitoring Private Plants</h3>
 
-<!--***********************************************************************
-*	                             HTML SECTION                             *
-************************************************************************-->
-<h3>Monitoring the Data</h3>
-
-@if (allPlants == null)
+@if (privatePlantsWithEmails == null)
 {
     <p>Loading plants...</p>
 }
-else if (!allPlants.Any())
+else if (!privatePlantsWithEmails.Any())
 {
-    <p>No plants have been added yet.</p>
+    <p>No private plants found.</p>
 }
 else
 {
@@ -46,16 +38,18 @@ else
                 <th>Plant ID</th>
                 <th>Plant Name</th>
                 <th>User ID</th>
+                <th>User Email</th>
                 <th>Is Private</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var plant in allPlants)
+            @foreach (var (plant, email) in privatePlantsWithEmails)
             {
                 <tr>
                     <td>@plant.PLANT_ID</td>
                     <td>@plant.PLANT_NAME</td>
                     <td>@plant.USER_ID</td>
+                    <td>@email</td>
                     <td>@plant.IS_PRIVATE</td>
                 </tr>
             }
@@ -63,14 +57,11 @@ else
     </table>
 }
 
-<!--***********************************************************************
-*	                             CODE SECTION                             *
-************************************************************************-->
 @code {
-    private List<Plants>? allPlants;
+    private List<(Plants Plant, string Email)>? privatePlantsWithEmails;
 
     protected override async Task OnInitializedAsync()
     {
-        allPlants = await PlantService.GetAllPlants();
+        privatePlantsWithEmails = await PlantService.GetAllPrivatePlantsWithEmail();
     }
 }
