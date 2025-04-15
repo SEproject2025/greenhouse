@@ -1,6 +1,10 @@
 ﻿@page "/Monitor"
 @inject IPlantService PlantService
+@rendermode InteractiveServer
 
+<!--***********************************************************************
+*	                             CSS/STYLING SECTION                      *
+************************************************************************-->
 <style>
     .plant-monitor-table {
         width: 100%;
@@ -8,18 +12,35 @@
         margin-top: 20px;
     }
 
-    .plant-monitor-table th,
-    .plant-monitor-table td {
-        border: 1px solid #ccc;
-        padding: 8px;
-        text-align: left;
+        .plant-monitor-table th,
+        .plant-monitor-table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .plant-monitor-table th {
+            background-color: #f0f0f0;
+        }
+
+    .delete-btn {
+        background-color: #d9534f;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        border-radius: 5px;
     }
 
-    .plant-monitor-table th {
-        background-color: #f0f0f0;
-    }
+        .delete-btn:hover {
+            background-color: #c9302c;
+        }
 </style>
 
+
+<!--***********************************************************************
+*	                             HTML SECTION                             *
+************************************************************************-->
 <h3>Monitoring Private Plants</h3>
 
 @if (privatePlantsWithEmails == null)
@@ -39,7 +60,7 @@ else
                 <th>Plant Name</th>
                 <th>User ID</th>
                 <th>User Email</th>
-                <th>Is Private</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -50,18 +71,41 @@ else
                     <td>@plant.PLANT_NAME</td>
                     <td>@plant.USER_ID</td>
                     <td>@email</td>
-                    <td>@plant.IS_PRIVATE</td>
+                    <td>
+                        <button class="delete-btn" @onclick="() => DeletePlant(plant.PLANT_ID)">
+                            Delete
+                        </button>
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
 }
 
+<!--***********************************************************************
+*	                             CODE SECTION                             *
+************************************************************************-->
 @code {
     private List<(Plants Plant, string Email)>? privatePlantsWithEmails;
 
     protected override async Task OnInitializedAsync()
     {
+        await LoadDataAsync();
+    }
+
+    private async Task LoadDataAsync()
+    {
         privatePlantsWithEmails = await PlantService.GetAllPrivatePlantsWithEmail();
+    }
+
+    private async Task DeletePlant(int plantId)
+    {
+        var success = await PlantService.DeletePlant(plantId);
+        if (success)
+        {
+            // Re-fetch list after deletion
+            await LoadDataAsync();
+            StateHasChanged();
+        }
     }
 }
