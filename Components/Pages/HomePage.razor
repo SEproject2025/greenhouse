@@ -271,11 +271,13 @@
             {
                 NavigationManager.NavigateTo("/");
             }
-
-            hasLoaded = true;
-            userPlants = await PlantService.GetUserPlants(uuid);
-            relative_user_date = await UserServices.GetRelativeCurrentDay(uuid);
-            StateHasChanged(); // Force UI update after fetching plants
+            else
+            {
+                hasLoaded = true;
+                userPlants = await PlantService.GetUserPlants(uuid);
+                relative_user_date = await UserServices.GetRelativeCurrentDay(uuid);
+                StateHasChanged(); // Force UI update after fetching plants
+            }
         }
     }
 
