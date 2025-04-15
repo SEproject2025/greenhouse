@@ -1,6 +1,7 @@
 ﻿@page "/Monitor"
 @inject IPlantService PlantService
 @rendermode InteractiveServer
+@implements IDisposable
 
 <!--***********************************************************************
 *	                             CSS/STYLING SECTION                      *
@@ -23,18 +24,40 @@
             background-color: #f0f0f0;
         }
 
-    .delete-btn {
+    .delete-btn, .edit-btn, .save-btn {
         background-color: #d9534f;
         color: white;
         border: none;
         padding: 5px 10px;
         cursor: pointer;
         border-radius: 5px;
+        margin-right: 5px;
     }
 
-        .delete-btn:hover {
-            background-color: #c9302c;
+    .edit-btn {
+        background-color: #5bc0de;
+    }
+
+        .edit-btn:hover {
+            background-color: #31b0d5;
         }
+
+    .save-btn {
+        background-color: #5cb85c;
+    }
+
+        .save-btn:hover {
+            background-color: #449d44;
+        }
+
+    .delete-btn:hover {
+        background-color: #c9302c;
+    }
+
+    input.edit-input {
+        width: 100%;
+        padding: 4px;
+    }
 </style>
 
 
@@ -68,10 +91,32 @@ else
             {
                 <tr>
                     <td>@plant.PLANT_ID</td>
-                    <td>@plant.PLANT_NAME</td>
+                    <td>
+                        @if (editingPlantId == plant.PLANT_ID)
+                        {
+                            <input class="edit-input" @bind="editPlantName" />
+                        }
+                        else
+                        {
+                            @plant.PLANT_NAME
+                        }
+                    </td>
                     <td>@plant.USER_ID</td>
                     <td>@email</td>
                     <td>
+                        @if (editingPlantId == plant.PLANT_ID)
+                        {
+                            <button class="save-btn" @onclick="() => SavePlantName(plant)">
+                                Save
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="edit-btn" @onclick="() => StartEditing(plant.PLANT_ID, plant.PLANT_NAME)">
+                                Edit
+                            </button>
+                        }
+
                         <button class="delete-btn" @onclick="() => DeletePlant(plant.PLANT_ID)">
                             Delete
                         </button>
@@ -82,20 +127,32 @@ else
     </table>
 }
 
+
 <!--***********************************************************************
 *	                             CODE SECTION                             *
 ************************************************************************-->
 @code {
     private List<(Plants Plant, string Email)>? privatePlantsWithEmails;
+    private System.Timers.Timer? refreshTimer;
+
+    private int editingPlantId = -1;
+    private string? editPlantName;
 
     protected override async Task OnInitializedAsync()
     {
         await LoadDataAsync();
+
+        // Set up a timer to refresh data every 10 seconds
+        refreshTimer = new System.Timers.Timer(10000);
+        refreshTimer.Elapsed += async (_, _) => await InvokeAsync(LoadDataAsync);
+        refreshTimer.AutoReset = true;
+        refreshTimer.Start();
     }
 
     private async Task LoadDataAsync()
     {
         privatePlantsWithEmails = await PlantService.GetAllPrivatePlantsWithEmail();
+        StateHasChanged();
     }
 
     private async Task DeletePlant(int plantId)
@@ -103,9 +160,32 @@ else
         var success = await PlantService.DeletePlant(plantId);
         if (success)
         {
-            // Re-fetch list after deletion
             await LoadDataAsync();
-            StateHasChanged();
         }
+    }
+
+    private void StartEditing(int plantId, string currentName)
+    {
+        editingPlantId = plantId;
+        editPlantName = currentName;
+    }
+
+    private async Task SavePlantName(Plants plant)
+    {
+        if (!string.IsNullOrWhiteSpace(editPlantName))
+        {
+            plant.PLANT_NAME = editPlantName;
+            await PlantService.UpdatePlant(plant);
+        }
+
+        editingPlantId = -1;
+        editPlantName = null;
+        await LoadDataAsync();
+    }
+
+    public void Dispose()
+    {
+        refreshTimer?.Stop();
+        refreshTimer?.Dispose();
     }
 }
