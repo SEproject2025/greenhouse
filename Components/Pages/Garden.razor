@@ -37,6 +37,12 @@
         gap: 10px; /* Adds spacing between buttons */
     }
 
+    button.btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        box-shadow: none;
+    }
+
     button.btn {
         background-color: #CFE8A9;
         color: #FFFFFF;
@@ -449,7 +455,7 @@
 
 <div class="Buttons">
     <AddPlantButton />
-    <button @onclick="GoToNextDay" class="btn btn-primary next-day-btn">Finish Day</button>
+    <button class="btn" @onclick="GoToNextDay" disabled="@isLoading">Finish Day</button>
 </div>
 
 <div class="tool-key">
@@ -701,6 +707,23 @@
             user_tasks = await PlantService.GetAllUserTasks(uuid);
             StateHasChanged();
         }
+    }
+
+    /* Add loading page logic to code */
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadPageDataAsync(); // load your actual data here
+        isLoading = false;
+    }
+
+    private async Task LoadPageDataAsync()
+    {
+        // example delay to simulate data loading
+        await Task.Delay(2000);
+
+        // TODO: Load R_CurrentDay, user_tasks, etc.
     }
 
     /* Advances the internal day tracker by 1 */
