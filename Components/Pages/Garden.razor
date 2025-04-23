@@ -395,20 +395,34 @@
         padding: 3px;
     }
     /* New tool-key container that acts as a legend */
-    .tool-key {
-        position: fixed; /* changed from absolute */
+    .tool-container {
+        position: fixed;
         top: 90px;
         right: 20px;
         background-color: #f7f3e8;
-        padding: 10px 15px;
+        padding: 10px;
         border: 2px solid #2C6E49;
         border-radius: 10px;
-        display: flex;
-        flex-direction: row;
-        gap: 15px;
-        z-index: 999;
         box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.2);
+        z-index: 999;
+        max-width: 1000px;
+        text-align: center;
     }
+
+    .tool-header {
+        font-size: 20px;
+        font-weight: bold;
+        color: #2C6E49;
+        margin-bottom: 10px;
+    }
+
+    .tool-key {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
+
 
     /* Each tool + label bundle */
     .tool-item {
@@ -424,6 +438,17 @@
         margin-top: 5px;
         font-weight: bold;
     }
+
+    /* Label above the drag and drop items */
+    .tool-label-header {
+        font-size: 20px;
+        font-weight: bold;
+        color: #2C6E49;
+        text-align: center;
+        width: auto; 
+        border: none;
+    }
+
 
 </style>
 
@@ -452,55 +477,59 @@
     <button @onclick="GoToNextDay" class="btn btn-primary next-day-btn">Finish Day</button>
 </div>
 
-<div class="tool-key">
-    <div class="tool-item">
-        <img src="/plant_tasks/WateringCan.png"
-        id="watering-can"
-        class="tool-icon"
-        draggable="true"
-        ondragstart="handleDragStart(event)"
-        alt="Watering Can" />
-        <div class="tool-label">Water</div>
-    </div>
+<div class="tool-container">
+    <div class="tool-header">Drag & Drop</div>
+    <div class="tool-key">
+    
+        <div class="tool-item">
+            <img src="/plant_tasks/WateringCan.png"
+            id="watering-can"
+            class="tool-icon"
+            draggable="true"
+            ondragstart="handleDragStart(event)"
+            alt="Watering Can" />
+            <div class="tool-label">Water</div>
+        </div>
 
-    <div class="tool-item">
-        <img src="/plant_tasks/PruningTool.png"
-        id="pruning-tool"
-        class="tool-icon"
-        draggable="true"
-        ondragstart="handlePruningDragStart(event)"
-        alt="Pruning Tool" />
-        <div class="tool-label">Prune</div>
-    </div>
+        <div class="tool-item">
+            <img src="/plant_tasks/PruningTool.png"
+            id="pruning-tool"
+            class="tool-icon"
+            draggable="true"
+            ondragstart="handlePruningDragStart(event)"
+            alt="Pruning Tool" />
+            <div class="tool-label">Prune</div>
+        </div>
 
-    <div class="tool-item">
-        <img src="/plant_tasks/BugSpray.png"
-        id="bugspray-tool"
-        class="tool-icon"
-        draggable="true"
-        ondragstart="handlePestControlDragStart(event)"
-        alt="Bug Spray" />
-        <div class="tool-label">Pest Control</div>
-    </div>
+        <div class="tool-item">
+            <img src="/plant_tasks/BugSpray.png"
+            id="bugspray-tool"
+            class="tool-icon"
+            draggable="true"
+            ondragstart="handlePestControlDragStart(event)"
+            alt="Bug Spray" />
+            <div class="tool-label">Pest Control</div>
+        </div>
 
-    <div class="tool-item">
-        <img src="/plant_tasks/Gloves.png"
-        id="gloves-tool"
-        class="tool-icon"
-        draggable="true"
-        ondragstart="handleWeedingDragStart(event)"
-        alt="Gloves" />
-        <div class="tool-label">Weed</div>
-    </div>
+        <div class="tool-item">
+            <img src="/plant_tasks/Gloves.png"
+            id="gloves-tool"
+            class="tool-icon"
+            draggable="true"
+            ondragstart="handleWeedingDragStart(event)"
+            alt="Gloves" />
+            <div class="tool-label">Weed</div>
+        </div>
 
-    <div class="tool-item">
-        <img src="/plant_tasks/Shovel.png"
-        id="shovel-tool"
-        class="tool-icon"
-        draggable="true"
-        ondragstart="handleShovelDragStart(event)"
-        alt="Shovel Tool" />
-        <div class="tool-label">Delete</div>
+        <div class="tool-item">
+            <img src="/plant_tasks/Shovel.png"
+            id="shovel-tool"
+            class="tool-icon"
+            draggable="true"
+            ondragstart="handleShovelDragStart(event)"
+            alt="Shovel Tool" />
+            <div class="tool-label">Delete</div>
+        </div>
     </div>
 </div>
 
