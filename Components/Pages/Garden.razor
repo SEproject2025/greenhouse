@@ -55,6 +55,12 @@
             color: #FFFFFF;
         }
 
+        button.btn:disabled
+        {
+            background-color: #5AA74E;
+            color: #FFFFFF;
+        }
+
     .circular-progress {
         width: 50px;
         height: 50px;
@@ -449,7 +455,7 @@
 
 <div class="Buttons">
     <AddPlantButton />
-    <button @onclick="GoToNextDay" class="btn btn-primary next-day-btn">Finish Day</button>
+    <button @onclick="GoToNextDay" disabled="@(!hasLoaded)" class="btn btn-primary next-day-btn">Finish Day</button>
 </div>
 
 <div class="tool-key">
