@@ -28,7 +28,7 @@ button.btn {
 <!--***********************************************************************
 *	                             HTML SECTION                             *
 ************************************************************************-->
-<button class="btn" @onclick="ShowModal" disabled="@isLoading">Add Plant</button>
+<button class="btn" @onclick="ShowModal" disabled="@IsLoading">Add Plant</button>
 
 
 <!-- Reference the Modal component -->
@@ -42,8 +42,12 @@ button.btn {
 *	                             CODE SECTION                             *
 ************************************************************************-->
 @code {
+    [Parameter]
+    public bool IsLoading { get; set; }
+
     private bool isModalVisible = false;
     private Modal? modalRef;
+
     private bool isLoading = true; // Flag to track loading state
 
     protected override async Task OnInitializedAsync()
@@ -55,7 +59,7 @@ button.btn {
 
     private void ShowModal()
     {
-        if (!isLoading) // Ensure modal doesn't open if still loading
+        if (!IsLoading)
         {
             isModalVisible = true;
         }

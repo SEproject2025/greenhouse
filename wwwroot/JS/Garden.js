@@ -114,13 +114,26 @@ function handleWeedingDrop(plantId) {
 }
 
 //***************************************************************************************
-// Drop handler for the shovel tool
+// Drop handler for the shovel tool & style the modal
 //***************************************************************************************
+let pendingDeletePlantId = null;
+
 function handleShovelDrop(plantId) {
+    pendingDeletePlantId = plantId;
+    document.getElementById("deleteConfirmModal").style.display = "flex";
+}
+
+function confirmDeletePlant() {
     const dotNetHelper = window.dotNetHelperRef;
-    if (dotNetHelper) {
-        dotNetHelper.invokeMethodAsync("DeletePlantByDrop", plantId);
+    if (dotNetHelper && pendingDeletePlantId !== null) {
+        dotNetHelper.invokeMethodAsync("DeletePlantByDrop", pendingDeletePlantId);
     }
+    closeDeleteModal();
+}
+
+function closeDeleteModal() {
+    document.getElementById("deleteConfirmModal").style.display = "none";
+    pendingDeletePlantId = null;
 }
 
 

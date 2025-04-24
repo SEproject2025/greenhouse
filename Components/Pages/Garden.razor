@@ -37,6 +37,12 @@
         gap: 10px; /* Adds spacing between buttons */
     }
 
+    button.btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        box-shadow: none;
+    }
+
     button.btn {
         background-color: #CFE8A9;
         color: #FFFFFF;
@@ -85,6 +91,32 @@
             font-size: 12px;
             font-weight: bold;
         }
+
+    .green-plant-name {
+        font-size: 24px; /* Slightly larger text */
+        font-weight: bold;
+        font-family: Arial, sans-serif;
+        color: black;
+        padding: 0px 20px; /* Moderate padding */
+        min-height: 40px;
+        min-width: 140px;
+        max-width: 300px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: center;
+        justify-content: center;
+        align-self: center;
+        white-space: nowrap;
+        background-color: #f7f3e8;
+        border: 1px solid #2C6E49;
+        display: block;
+        position: relative;
+        top: 200px;
+        z-index: 10;
+        border-radius: 12px; /* Slightly rounder corners */
+        box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.3), -4px -4px 12px rgba(255, 255, 255, 0.08);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
 
     /* Container to hold the health icon and label */
     .health-status-container {
@@ -340,7 +372,7 @@
             opacity: 0; /* Slight transparency for the image */
             position: absolute; /* Position the image absolutely inside the tile */
             top: 13.7%; /* Adjust top position as needed */
-            left: 19%; /* Adjust left position as needed */
+            left: 20%; /* Adjust left position as needed */
             width: 60%; /* Resize the image to fit inside the tile */
             height: auto;
             object-fit: contain; /* Ensure the image maintains aspect ratio */
@@ -369,7 +401,9 @@
         flex-wrap: wrap;
         justify-content: center;
         gap: 50px;
-        padding: 30px;
+        padding: 15px;
+        padding-left: 30px;
+        padding-right: 30px;
     }
 
     .title {
@@ -377,6 +411,7 @@
         color: #2C6E49;
         text-align: center;
         margin-bottom: 20px;
+        margin-top: 20px;
         font-family: 'Georgia', serif;
     }
 
@@ -446,6 +481,55 @@
         font-weight: bold;
     }
 
+    /* Confirm Delete Plant  */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-content {
+        background-color: #f7f3e8;
+        padding: 20px 30px;
+        border-radius: 12px;
+        text-align: center;
+        border: 3px solid #2C6E49;
+        box-shadow: 6px 6px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-buttons {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .confirm-btn, .cancel-btn {
+        background-color: #CFE8A9;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+    }
+
+        .confirm-btn:hover {
+            background-color: #A5D68B;
+        }
+
+        .cancel-btn:hover {
+            background-color: #e8cfa9;
+        }
+
     /* Label above the drag and drop items */
     .tool-label-header {
         font-size: 20px;
@@ -480,8 +564,11 @@
 </div>
 
 <div class="Buttons">
-    <AddPlantButton />
-    <button @onclick="GoToNextDay" disabled="@(!hasLoaded)" class="btn btn-primary next-day-btn">Finish Day</button>
+    <AddPlantButton IsLoading="@isLoading" />
+    <button class="btn" @onclick="GoToNextDay" disabled="@isLoading">Finish Day</button>
+  
+    <!-- <AddPlantButton /> -->
+    <!-- <button @onclick="GoToNextDay" disabled="@(!hasLoaded)" class="btn btn-primary next-day-btn">Finish Day</button> -->
 </div>
 
 <div class="tool-container">
@@ -498,45 +585,44 @@
             <div class="tool-label">Water</div>
         </div>
 
-        <div class="tool-item">
-            <img src="/plant_tasks/PruningTool.png"
-            id="pruning-tool"
-            class="tool-icon"
-            draggable="true"
-            ondragstart="handlePruningDragStart(event)"
-            alt="Pruning Tool" />
-            <div class="tool-label">Prune</div>
-        </div>
+    <div class="tool-item">
+        <img src="/plant_tasks/Gloves.png"
+             id="gloves-tool"
+             class="tool-icon"
+             draggable="true"
+             ondragstart="handleWeedingDragStart(event)"
+             alt="Gloves" />
+        <div class="tool-label">Weed</div>
+    </div>
 
-        <div class="tool-item">
-            <img src="/plant_tasks/BugSpray.png"
-            id="bugspray-tool"
-            class="tool-icon"
-            draggable="true"
-            ondragstart="handlePestControlDragStart(event)"
-            alt="Bug Spray" />
-            <div class="tool-label">Pest Control</div>
-        </div>
+    <div class="tool-item">
+        <img src="/plant_tasks/PruningTool.png"
+        id="pruning-tool"
+        class="tool-icon"
+        draggable="true"
+        ondragstart="handlePruningDragStart(event)"
+        alt="Pruning Tool" />
+        <div class="tool-label">Prune</div>
+    </div>
 
-        <div class="tool-item">
-            <img src="/plant_tasks/Gloves.png"
-            id="gloves-tool"
-            class="tool-icon"
-            draggable="true"
-            ondragstart="handleWeedingDragStart(event)"
-            alt="Gloves" />
-            <div class="tool-label">Weed</div>
-        </div>
+    <div class="tool-item">
+        <img src="/plant_tasks/BugSpray.png"
+             id="bugspray-tool"
+             class="tool-icon"
+             draggable="true"
+             ondragstart="handlePestControlDragStart(event)"
+             alt="Bug Spray" />
+        <div class="tool-label">Pest Control</div>
+    </div>
 
-        <div class="tool-item">
-            <img src="/plant_tasks/Shovel.png"
-            id="shovel-tool"
-            class="tool-icon"
-            draggable="true"
-            ondragstart="handleShovelDragStart(event)"
-            alt="Shovel Tool" />
-            <div class="tool-label">Delete</div>
-        </div>
+    <div class="tool-item">
+        <img src="/plant_tasks/Shovel.png"
+        id="shovel-tool"
+        class="tool-icon"
+        draggable="true"
+        ondragstart="handleShovelDragStart(event)"
+        alt="Shovel Tool" />
+        <div class="tool-label">Delete</div>
     </div>
 </div>
 
@@ -560,14 +646,14 @@
         @foreach (var p in plant)
         {
             <div class="tile @(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID] ? "green-fade" : "")"
-            ondragover="event.preventDefault()"
-            ondrop="handleGenericDrop(event, @p.PLANT_ID)">
+                 ondragover="event.preventDefault()"
+                 ondrop="handleGenericDrop(event, @p.PLANT_ID)">
 
                 @if (
-                 plantOverdueCounts.ContainsKey(p.PLANT_ID) &&
-                 plantOverdueCounts[p.PLANT_ID] > 0 &&
-                 !(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID])
-              )
+               plantOverdueCounts.ContainsKey(p.PLANT_ID) &&
+               plantOverdueCounts[p.PLANT_ID] > 0 &&
+               !(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID])
+            )
                 {
                     <div class="pulsing-dot" title="You have an overdue task"></div>
                 }
@@ -581,19 +667,31 @@
                             var overdue_counter = plantOverdueCounts[p.PLANT_ID];
                             if (overdue_counter == 0)
                             {
-                                <img src="/plant_health_images/Healthy.png" alt="Healthy" class="plant-health-image" />
+                                <img src="/plant_health_images/Healthy.png"
+                                     alt="Healthy"
+                                     title="Your plant is healthy!"
+                                     class="plant-health-image" />
                             }
                             else if (overdue_counter > 0 && overdue_counter <= 7)
                             {
-                                <img src="/plant_health_images/Ok.png" alt="Ok" class="plant-health-image" />
+                                <img src="/plant_health_images/Ok.png"
+                                     alt="Ok"
+                                     title="Your plant is OK!"
+                                     class="plant-health-image" />
                             }
                             else if (overdue_counter > 7 && overdue_counter <= 14)
                             {
-                                <img src="/plant_health_images/Unhealthy.png" alt="Unhealthy" class="plant-health-image" />
+                                <img src="/plant_health_images/Unhealthy.png"
+                                     alt="Unhealthy"
+                                     title="Your plant is unhealthy!"
+                                     class="plant-health-image" />
                             }
                             else if (overdue_counter > 14)
                             {
-                                <img src="/plant_health_images/Dying.png" alt="Dying" class="plant-health-image" />
+                                <img src="/plant_health_images/Dying.png"
+                                     alt="Dying"
+                                     title="Your plant is dying!"
+                                     class="plant-health-image" />
                             }
                             <div class="plant-health-label">Status</div>
                         }
@@ -602,8 +700,8 @@
                     @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
                     {
                         <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)"
-                        alt="@p.PLANT_NAME"
-                        class="plant-image" />
+                             alt="@p.PLANT_NAME"
+                             class="plant-image" />
                     }
 
                     <div class="plant-name" title="@p.PLANT_NAME">@p.PLANT_NAME</div>
@@ -618,7 +716,7 @@
                             {
                                 <div class="progress-item">
                                     <div class="circular-progress" id="progress-@t.TASK_ID"
-                                    data-percentage="@CalculateTaskProgress(t.DAYS_UNTIL, t.FREQ)">
+                                         data-percentage="@CalculateTaskProgress(t.DAYS_UNTIL, t.FREQ)">
                                         <div class="inner-circle">
                                             <img src="@GetTaskIcon(t.TASK_NAME)" alt="@t.TASK_NAME icon" class="progress-icon" />
                                         </div>
@@ -635,19 +733,19 @@
                             @if (p.PLANT_ID == t.PLANT_ID && (t.DAYS_UNTIL == 0 || (t.DONE_DATE == R_CurrentDay || t.DONE_DATE == null)))
                             {
                                 <div class="task-container">
-                                    <img   src="@GetTaskIcon(t.TASK_NAME)" alt="@t.TASK_NAME icon" class="task-icon" />
-                                    <label for="@t.TASK_NAME-@p.PLANT_ID" 
-                                    class="@(t.OVERDUE > 0 ? "task-label-overdue" : "task-label")">@t.TASK_NAME</label>
-                                    <input type="checkbox"
-                                    class="task-checkbox"
-                                    id="@t.TASK_NAME-@p.PLANT_ID"
-                                    name="@t.TASK_NAME-@p.PLANT_ID"
-                                    checked='@t.IS_COMPLETED'
-                                    @onchange="(e) => CheckboxChecked(e, t, p)"
-                                    @ref="t.CheckboxRef"
-                                    disabled="@(t.IS_COMPLETED ? "disabled" : null)" />
-                                </div>
-                            }
+                                    <img src="@GetTaskIcon(t.TASK_NAME)" alt="@t.TASK_NAME icon" class="task-icon" />
+                                    <label for="@t.TASK_NAME-@p.PLANT_ID"
+                                           class="@(t.OVERDUE > 0 ? "task-label-overdue" : "task-label")">@t.TASK_NAME</label>
+                                        <input type="checkbox"
+                                               class="task-checkbox"
+                                               id="@t.TASK_NAME-@p.PLANT_ID"
+                                               name="@t.TASK_NAME-@p.PLANT_ID"
+                                               checked='@t.IS_COMPLETED'
+                                               @onchange="(e) => CheckboxChecked(e, t, p)"
+                                               @ref="t.CheckboxRef"
+                                               disabled="@(t.IS_COMPLETED ? "disabled" : null)" />
+                                    </div>
+                                }
                         }
                     </div>
                 }
@@ -656,15 +754,27 @@
                     @if (p.IMAGE_DATA != null && p.IMAGE_DATA.Length > 0)
                     {
                         <img src="data:image/png;base64,@Convert.ToBase64String(p.IMAGE_DATA)"
-                        alt="@p.PLANT_NAME" />
+                             alt="@p.PLANT_NAME" />
                     }
                     else
                     {
                         <img src="/images/Default.webp"
-                        alt="Default Plant Image" />
+                             alt="Default Plant Image" />
                     }
+                    <div class="green-plant-name" title="@p.PLANT_NAME">@p.PLANT_NAME</div>
                 }
             </div>
+            <div id="deleteConfirmModal" class="modal-overlay" style="display:none;">
+                <div class="modal-content">
+                    <p>Are you sure you want to delete your plant?</p>
+                    <div class="modal-buttons">
+                        <button onclick="confirmDeletePlant()" class="confirm-btn">Yes</button>
+                        <button onclick="closeDeleteModal()" class="cancel-btn">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+
         }
     }
 </div>
@@ -737,6 +847,23 @@
             user_tasks = await PlantService.GetAllUserTasks(uuid);
             StateHasChanged();
         }
+    }
+
+    /* Add loading page logic to code */
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadPageDataAsync(); // load your actual data here
+        isLoading = false;
+    }
+
+    private async Task LoadPageDataAsync()
+    {
+        // example delay to simulate data loading
+        await Task.Delay(2000);
+
+        // TODO: Load R_CurrentDay, user_tasks, etc.
     }
 
     /* Advances the internal day tracker by 1 */
