@@ -61,6 +61,12 @@
             color: #FFFFFF;
         }
 
+        button.btn:disabled
+        {
+            background-color: #5AA74E;
+            color: #FFFFFF;
+        }
+
     .circular-progress {
         width: 50px;
         height: 50px;
@@ -430,20 +436,35 @@
         padding: 3px;
     }
     /* New tool-key container that acts as a legend */
-    .tool-key {
-        position: fixed; /* changed from absolute */
+    .tool-container {
+        position: fixed;
         top: 90px;
         right: 20px;
         background-color: #f7f3e8;
-        padding: 10px 15px;
+        padding: 10px;
         border: 2px solid #2C6E49;
         border-radius: 10px;
-        display: flex;
-        flex-direction: row;
-        gap: 15px;
-        z-index: 999;
         box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.2);
+        z-index: 999;
+        max-width: 1000px;
+        text-align: center;
     }
+
+    .tool-header {
+        font-size: 20px;
+        font-weight: bold;
+        color: #2C6E49;
+        margin-bottom: 0px;
+        margin-top: 0px;
+    }
+
+    .tool-key {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
+
 
     /* Each tool + label bundle */
     .tool-item {
@@ -509,6 +530,16 @@
             background-color: #e8cfa9;
         }
 
+    /* Label above the drag and drop items */
+    .tool-label-header {
+        font-size: 20px;
+        font-weight: bold;
+        color: #2C6E49;
+        text-align: center;
+        width: auto; 
+        border: none;
+    }
+
 
 </style>
 
@@ -535,18 +566,24 @@
 <div class="Buttons">
     <AddPlantButton IsLoading="@isLoading" />
     <button class="btn" @onclick="GoToNextDay" disabled="@isLoading">Finish Day</button>
+  
+    <!-- <AddPlantButton /> -->
+    <!-- <button @onclick="GoToNextDay" disabled="@(!hasLoaded)" class="btn btn-primary next-day-btn">Finish Day</button> -->
 </div>
 
-<div class="tool-key">
-    <div class="tool-item">
-        <img src="/plant_tasks/WateringCan.png"
-        id="watering-can"
-        class="tool-icon"
-        draggable="true"
-        ondragstart="handleDragStart(event)"
-        alt="Watering Can" />
-        <div class="tool-label">Water</div>
-    </div>
+<div class="tool-container">
+    <div class="tool-header">Drag & Drop</div>
+    <div class="tool-key">
+    
+        <div class="tool-item">
+            <img src="/plant_tasks/WateringCan.png"
+            id="watering-can"
+            class="tool-icon"
+            draggable="true"
+            ondragstart="handleDragStart(event)"
+            alt="Watering Can" />
+            <div class="tool-label">Water</div>
+        </div>
 
     <div class="tool-item">
         <img src="/plant_tasks/Gloves.png"
@@ -1120,11 +1157,290 @@
 
 }
 
-<!-- JavaScript for the circle progress bars -->  
-<script src="js/garden.js" defer></script>
+<script>
+
+    //***************************************************************************************
+    // Updates the progress circles on the plant tiles
+    //***************************************************************************************
+    function updateProgressCircles() {
+        document.querySelectorAll(".circular-progress").forEach((progressBar) => {
+            let value = parseInt(progressBar.getAttribute("data-percentage"));
+
+            // Ensure value is between 0 and 100
+            value = Math.max(0, Math.min(value, 100));
+
+            // Apply the conic-gradient for progress
+            progressBar.style.background = `conic-gradient(green ${value * 3.6}deg, lightgray ${value * 3.6}deg)`;
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", updateProgressCircles);
+
+    //***************************************************************************************
+    // Called when the user starts dragging the watering can
+    //***************************************************************************************
+    function handleDragStart(event) {
+        event.dataTransfer.setData("text", "watering");
+    }
+
+    //***************************************************************************************
+    // Called when the user starts dragging the pruning tool
+    //***************************************************************************************
+    function handlePruningDragStart(event) {
+        event.dataTransfer.setData("text", "pruning");
+    }
+
+    //***************************************************************************************
+    // Called when the user starts dragging the bug spray
+    //***************************************************************************************
+    function handlePestControlDragStart(event) {
+        event.dataTransfer.setData("text", "pestcontrol");
+    }
+
+    //***************************************************************************************
+    // Called when the user starts dragging the gloves
+    //***************************************************************************************
+    function handleWeedingDragStart(event) {
+        event.dataTransfer.setData("text", "weeding");
+    }
+
+    //***************************************************************************************
+    // Called when the user starts dragging the shovel
+    //***************************************************************************************
+    function handleShovelDragStart(event) {
+        event.dataTransfer.setData("text", "shovel");
+
+    }
+
+    //***************************************************************************************
+    // Central drop handler that delegates to the correct tool function
+    //***************************************************************************************
+    function handleGenericDrop(event, plantId) {
+        event.preventDefault();
+        const tool = event.dataTransfer.getData("text");
+
+        switch (tool) {
+            case "watering":
+                handleWateringDrop(plantId);
+                break;
+            case "pruning":
+                handlePruningDrop(plantId);
+                break;
+            case "pestcontrol":
+                handlePestControlDrop(plantId);
+                break;
+            case "weeding":
+                handleWeedingDrop(plantId);
+                break;
+            case "shovel":
+                handleShovelDrop(plantId);
+                break;
+        }
+    }
+
+    //***************************************************************************************
+    // Separated drop handlers for each tool
+    //***************************************************************************************
+    function handleWateringDrop(plantId) {
+        const dotNetHelper = window.dotNetHelperRef;
+        if (dotNetHelper) {
+            dotNetHelper.invokeMethodAsync("CompleteWateringTask", plantId);
+        }
+    }
+
+    function handlePruningDrop(plantId) {
+        const dotNetHelper = window.dotNetHelperRef;
+        if (dotNetHelper) {
+            dotNetHelper.invokeMethodAsync("CompletePruningTask", plantId);
+        }
+    }
+
+    function handlePestControlDrop(plantId) {
+        const dotNetHelper = window.dotNetHelperRef;
+        if (dotNetHelper) {
+            dotNetHelper.invokeMethodAsync("CompletePestControlTask", plantId);
+        }
+    }
+
+    function handleWeedingDrop(plantId) {
+        const dotNetHelper = window.dotNetHelperRef;
+        if (dotNetHelper) {
+            dotNetHelper.invokeMethodAsync("CompleteWeedingTask", plantId);
+        }
+    }
+
+    //***************************************************************************************
+    // Drop handler for the shovel tool
+    //***************************************************************************************
+    function handleShovelDrop(plantId) {
+        const dotNetHelper = window.dotNetHelperRef;
+        if (dotNetHelper) {
+            dotNetHelper.invokeMethodAsync("DeletePlantByDrop", plantId);
+        }
+    }
+
+
+    //***************************************************************************************
+    // Registers a .NET helper reference for later JS-to-blazor calls
+    //***************************************************************************************
+    window.setDotNetHelper = function (dotNetHelper) {
+        window.dotNetHelperRef = dotNetHelper;
+    };
+
+
+    //***************************************************************************************
+    //***************************************************************************************
+    //***************************************************************************************
+    window.triggerConfettiFromCheckbox = (checkbox) => {
+        if (!checkbox) return;
+
+        let rect = checkbox.getBoundingClientRect();
+        let x = (rect.left + rect.width / 2) / window.innerWidth;
+        let y = (rect.top + rect.height / 2) / window.innerHeight;
+
+        var end = Date.now() + 100;
+        var interval = setInterval(() => {
+            if (Date.now() > end) {
+                clearInterval(interval);
+                return;
+            }
+            confetti({
+                particleCount: 10, // Increase number of confetti particles
+                angle: Math.random() * 60 + 45, // More varied angles
+                spread: 60, // Increase spread
+                startVelocity: 10, // Increase launch speed
+                origin: { x, y },
+                colors: ['#90EE90'], // More colors
+                scalar: .7 // particle size
+            });
+        }, 3);
+    };
+
+    window.rainbowConfetti = () => {
+        var end = Date.now() + 1500; // Confetti rains for 1.5 seconds
+        var interval = setInterval(() => {
+            if (Date.now() > end) {
+                clearInterval(interval);
+                return;
+            }
+            confetti({
+                particleCount: 100, // Reduced confetti count
+                angle: 90, // Falls straight down
+                spread: 150, // Narrower spread
+                startVelocity: 60, // Faster falling speed
+                decay: 0.9, // Quicker disappearance
+                gravity: 2, // Increased gravity for faster fall
+                origin: { x: 0.45 + Math.random() * 0.1, y: 0 }, // Confetti starts from a narrower portion of the top
+                colors: ['#8B5A2B', '#A67B5B', '#C4A484', '#6B8E23', '#556B2F', '#228B22', '#2E8B57'] // Earthy colors
+            });
+        }, 150); // Fires every 150ms
+    };
+
+    window.waterConfetti = (checkbox) => {
+        if (!checkbox) return;
+
+        let rect = checkbox.getBoundingClientRect();
+        let x = (rect.left + rect.width / 2) / window.innerWidth;
+        let y = (rect.top + rect.height / 2) / window.innerHeight;
+
+        var end = Date.now() + 100;
+        var interval = setInterval(() => {
+            if (Date.now() > end) {
+                clearInterval(interval);
+                return;
+            }
+            confetti({
+                particleCount: 10, // Increase number of confetti particles
+                angle: Math.random() * 60 + 45, // More varied angles
+                spread: 60, // Increase spread
+                startVelocity: 14, // Increase launch speed
+                gravity: 1.6,
+                origin: { x, y },
+                colors: ['#B0E0E6', '#ADD8E6', '#AFEEEE', '#E0FFFF'], // Simulates water
+                scalar: .6 // particle size
+            });
+        }, 4);
+    };
+
+    window.weedConfetti = (checkbox) => {
+        if (!checkbox) return;
+
+        let rect = checkbox.getBoundingClientRect();
+        let x = (rect.left + rect.width / 2) / window.innerWidth;
+        let y = (rect.top + rect.height / 2) / window.innerHeight;
+
+        var end = Date.now() + 70;
+        var interval = setInterval(() => {
+            if (Date.now() > end) {
+                clearInterval(interval);
+                return;
+            }
+            confetti({
+                particleCount: 10, // Increase number of confetti particles
+                angle: Math.random() * 60 + 45, // More varied angles
+                spread: 60, // Increase spread
+                startVelocity: 9, // Increase launch speed
+                gravity: 1.6,
+                //decay: 1.5,
+                origin: { x, y },
+                colors: ['#8B4513', '#A0522D', '#6B4226', '#5D3A1A'], // Simulates dirt specks coming up
+                scalar: .6 // particle size
+            });
+        }, 4);
+    };
+
+    window.pestConfetti = (checkbox) => {
+        if (!checkbox) return;
+
+        let rect = checkbox.getBoundingClientRect();
+        let x = (rect.left + rect.width / 2) / window.innerWidth;
+        let y = (rect.top + rect.height / 2) / window.innerHeight;
+
+        var end = Date.now() + 100;
+        var interval = setInterval(() => {
+            if (Date.now() > end) {
+                clearInterval(interval);
+                return;
+            }
+            confetti({
+                particleCount: 40, // Increase number of confetti particles
+                angle: Math.random() * 60 + 45, // More varied angles
+                spread: 60, // Increase spread
+                startVelocity: 10, // Increase launch speed
+                gravity: .6,
+                origin: { x, y },
+                colors: ['#FFFF00', '#FFD700', '#FFEA00', '#F7FF3C'], // Simulates pest spray
+                scalar: .2 // particle size
+            });
+        }, 2);
+    };
+
+    window.pruneConfetti = (checkbox) => {
+        if (!checkbox) return;
+
+        let rect = checkbox.getBoundingClientRect();
+        let x = (rect.left + rect.width / 2) / window.innerWidth;
+        let y = (rect.top + rect.height / 2) / window.innerHeight;
+
+        var end = Date.now() + 100;
+        var interval = setInterval(() => {
+            if (Date.now() > end) {
+                clearInterval(interval);
+                return;
+            }
+            confetti({
+                particleCount: 5, // Increase number of confetti particles
+                angle: Math.random() * 60 + 45, // More varied angles
+                spread: 60, // Increase spread
+                startVelocity: 10, // Increase launch speed
+                origin: { x, y },
+                colors: ['#1B5E20', '#2E7D32', '#388E3C', '#145A32'], // Simulates leaf bits
+                scalar: .7 // particle size
+            });
+        }, 5);
+    };
+</script>
 
 <!-- Load the confetti library -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-      
-<!-- Load your custom confetti.js (Ensure it's in the wwwroot folder) -->
-<script src="confetti.js"></script>
+     
