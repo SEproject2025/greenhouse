@@ -61,8 +61,7 @@
             color: #FFFFFF;
         }
 
-        button.btn:disabled
-        {
+        button.btn:disabled {
             background-color: #5AA74E;
             color: #FFFFFF;
         }
@@ -120,7 +119,7 @@
 
     /* Container to hold the health icon and label */
     .health-status-container {
-        position: absolute; 
+        position: absolute;
         margin-left: 225px;
         text-align: right;
     }
@@ -358,43 +357,43 @@
             font-size: 14px;
         }
 
-    /* Styling for the green fade effect when the Next Day button is clicked */
-    .tile.green-fade {
-        background-color: #B0E57C;
-        transition: background-color 2s ease-out; /* Smooth transition */
-        color: transparent; /* Hide text content */
-        position: relative; /* For positioning the image */
-        z-index: 0;
-    }
-
-        /* Styling for the image when the tile is green */
-        .tile.green-fade img {
-            opacity: 0; /* Slight transparency for the image */
-            position: absolute; /* Position the image absolutely inside the tile */
-            top: 13.7%; /* Adjust top position as needed */
-            left: 20%; /* Adjust left position as needed */
-            width: 60%; /* Resize the image to fit inside the tile */
-            height: auto;
-            object-fit: contain; /* Ensure the image maintains aspect ratio */
-            z-index: 2; /* Ensure the image is above the background */
-            border-radius: 50%; /* Round the corners of the image */
-            border: 5px solid #4B8B3B; /* Black border around the image */
-            transition: opacity 4s ease-out; /* Smooth fade-in transition */
+        /* Styling for the green fade effect when the Next Day button is clicked */
+        .tile.green-fade {
+            background-color: #B0E57C;
+            transition: background-color 2s ease-out; /* Smooth transition */
+            color: transparent; /* Hide text content */
+            position: relative; /* For positioning the image */
+            z-index: 0;
         }
 
-        /* When the tile has the green-fade class applied */
-        .tile.green-fade img {
-            opacity: 0.9; /* Final opacity when faded */
-            border: 5px solid #4B8B3B; /* Black border around the image */
-        }
+            /* Styling for the image when the tile is green */
+            .tile.green-fade img {
+                opacity: 0; /* Slight transparency for the image */
+                position: absolute; /* Position the image absolutely inside the tile */
+                top: 13.7%; /* Adjust top position as needed */
+                left: 20%; /* Adjust left position as needed */
+                width: 60%; /* Resize the image to fit inside the tile */
+                height: auto;
+                object-fit: contain; /* Ensure the image maintains aspect ratio */
+                z-index: 2; /* Ensure the image is above the background */
+                border-radius: 50%; /* Round the corners of the image */
+                border: 5px solid #4B8B3B; /* Black border around the image */
+                transition: opacity 4s ease-out; /* Smooth fade-in transition */
+            }
 
-        /* Hides the content of the tile when it's green */
-        .tile.green-fade span,
-        .tile.green-fade input[type="checkbox"],
-        .tile.green-fade label
-        .tile.green-fade .progress-bar-wrapper {
-            display: none;
-        }
+            /* When the tile has the green-fade class applied */
+            .tile.green-fade img {
+                opacity: 0.9; /* Final opacity when faded */
+                border: 5px solid #4B8B3B; /* Black border around the image */
+            }
+
+            /* Hides the content of the tile when it's green */
+            .tile.green-fade span,
+            .tile.green-fade input[type="checkbox"],
+            .tile.green-fade label
+            .tile.green-fade .progress-bar-wrapper {
+                display: none;
+            }
 
     .tiles-container {
         display: flex;
@@ -536,11 +535,9 @@
         font-weight: bold;
         color: #2C6E49;
         text-align: center;
-        width: auto; 
+        width: auto;
         border: none;
     }
-
-
 </style>
 
 
@@ -550,8 +547,9 @@
 <div class="page-header">
     <!-- Title -->
     <div class="page-title">
-        <h3 class="title">My Garden
-        @if (R_CurrentDay == DateTime.MinValue)
+        <h3 class="title">
+            My Garden
+            @if (R_CurrentDay == DateTime.MinValue)
             {
                 <p>Loading...</p>
             }
@@ -565,65 +563,63 @@
 
 <div class="Buttons">
     <AddPlantButton IsLoading="@isLoading" />
-    <button class="btn" @onclick="GoToNextDay" disabled="@isLoading">Finish Day</button>
-  
-    <!-- <AddPlantButton /> -->
-    <!-- <button @onclick="GoToNextDay" disabled="@(!hasLoaded)" class="btn btn-primary next-day-btn">Finish Day</button> -->
+
+    <button @onclick="GoToNextDay" disabled="@(!hasLoaded)" class="btn btn-primary next-day-btn">Finish Day</button>
 </div>
 
 <div class="tool-container">
     <div class="tool-header">Drag & Drop</div>
     <div class="tool-key">
-    
+
         <div class="tool-item">
             <img src="/plant_tasks/WateringCan.png"
-            id="watering-can"
-            class="tool-icon"
-            draggable="true"
-            ondragstart="handleDragStart(event)"
-            alt="Watering Can" />
+                 id="watering-can"
+                 class="tool-icon"
+                 draggable="true"
+                 ondragstart="handleDragStart(event)"
+                 alt="Watering Can" />
             <div class="tool-label">Water</div>
         </div>
 
-    <div class="tool-item">
-        <img src="/plant_tasks/Gloves.png"
-             id="gloves-tool"
-             class="tool-icon"
-             draggable="true"
-             ondragstart="handleWeedingDragStart(event)"
-             alt="Gloves" />
-        <div class="tool-label">Weed</div>
-    </div>
+        <div class="tool-item">
+            <img src="/plant_tasks/Gloves.png"
+                 id="gloves-tool"
+                 class="tool-icon"
+                 draggable="true"
+                 ondragstart="handleWeedingDragStart(event)"
+                 alt="Gloves" />
+            <div class="tool-label">Weed</div>
+        </div>
 
-    <div class="tool-item">
-        <img src="/plant_tasks/PruningTool.png"
-        id="pruning-tool"
-        class="tool-icon"
-        draggable="true"
-        ondragstart="handlePruningDragStart(event)"
-        alt="Pruning Tool" />
-        <div class="tool-label">Prune</div>
-    </div>
+        <div class="tool-item">
+            <img src="/plant_tasks/PruningTool.png"
+                 id="pruning-tool"
+                 class="tool-icon"
+                 draggable="true"
+                 ondragstart="handlePruningDragStart(event)"
+                 alt="Pruning Tool" />
+            <div class="tool-label">Prune</div>
+        </div>
 
-    <div class="tool-item">
-        <img src="/plant_tasks/BugSpray.png"
-             id="bugspray-tool"
-             class="tool-icon"
-             draggable="true"
-             ondragstart="handlePestControlDragStart(event)"
-             alt="Bug Spray" />
-        <div class="tool-label">Pest Control</div>
-    </div>
+        <div class="tool-item">
+            <img src="/plant_tasks/BugSpray.png"
+                 id="bugspray-tool"
+                 class="tool-icon"
+                 draggable="true"
+                 ondragstart="handlePestControlDragStart(event)"
+                 alt="Bug Spray" />
+            <div class="tool-label">Pest Control</div>
+        </div>
 
-    <div class="tool-item">
-        <img src="/plant_tasks/Shovel.png"
-        id="shovel-tool"
-        class="tool-icon"
-        draggable="true"
-        ondragstart="handleShovelDragStart(event)"
-        alt="Shovel Tool" />
-        <div class="tool-label">Delete</div>
-    </div>
+        <div class="tool-item">
+            <img src="/plant_tasks/Shovel.png"
+                 id="shovel-tool"
+                 class="tool-icon"
+                 draggable="true"
+                 ondragstart="handleShovelDragStart(event)"
+                 alt="Shovel Tool" />
+            <div class="tool-label">Delete</div>
+        </div>
     </div>
 </div>
 <div class="tiles-container">
@@ -631,7 +627,7 @@
     {
         <div style="text-align: center;">
             <p> Loading . . .</p>
-            <div class="loader"></div> 
+            <div class="loader"></div>
         </div>
     }
     else if (!plant.Any()) // User has no plants
@@ -650,10 +646,10 @@
                  ondrop="handleGenericDrop(event, @p.PLANT_ID)">
 
                 @if (
-               plantOverdueCounts.ContainsKey(p.PLANT_ID) &&
-               plantOverdueCounts[p.PLANT_ID] > 0 &&
-               !(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID])
-            )
+              plantOverdueCounts.ContainsKey(p.PLANT_ID) &&
+              plantOverdueCounts[p.PLANT_ID] > 0 &&
+              !(plantGreenStates.ContainsKey(p.PLANT_ID) && plantGreenStates[p.PLANT_ID])
+              )
                 {
                     <div class="pulsing-dot" title="You have an overdue task"></div>
                 }
@@ -784,20 +780,20 @@
 ************************************************************************-->
 @code {
 
-    List<Plants>?   plant = null;
+    List<Plants>? plant = null;
     List<PlantTask> user_tasks = new List<PlantTask>();  // The list of currently active tasks
 
     private DateTime R_CurrentDay { get; set; }
-    private string   uuid = null!;
+    private string uuid = null!;
 
     // Dictionary to track which plants should fade to green
     private Dictionary<int, bool> plantGreenStates = new();
-    private Dictionary<int, int>  plantOverdueCounts = new Dictionary<int, int>();
+    private Dictionary<int, int> plantOverdueCounts = new Dictionary<int, int>();
     private int tasks_finished_counter;
 
     private bool hasLoaded = false;
 
-    public Plants PlaceholderPlant = new Plants {PLANT_NAME="PlaceholderPlant"};
+    public Plants PlaceholderPlant = new Plants { PLANT_NAME = "PlaceholderPlant" };
 
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -861,7 +857,7 @@
     private async Task LoadPageDataAsync()
     {
         // example delay to simulate data loading
-        await Task.Delay(2000);
+        await Task.Delay(300);
 
         // TODO: Load R_CurrentDay, user_tasks, etc.
     }
@@ -943,7 +939,7 @@
         {
             ActivateCheckboxConfetti(t.CheckboxRef);
         }
-        else if(t.TASK_NAME == "Watering")
+        else if (t.TASK_NAME == "Watering")
         {
             ActivateWaterConfetti(t.CheckboxRef);
         }
@@ -1272,12 +1268,45 @@
     //***************************************************************************************
     // Drop handler for the shovel tool
     //***************************************************************************************
+
+    let pendingDeletePlantId = null;
+
+
+
     function handleShovelDrop(plantId) {
-        const dotNetHelper = window.dotNetHelperRef;
-        if (dotNetHelper) {
-            dotNetHelper.invokeMethodAsync("DeletePlantByDrop", plantId);
-        }
+
+        pendingDeletePlantId = plantId;
+
+        document.getElementById("deleteConfirmModal").style.display = "flex";
+
     }
+
+
+
+    function confirmDeletePlant() {
+
+        const dotNetHelper = window.dotNetHelperRef;
+
+        if (dotNetHelper && pendingDeletePlantId !== null) {
+
+            dotNetHelper.invokeMethodAsync("DeletePlantByDrop", pendingDeletePlantId);
+
+        }
+
+        closeDeleteModal();
+
+    }
+
+
+
+    function closeDeleteModal() {
+
+        document.getElementById("deleteConfirmModal").style.display = "none";
+
+        pendingDeletePlantId = null;
+
+    }
+
 
 
     //***************************************************************************************
@@ -1443,4 +1472,3 @@
 
 <!-- Load the confetti library -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-     
